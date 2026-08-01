@@ -14,7 +14,7 @@
 :root{
   --bg:#0C1512; --panel:#13211C; --panel2:#0E1A16;
   --ink:#ECF3EE; --mut:#8AA399; --line:rgba(150,200,180,.13);
-  --teal:#2DD4BF; --amber:#F4B740; --green:#46D18A; --red:#FF5C5C;
+  --teal:#2DD4BF; --amber:#F4B740; --green:#46D18A; --red:#FF5C5C; --pen:#FF5C5C;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
@@ -88,8 +88,16 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   font:800 19px 'JetBrains Mono';text-align:right}
 .rate-cur{font:800 14px 'JetBrains Mono';color:var(--mut)}
 
-.legend{color:var(--mut);font-size:10.5px;padding:10px 2px 4px;line-height:1.5}
-.legend b{color:var(--ink)} .legend .g{color:var(--green)} .legend .r{color:var(--red)} .legend .t{color:var(--teal)}
+/* ── раскладка жестов ── */
+.gest{margin:12px 0 4px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+.gest-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);font-size:10.5px}
+.gest-row:last-child{border-bottom:none}
+.gest-k{flex:0 0 auto;min-width:96px;font:700 9.5px 'JetBrains Mono';text-transform:uppercase;letter-spacing:.05em;
+  color:var(--teal);background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:5px 8px;text-align:center}
+.gest-row.g-pen .gest-k{color:var(--pen);border-color:rgba(255,92,92,.4)}
+.gest-row.g-sum .gest-k{color:var(--amber);border-color:rgba(244,183,64,.4)}
+.gest-row.g-name .gest-k{color:#7FE3D2}
+.gest-v{color:var(--mut);line-height:1.4} .gest-v b{color:var(--ink)}
 
 /* ── выплаты  */
 .h2{font:700 13px 'Unbounded';margin:18px 0 10px;display:flex;align-items:center;gap:7px}
@@ -142,19 +150,10 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .chip b{font:700 10.5px 'JetBrains Mono';color:var(--ink)}
 .c-b{color:#7FE3D2!important}.c-a{color:var(--amber)!important}.c-g{color:var(--green)!important}
 
-/* ── лента дней + стрелки ── */
-.strip-wrap{position:relative;margin-top:10px}
+/* ── лента дней ── */
 .strip{display:flex;gap:5px;overflow-x:auto;padding:10px 2px;scroll-snap-type:x proximity;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;margin-top:10px}
 .strip::-webkit-scrollbar{display:none}
-.scr-l,.scr-r{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:25px;height:44px;
-  border-radius:10px;display:grid;place-items:center;font-size:15px;font-weight:800;color:var(--ink);
-  background:rgba(14,26,22,.86);border:1px solid var(--line);backdrop-filter:blur(4px);
-  box-shadow:0 4px 14px rgba(0,0,0,.45);transition:opacity .22s,transform .12s,background .15s}
-.scr-l{left:-1px} .scr-r{right:-1px}
-.scr-l:active,.scr-r:active{transform:translateY(-50%) scale(.88);background:rgba(45,212,191,.28)}
-.strip-wrap.at-start .scr-l{opacity:0;pointer-events:none}
-.strip-wrap.at-end .scr-r{opacity:0;pointer-events:none}
 
 /* ── клетка дня ── */
 .cell{flex:0 0 auto;scroll-snap-align:start;position:relative;width:46px;height:60px;border-radius:9px;
@@ -168,17 +167,21 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .cell .dot{color:rgba(150,200,180,.3);font-size:10px}
 .cell.we i,.cell.we b{color:#D99}
 .cell:hover{transform:translateY(-3px);border-color:var(--teal)}
-/* отработано = плотная зелёная заливка (как в Excel) */
 .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.42),rgba(70,209,138,.22));border-color:rgba(70,209,138,.82)}
 .cell.has-pos i{color:#C7F2DD} .cell.has-pos u{color:#E9FFF4}
-/* штраф / минус = плотная красная заливка */
-.cell.has-neg{background:linear-gradient(180deg,rgba(255,92,92,.42),rgba(255,92,92,.22));border-color:rgba(255,92,92,.82)}
-.cell.has-neg i{color:#F4CCCC} .cell.has-neg u{color:#FFE6E6}
-/* сегодня = кольцо + пульсирующее свечение поверх всего */
+.cell.has-pen{background:linear-gradient(180deg,rgba(255,92,92,.46),rgba(214,40,40,.26));border-color:rgba(255,92,92,.9);
+  box-shadow:0 0 12px rgba(255,92,92,.32)}
+.cell.has-pen i{color:#FFD2D2} .cell.has-pen b{color:#FFF} .cell.has-pen u{color:#FFE2E2}
+.cell.has-pen::after{content:'!';position:absolute;top:2px;right:3px;font:800 8px 'JetBrains Mono';color:rgba(255,255,255,.78)}
 .cell.today{z-index:3;animation:todayGlow 2.2s ease-in-out infinite}
 @keyframes todayGlow{
   0%,100%{box-shadow:0 0 0 2px var(--teal),0 0 10px rgba(45,212,191,.40)}
   50%{box-shadow:0 0 0 2px var(--teal),0 0 10px rgba(45,212,191,.90)}
+}
+.cell.today.has-pen{animation:todayGlowPen 2.2s ease-in-out infinite}
+@keyframes todayGlowPen{
+  0%,100%{box-shadow:0 0 0 2px var(--teal),0 0 10px rgba(45,212,191,.40),0 0 12px rgba(255,92,92,.32)}
+  50%{box-shadow:0 0 0 2px var(--teal),0 0 10px rgba(45,212,191,.90),0 0 12px rgba(255,92,92,.32)}
 }
 .cell.pop{animation:pop .38s}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
@@ -189,6 +192,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .ov.open{display:flex}
 .modal{width:min(94vw,390px);background:#122019;border:1px solid rgba(45,212,191,.35);
   border-radius:16px;padding:16px;animation:up .28s cubic-bezier(.2,.9,.3,1.2);max-height:92vh;overflow-y:auto}
+.modal.pen-modal{border-color:rgba(255,92,92,.5)}
 @keyframes up{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}
 .m-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .m-id{display:flex;align-items:center;gap:10px;min-width:0}
@@ -199,22 +203,32 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .m-top b{font:800 14px 'Golos Text';display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .m-top span{font:600 10px 'JetBrains Mono';color:var(--mut)}
 .m-lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin-top:12px}
-#m-amount,.fld,.ta{width:100%;margin:6px 0 8px;background:var(--panel2);border:1px solid var(--line);
+#m-amount,#p-amount,.fld,.ta{width:100%;margin:6px 0 8px;background:var(--panel2);border:1px solid var(--line);
   border-radius:10px;color:var(--ink);font:700 14px 'JetBrains Mono';padding:10px 12px;outline:none}
-#m-amount{font-weight:800;font-size:19px}
-#m-amount:focus,.fld:focus,.ta:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(45,212,191,.2)}
+#m-amount,#p-amount{font-weight:800;font-size:19px}
+#p-amount{color:var(--pen)}
+#m-amount:focus,#p-amount:focus,.fld:focus,.ta:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(45,212,191,.2)}
+#p-amount:focus{border-color:var(--pen);box-shadow:0 0 0 3px rgba(255,92,92,.2)}
 .ta{font-size:11px;line-height:1.5;resize:vertical;min-height:96px;font-family:'JetBrains Mono'}
 .m-hint{font-size:10px;color:var(--mut);margin:-3px 0 10px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.qchip{font:700 10.5px 'JetBrains Mono';background:var(--panel2);border:1px solid var(--line);
-  border-radius:99px;padding:5px 10px;color:var(--mut);transition:.15s}
-.qchip:hover{border-color:var(--green);color:var(--green)}
-.qchip.neg:hover{border-color:var(--red);color:var(--red)}
+/* база-инфо и живой превью в меню штрафа */
+.pen-base{display:flex;justify-content:space-between;align-items:center;background:var(--panel2);
+  border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin:12px 0 2px;font-size:11px;color:var(--mut)}
+.pen-base b{font:800 15px 'JetBrains Mono';color:var(--ink)}
+.pen-prev{display:flex;justify-content:space-between;align-items:center;border-radius:10px;padding:10px 12px;
+  margin:10px 0 12px;font-size:11px;font-weight:600;border:1px solid var(--line);background:var(--panel2);transition:.2s}
+.pen-prev b{font:800 18px 'JetBrains Mono';transition:color .2s}
+.pen-prev.ok{border-color:rgba(70,209,138,.4)} .pen-prev.ok b{color:var(--green)}
+.pen-prev.cut{border-color:rgba(255,92,92,.55);background:rgba(255,92,92,.1)} .pen-prev.cut b{color:var(--pen)}
+.pen-prev.neg{border-color:transparent;background:linear-gradient(140deg,#FF6161,#D62828);color:#fff} .pen-prev.neg b{color:#fff}
+.pen-prev.bump{animation:bump .3s ease-out}
+@keyframes bump{0%{transform:scale(1)}35%{transform:scale(1.04)}100%{transform:scale(1)}}
 .m-act{display:flex;gap:7px;flex-wrap:wrap}
 .btn{border-radius:10px;padding:11px;font:700 12px 'Golos Text';transition:.15s;text-align:center;text-decoration:none}
 .btn.primary{flex:1;background:linear-gradient(140deg,#5EEAD4,#0E9488);color:#04201B;
   box-shadow:0 5px 15px rgba(45,212,191,.3)}
 .btn.primary:active{transform:scale(.97)}
+.btn.primary.pen{background:linear-gradient(140deg,#FF7676,#D62828);color:#fff;box-shadow:0 5px 15px rgba(255,92,92,.35)}
 .btn.danger{background:rgba(255,92,92,.1);border:1px solid rgba(255,92,92,.45);color:var(--red)}
 .btn.ghost{background:var(--panel2);border:1px solid var(--line);color:var(--ink)}
 .btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
@@ -287,7 +301,13 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
   </section>
 
-  <p class="legend rv"><span class="g">■</span> зелёная — отработано. <span class="r">■</span> красная — штраф. <span class="t">◉</span> светящееся кольцо = сегодня (лента сама к нему приезжает). <b>Тап</b> по пустой = ставка. <b>Тап</b> по занятой = изменить. <b>Зажал</b> пустую = особая сумма. <b>Свайп</b> по клеткам или ‹ › = листать дни. <b>Тап</b> по имени = контакты. <b>Зажал</b> имя = редактировать.</p>
+  <section class="gest rv">
+    <div class="gest-row"><span class="gest-k">тап / зажал<br>по пустой</span><span class="gest-v">поставить смену по ставке</span></div>
+    <div class="gest-row g-pen"><span class="gest-k">тап / зажал<br>по смене</span><span class="gest-v"><b>штраф</b> — впиши сумму (без −) и за что</span></div>
+    <div class="gest-row g-sum"><span class="gest-k">двойной тап</span><span class="gest-v"><b>сумма смены</b> — поменять базу / удалить смену</span></div>
+    <div class="gest-row"><span class="gest-k">свайп ←→</span><span class="gest-v">листать дни</span></div>
+    <div class="gest-row g-name"><span class="gest-k">тап / зажал<br>по имени</span><span class="gest-v">контакты / редактировать сотрудника</span></div>
+  </section>
 
   <section class="rv" id="pvz-list"></section>
   <button class="addpvz rv" data-act="addpvz">＋ добавить ПВЗ</button>
@@ -305,20 +325,39 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </footer>
 </main>
 
-<!-- модалка смены -->
+<!-- модалка СУММЫ СМЕНЫ (двойной тап) -->
 <div id="overlay" class="ov">
   <div class="modal">
     <div class="m-top">
       <div class="m-id-txt"><b id="m-emp"></b><span id="m-date"></span></div>
       <button class="mini" data-act="mclose">✕</button>
     </div>
-    <label class="m-lbl">Сумма за смену, ₽ (можно с минусом — штраф)</label>
+    <label class="m-lbl">Сумма за смену, ₽</label>
     <input id="m-amount" type="text" inputmode="numeric">
-    <div class="m-hint">Знак «−» перед числом = вычет / штраф.</div>
-    <div class="chips" id="m-chips"></div>
+    <div class="m-hint">Это база смены. Штраф навешивается отдельно — тапом по клетке.</div>
     <div class="m-act">
-      <button id="m-del" class="btn danger" data-act="mdel">Удалить</button>
+      <button id="m-del" class="btn danger" data-act="mdel">Удалить смену</button>
       <button class="btn primary" data-act="msave">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- модалка ШТРАФА (тап/зажатие по смене) -->
+<div id="penalty" class="ov">
+  <div class="modal pen-modal">
+    <div class="m-top">
+      <div class="m-id-txt"><b id="p-emp"></b><span id="p-date"></span></div>
+      <button class="mini" data-act="pclose">✕</button>
+    </div>
+    <div class="pen-base"><span>Смена (основа)</span><b id="p-base">0 ₽</b></div>
+    <label class="m-lbl">Сумма штрафа, ₽ — пиши БЕЗ минуса</label>
+    <input id="p-amount" type="text" inputmode="numeric" placeholder="0">
+    <label class="m-lbl">За что (комментарий)</label>
+    <input id="p-note" class="fld" type="text" placeholder="опоздание, недостача, косяк…">
+    <div class="pen-prev ok" id="p-prev"><span>Итог за день</span><b id="p-prev-val">0 ₽</b></div>
+    <div class="m-act">
+      <button class="btn danger" data-act="pclear">Убрать штраф</button>
+      <button class="btn primary pen" data-act="psave">Сохранить штраф</button>
     </div>
   </div>
 </div>
@@ -395,7 +434,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 <div id="toast"></div>
 <input type="file" id="imp" accept="application/json" hidden>
 
-<!-- Firebase (нужен только если подключаешь облако) -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -429,12 +468,27 @@ function defaults(){
     shifts:{}, rate:1700, lastAmount:1700
   };
 }
+function normShift(r){
+  if(!r)return null;
+  if(typeof r.b==='number')return {b:r.b, p:r.p||0, n:r.n||''};
+  if(typeof r.a==='number'){const a=r.a;
+    if(a>0)return {b:a,p:0,n:''};
+    if(a<0)return {b:0,p:-a,n:''};
+    return null;}
+  return null;
+}
+function migrateShifts(v){
+  const ns={};
+  for(const k in (v.shifts||{})){const n=normShift(v.shifts[k]);if(n)ns[k]=n;}
+  v.shifts=ns;
+}
 function mergeDefaults(v){
   v=v||{};const d=defaults();
   v.pvz=(v.pvz&&Object.keys(v.pvz).length)?v.pvz:d.pvz;
   v.emp=Array.isArray(v.emp)&&v.emp.length?v.emp.map(e=>({phone:'',bank:'',...e})):d.emp;
   v.shifts=v.shifts||{};
   v.rate=v.rate||1700;v.lastAmount=v.lastAmount||v.rate||1700;
+  migrateShifts(v);
   return v;
 }
 function load(){
@@ -445,8 +499,10 @@ function persist(push){localStorage.setItem(LS,JSON.stringify(state));if(push!==
 const key=(e,y,m,d)=>e+'@'+y+'-'+pad(m+1)+'-'+pad(d);
 const empById=id=>state.emp.find(e=>e.id===id);
 const empName=id=>{const e=empById(id);return e?e.name:'?';};
-function sumRange(e,d1,d2){let s=0;for(let d=d1;d<=d2;d++){const sh=state.shifts[key(e,view.y,view.m,d)];if(sh)s+=sh.a;}return s;}
-function cntRange(e,d1,d2){let c=0;for(let d=d1;d<=d2;d++){if(state.shifts[key(e,view.y,view.m,d)])c++;}return c;}
+const daySum=sh=>sh?((sh.b||0)-(sh.p||0)):0;
+const isWorked=sh=>sh&&sh.b>0;
+function sumRange(e,d1,d2){let s=0;for(let d=d1;d<=d2;d++){const sh=state.shifts[key(e,view.y,view.m,d)];if(sh)s+=daySum(sh);}return s;}
+function cntRange(e,d1,d2){let c=0;for(let d=d1;d<=d2;d++){if(isWorked(state.shifts[key(e,view.y,view.m,d)]))c++;}return c;}
 const pvzKeys=()=>Object.keys(state.pvz);
 
 // ═══ ОБЛАКО ═══
@@ -494,12 +550,12 @@ function daysHTML(e,dm){
     const s=state.shifts[k];
     const dw=new Date(view.y,view.m,d).getDay();
     const cls=['cell'];
-    if(s)cls.push(s.a<0?'has-neg':'has-pos');
+    if(s){cls.push((s.p>0)?'has-pen':'has-pos');}
     if(dw===0||dw===6)cls.push('we');
     if(isCur&&d===t.getDate())cls.push('today');
     h+='<button class="'+cls.join(' ')+'" data-emp="'+e.id+'" data-d="'+d+'" data-k="'+k+'">'
       +'<i>'+WD[dw]+'</i><b>'+d+'</b>'
-      +(s?'<u>'+fmt(s.a)+'</u>':'<span class="dot">·</span>')+'</button>';
+      +(s?'<u>'+fmt(daySum(s))+'</u>':'<span class="dot">·</span>')+'</button>';
   }
   return h;
 }
@@ -515,9 +571,7 @@ function empHTML(e,dm){
    +'<span class="chip">итого: <b class="c-b">'+fmt(tot)+' ₽</b></span>'
    +'<span class="chip">15-го: <b class="c-a">'+fmt(mid)+' ₽</b></span>'
    +'<span class="chip">в конце: <b class="c-g">'+fmt(end)+' ₽</b></span></div>'
-   +'<div class="strip-wrap"><button class="scr-l" data-act="scr" data-dir="-1" aria-label="назад">‹</button>'
-   +'<div class="strip">'+daysHTML(e,dm)+'</div>'
-   +'<button class="scr-r" data-act="scr" data-dir="1" aria-label="вперёд">›</button></div></div>';
+   +'<div class="strip">'+daysHTML(e,dm)+'</div></div>';
 }
 function pvzHTML(n,dm){
   const emps=state.emp.filter(e=>e.pvz===n);
@@ -549,26 +603,12 @@ function animNum(el,target,suf){
     el.textContent=fmt(target*(1-Math.pow(1-p,3)))+(suf||'');
     if(p<1)requestAnimationFrame(step);})(t0);
 }
-function updateStripArrows(strip){
-  const w=strip.closest('.strip-wrap');if(!w)return;
-  const max=strip.scrollWidth-strip.clientWidth-1;
-  w.classList.toggle('at-start',strip.scrollLeft<=1);
-  w.classList.toggle('at-end',strip.scrollLeft>=max);
-}
 function scrollToTodayOrStart(){
   document.querySelectorAll('.strip').forEach(strip=>{
     const t=strip.querySelector('.cell.today');
-    if(t){
-      const sr=strip.getBoundingClientRect(), cr=t.getBoundingClientRect();
-      strip.scrollLeft += (cr.left - sr.left) - 6; // сегодня первым в кадре, чуть правее стрелки ‹
-    }else{
-      strip.scrollLeft=0;
-    }
-    updateStripArrows(strip);
+    if(t){const sr=strip.getBoundingClientRect(),cr=t.getBoundingClientRect();strip.scrollLeft+=(cr.left-sr.left)-6;}
+    else strip.scrollLeft=0;
   });
-}
-function bindStrips(){
-  document.querySelectorAll('.strip').forEach(s=>{s.onscroll=()=>updateStripArrows(s);});
 }
 function renderAll(){
   const dm=dim(view.y,view.m);
@@ -581,37 +621,55 @@ function renderAll(){
   $('#paygrid').innerHTML=
     panel('АВАНС','выплата 15-го','смены с 1 по 15 число',1,15,'mid')
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
-  bindStrips();
   scrollToTodayOrStart();
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
   if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
   else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
 }
 
-// ═══ МОДАЛКА СМЕНЫ ═══
+// ═══ МОДАЛКА СУММЫ (двойной тап) ═══
 let cur={k:null,emp:null,d:0};
 let curEmp=null;
-function renderChips(){
-  const rec=[...new Set(Object.values(state.shifts).map(s=>s.a))].slice(-3).reverse();
-  const list=[...new Set([state.rate,state.lastAmount,2000,2500,...rec])].filter(v=>v>0).slice(0,5);
-  const negs=[-500,-1000];
-  $('#m-chips').innerHTML=list.map(v=>'<button class="qchip" data-act="q" data-v="'+v+'">'+fmt(v)+'</button>').join('')
-    +negs.map(v=>'<button class="qchip neg" data-act="q" data-v="'+v+'">'+fmt(v)+'</button>').join('');
-}
-function openModalFor(emp,d){
+function openSum(emp,d){
   const k=key(emp,view.y,view.m,d);
   const s=state.shifts[k];
   cur={k,emp,d};
   $('#m-emp').textContent=empName(emp);
   const dw=new Date(view.y,view.m,d).getDay();
   $('#m-date').textContent=d+' '+MG[view.m]+' '+view.y+', '+WD[dw];
-  $('#m-amount').value=s?s.a:state.rate;
+  $('#m-amount').value=s?s.b:state.rate;
   $('#m-del').style.display=s?'block':'none';
-  renderChips();
   $('#overlay').classList.add('open');document.body.classList.add('lock');
   setTimeout(()=>$('#m-amount').focus(),120);
 }
 function closeM(){$('#overlay').classList.remove('open');syncLock();}
+
+// ═══ МОДАЛКА ШТРАФА (тап/зажатие по смене) ═══
+let pen={k:null,emp:null,d:0};
+function updatePenPrev(){
+  const s=state.shifts[pen.k];const b=s?s.b:0;
+  const p=parseNum($('#p-amount').value)||0;
+  const tot=b-p;
+  $('#p-prev-val').textContent=fmt(tot)+' ₽';
+  const el=$('#p-prev');el.classList.remove('ok','cut','neg');
+  el.classList.add(tot<0?'neg':(p>0?'cut':'ok'));
+  el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump'); // отдача от ввода
+}
+function openPenalty(emp,d){
+  const k=key(emp,view.y,view.m,d);
+  const s=state.shifts[k];if(!s)return;
+  pen={k,emp,d};
+  $('#p-emp').textContent=empName(emp);
+  const dw=new Date(view.y,view.m,d).getDay();
+  $('#p-date').textContent=d+' '+MG[view.m]+' '+view.y+', '+WD[dw];
+  $('#p-base').textContent=fmt(s.b)+' ₽';
+  $('#p-amount').value=s.p||'';
+  $('#p-note').value=s.n||'';
+  updatePenPrev();
+  $('#penalty').classList.add('open');document.body.classList.add('lock');
+  setTimeout(()=>$('#p-amount').focus(),120);
+}
+function closePen(){$('#penalty').classList.remove('open');syncLock();}
 
 // ═══ КОНТАКТЫ / РЕДАКТ. СОТРУДНИКА ═══
 function openEmpInfo(id){
@@ -640,7 +698,6 @@ function openEmpEdit(id){
 }
 function closeEmpEdit(){$('#emp-edit').classList.remove('open');syncLock();}
 
-// ═══ ОКНО ОБЛАКА ═══
 function openCloudSetup(){
   const cfg=getCfg();
   $('#cfg-in').value=cfg?JSON.stringify(cfg,null,2):'';
@@ -661,30 +718,42 @@ function fallbackCopy(txt,cb){
   document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);cb();
 }
 
-// ═══ ТАП / ЗАЖАЛ / СВАЙП: КЛЕТКИ + ИМЕНА ═══
-let press=null, namePress=null;
-function isScrollGesture(dx,dy){ // горизонтальный свайп = прокрутка ленты, не тап
-  return (Math.abs(dx)>6 && Math.abs(dx)>=Math.abs(dy)) || Math.abs(dy)>8;
+// ═══ ЖЕСТЫ ПО КЛЕТКАМ ═══
+let press=null, namePress=null, cellPending=null;
+function isScrollGesture(dx,dy){return (Math.abs(dx)>6 && Math.abs(dx)>=Math.abs(dy)) || Math.abs(dy)>8;}
+function setRateAt(emp,d){
+  const k=key(emp,view.y,view.m,d);
+  state.shifts[k]={b:state.rate,p:0,n:''};state.lastAmount=state.rate;
+  persist();renderAll();popCell(k);toast('Смена '+fmt(state.rate)+' ₽ ✔');
+}
+function runSingle(emp,d){
+  const k=key(emp,view.y,view.m,d);
+  if(state.shifts[k])openPenalty(emp,d); else setRateAt(emp,d);
 }
 document.addEventListener('pointerdown',e=>{
   const c=e.target.closest('.cell');
   if(c){press={emp:c.dataset.emp,d:+c.dataset.d,x:e.clientX,y:e.clientY,moved:false,long:false,
-    timer:setTimeout(()=>{if(press&&!press.moved){press.long=true;openModalFor(press.emp,press.d);}},430)};return;}
+    timer:setTimeout(()=>{if(press&&!press.moved){press.long=true;runSingle(press.emp,press.d);}},430)};return;}
   const n=e.target.closest('.ename');
   if(n){namePress={emp:n.dataset.emp,x:e.clientX,y:e.clientY,moved:false,long:false,
     timer:setTimeout(()=>{if(namePress&&!namePress.moved){namePress.long=true;openEmpEdit(namePress.emp);}},430)};return;}
 });
 document.addEventListener('pointermove',e=>{
-  if(press){const dx=e.clientX-press.x,dy=e.clientY-press.y;
-    if(isScrollGesture(dx,dy)){press.moved=true;clearTimeout(press.timer);}}
-  if(namePress){const dx=e.clientX-namePress.x,dy=e.clientY-namePress.y;
-    if(isScrollGesture(dx,dy)){namePress.moved=true;clearTimeout(namePress.timer);}}
+  if(press){const dx=e.clientX-press.x,dy=e.clientY-press.y;if(isScrollGesture(dx,dy)){press.moved=true;clearTimeout(press.timer);}}
+  if(namePress){const dx=e.clientX-namePress.x,dy=e.clientY-namePress.y;if(isScrollGesture(dx,dy)){namePress.moved=true;clearTimeout(namePress.timer);}}
 });
+function firePending(){if(!cellPending)return;const p=cellPending;cellPending=null;runSingle(p.emp,p.d);}
 document.addEventListener('pointerup',e=>{
   if(press){const p=press;press=null;clearTimeout(p.timer);
-    if(!(p.moved||p.long)){const k=key(p.emp,view.y,view.m,p.d);
-      if(state.shifts[k]){openModalFor(p.emp,p.d);}
-      else{state.shifts[k]={a:state.rate};state.lastAmount=state.rate;persist();renderAll();popCell(k);toast('Смена '+fmt(state.rate)+' ₽ ✔');}}}
+    if(!(p.moved||p.long)){
+      if(cellPending && cellPending.emp===p.emp && cellPending.d===p.d){
+        clearTimeout(cellPending.timer);cellPending=null;openSum(p.emp,p.d);
+      }else{
+        if(cellPending){clearTimeout(cellPending.timer);runSingle(cellPending.emp,cellPending.d);}
+        cellPending={emp:p.emp,d:p.d,timer:setTimeout(firePending,300)};
+      }
+    }
+  }
   if(namePress){const p=namePress;namePress=null;clearTimeout(p.timer);
     if(!(p.moved||p.long)){openEmpInfo(p.emp);}}
 });
@@ -696,21 +765,27 @@ document.addEventListener('click',e=>{
   const a=el.dataset.act;
   if(a==='prev'){view.m--;if(view.m<0){view.m=11;view.y--;}renderAll();}
   else if(a==='next'){view.m++;if(view.m>11){view.m=0;view.y++;}renderAll();}
-  else if(a==='scr'){const w=el.closest('.strip-wrap');const s=w&&w.querySelector('.strip');
-    if(s)s.scrollBy({left:(el.dataset.dir==='1'?1:-1)*210,behavior:'smooth'});}
-  else if(a==='q'){$('#m-amount').value=el.dataset.v;}
   else if(a==='mclose')closeM();
   else if(a==='msave'){
     const v=parseNum($('#m-amount').value);
-    if(v===null){toast('Введи число, ебать!');return;}
-    state.shifts[cur.k]={a:v};state.lastAmount=v;persist();closeM();renderAll();popCell(cur.k);toast('Сохранено ✔');
+    if(v===null||v<=0){toast('Введи сумму за смену!');return;}
+    const s=state.shifts[cur.k];
+    if(s){s.b=v;}else{state.shifts[cur.k]={b:v,p:0,n:''};}
+    state.lastAmount=v;persist();closeM();renderAll();popCell(cur.k);toast('Сумма смены сохранена ✔');
   }
   else if(a==='mdel'){delete state.shifts[cur.k];persist();closeM();renderAll();toast('Смена удалена');}
-  // контакты
+  else if(a==='pclose')closePen();
+  else if(a==='psave'){
+    const s=state.shifts[pen.k];if(!s)return;
+    const p=parseNum($('#p-amount').value)||0;
+    s.p=p;s.n=$('#p-note').value.trim();
+    persist();closePen();renderAll();popCell(pen.k);
+    toast(p>0?'Штраф '+fmt(p)+' ₽ сохранён ✔':'Штраф убран ✔');
+  }
+  else if(a==='pclear'){const s=state.shifts[pen.k];if(!s)return;s.p=0;s.n='';persist();closePen();renderAll();popCell(pen.k);toast('Штраф убран ✔');}
   else if(a==='ei-close')closeEmpInfo();
   else if(a==='ei-edit'){const id=curEmp;closeEmpInfo();openEmpEdit(id);}
   else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован 📋');}
-  // редактирование сотрудника
   else if(a==='ee-close')closeEmpEdit();
   else if(a==='ee-save'){
     const e=empById(curEmp);if(!e)return;
@@ -723,7 +798,6 @@ document.addEventListener('click',e=>{
     if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
     state.emp=state.emp.filter(x=>x.id!==e.id);persist();closeEmpEdit();renderAll();toast('Сотрудник удалён');}
-  // облако
   else if(a==='cloud-setup')openCloudSetup();
   else if(a==='cs-close')closeCloudSetup();
   else if(a==='cs-save'){
@@ -738,7 +812,6 @@ document.addEventListener('click',e=>{
     if(!confirm('Отключить облако? Табель останется только на этом телефоне.'))return;
     localStorage.removeItem(CFG_LS);toast('Отключаю…');setTimeout(()=>location.reload(),500);
   }
-  // прочее
   else if(a==='del-emp'){const e=empById(el.dataset.emp);if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
     state.emp=state.emp.filter(x=>x.id!==e.id);persist();renderAll();toast('Сотрудник удалён');}
@@ -755,7 +828,7 @@ document.addEventListener('click',e=>{
     state.pvz['p'+Date.now()]=n.trim();persist();renderAll();toast('ПВЗ добавлен ✔');}}
   else if(a==='fill'){const e=empById(el.dataset.emp);const dm=dim(view.y,view.m);
     if(!confirm('Раскидать для «'+e.name+'» график 2/2 на '+MONTHS[view.m]+'? (2 рабочих / 2 выходных, ставка '+fmt(state.rate)+' ₽). Старые смены месяца затрутся!'))return;
-    for(let d=1;d<=dm;d++){const k=key(e.id,view.y,view.m,d);if(((d-1)%4)<2)state.shifts[k]={a:state.rate};else delete state.shifts[k];}
+    for(let d=1;d<=dm;d++){const k=key(e.id,view.y,view.m,d);if(((d-1)%4)<2)state.shifts[k]={b:state.rate,p:0,n:''};else delete state.shifts[k];}
     persist();renderAll();toast('График 2/2 готов ✔');}
   else if(a==='clearemp'){const e=empById(el.dataset.emp);if(!confirm('Стереть ВСЕ смены «'+e.name+'» за '+MONTHS[view.m]+'?'))return;
     const dm=dim(view.y,view.m);for(let d=1;d<=dm;d++)delete state.shifts[key(e.id,view.y,view.m,d)];persist();renderAll();toast('Месяц очищен');}
@@ -765,10 +838,11 @@ document.addEventListener('click',e=>{
   else if(a==='reset'){if(!confirm('Точно сбросить ВЕСЬ табель нахрен?'))return;localStorage.removeItem(LS);state=load();persist(false);renderAll();toast('Всё сброшено');}
 });
 $('#rate').addEventListener('input',e=>{const v=parseNum(e.target.value);if(v!==null&&v>0){state.rate=v;persist();}});
-['overlay','emp-info','emp-edit','cloud-setup'].forEach(id=>{
+$('#p-amount').addEventListener('input',updatePenPrev);
+['overlay','penalty','emp-info','emp-edit','cloud-setup'].forEach(id=>{
   $('#'+id).addEventListener('click',e=>{if(e.target.id===id){$('#'+id).classList.remove('open');syncLock();}});
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeEmpInfo();closeEmpEdit();closeCloudSetup();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closePen();closeEmpInfo();closeEmpEdit();closeCloudSetup();}});
 $('#imp').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.emp||!s.pvz||!s.shifts)throw 0;
