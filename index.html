@@ -46,6 +46,16 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .brand h1{font:900 13.5px 'Unbounded';letter-spacing:.02em}
 .brand span{font-size:9.5px;color:var(--mut)}
 .nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cstat{display:inline-flex;align-items:center;gap:6px;font:700 10px 'JetBrains Mono';border-radius:99px;
+  padding:5px 10px;border:1px solid var(--line);background:var(--panel2);color:var(--mut);cursor:pointer;transition:.15s}
+.cstat:hover{border-color:var(--teal)}
+.cstat .d{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
+.cstat.off{color:var(--mut)}
+.cstat.boot{color:var(--amber)} .cstat.boot .d{animation:blink 1s infinite}
+.cstat.on{color:var(--green);border-color:rgba(70,209,138,.4);background:rgba(70,209,138,.08)}
+.cstat.on .d{animation:blink 2.6s infinite}
+.cstat.err{color:var(--red);border-color:rgba(255,92,92,.4)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 .paychip{font:700 10px 'JetBrains Mono';color:var(--amber);background:rgba(244,183,64,.1);
   border:1px solid rgba(244,183,64,.4);border-radius:99px;padding:5px 10px;animation:pulse 2.4s infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(244,183,64,.25)}50%{box-shadow:0 0 0 6px rgba(244,183,64,0)}}
@@ -79,9 +89,9 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .rate-cur{font:800 14px 'JetBrains Mono';color:var(--mut)}
 
 .legend{color:var(--mut);font-size:10.5px;padding:10px 2px 4px;line-height:1.5}
-.legend b{color:var(--ink)} .legend .g{color:var(--green)} .legend .r{color:var(--red)}
+.legend b{color:var(--ink)} .legend .g{color:var(--green)} .legend .r{color:var(--red)} .legend .t{color:var(--teal)}
 
-/* ── выплаты ── */
+/* ── выплаты  */
 .h2{font:700 13px 'Unbounded';margin:18px 0 10px;display:flex;align-items:center;gap:7px}
 .pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:740px){.pay-grid{grid-template-columns:1fr}}
@@ -131,26 +141,45 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .chip{background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:4px 8px;font-size:10px;color:var(--mut)}
 .chip b{font:700 10.5px 'JetBrains Mono';color:var(--ink)}
 .c-b{color:#7FE3D2!important}.c-a{color:var(--amber)!important}.c-g{color:var(--green)!important}
-.strip{display:flex;gap:5px;overflow-x:auto;margin-top:10px;padding:3px 2px 8px;scroll-snap-type:x proximity}
-.strip::-webkit-scrollbar{height:4px}
-.strip::-webkit-scrollbar-thumb{background:rgba(45,212,191,.35);border-radius:99px}
+
+/* ── лента дней + стрелки ── */
+.strip-wrap{position:relative;margin-top:10px}
+.strip{display:flex;gap:5px;overflow-x:auto;padding:10px 2px;scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+.strip::-webkit-scrollbar{display:none}
+.scr-l,.scr-r{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:25px;height:44px;
+  border-radius:10px;display:grid;place-items:center;font-size:15px;font-weight:800;color:var(--ink);
+  background:rgba(14,26,22,.86);border:1px solid var(--line);backdrop-filter:blur(4px);
+  box-shadow:0 4px 14px rgba(0,0,0,.45);transition:opacity .22s,transform .12s,background .15s}
+.scr-l{left:-1px} .scr-r{right:-1px}
+.scr-l:active,.scr-r:active{transform:translateY(-50%) scale(.88);background:rgba(45,212,191,.28)}
+.strip-wrap.at-start .scr-l{opacity:0;pointer-events:none}
+.strip-wrap.at-end .scr-r{opacity:0;pointer-events:none}
 
 /* ── клетка дня ── */
-.cell{flex:0 0 auto;scroll-snap-align:start;width:46px;height:60px;border-radius:9px;
+.cell{flex:0 0 auto;scroll-snap-align:start;position:relative;width:46px;height:60px;border-radius:9px;
   border:1px solid var(--line);background:var(--panel2);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
-  font-family:'JetBrains Mono';transition:transform .15s,border-color .15s,box-shadow .15s;touch-action:pan-y}
-.cell i{font-style:normal;font-size:8px;letter-spacing:.04em;color:var(--mut)}
+  font-family:'JetBrains Mono';transition:transform .15s,border-color .15s,box-shadow .15s,background .15s;
+  touch-action:manipulation;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.cell i{font-style:normal;font-size:8px;letter-spacing:.04em;color:var(--mut);transition:color .15s}
 .cell b{font-size:13px;font-weight:800}
-.cell u{text-decoration:none;font-size:8px;font-weight:700;color:#B9D7CC}
+.cell u{text-decoration:none;font-size:8px;font-weight:700;color:#B9D7CC;transition:color .15s}
 .cell .dot{color:rgba(150,200,180,.3);font-size:10px}
 .cell.we i,.cell.we b{color:#D99}
 .cell:hover{transform:translateY(-3px);border-color:var(--teal)}
-.cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.30),rgba(70,209,138,.08));border-color:rgba(70,209,138,.6)}
-.cell.has-pos u{color:#BFF3D8}
-.cell.has-neg{background:linear-gradient(180deg,rgba(255,92,92,.30),rgba(255,92,92,.08));border-color:rgba(255,92,92,.6)}
-.cell.has-neg u{color:#FFC9C9}
-.cell.today{box-shadow:0 0 0 2px var(--teal),0 0 16px rgba(45,212,191,.4)}
+/* отработано = плотная зелёная заливка (как в Excel) */
+.cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.42),rgba(70,209,138,.22));border-color:rgba(70,209,138,.82)}
+.cell.has-pos i{color:#C7F2DD} .cell.has-pos u{color:#E9FFF4}
+/* штраф / минус = плотная красная заливка */
+.cell.has-neg{background:linear-gradient(180deg,rgba(255,92,92,.42),rgba(255,92,92,.22));border-color:rgba(255,92,92,.82)}
+.cell.has-neg i{color:#F4CCCC} .cell.has-neg u{color:#FFE6E6}
+/* сегодня = кольцо + пульсирующее свечение поверх всего */
+.cell.today{z-index:3;animation:todayGlow 2.2s ease-in-out infinite}
+@keyframes todayGlow{
+  0%,100%{box-shadow:0 0 0 2px var(--teal),0 0 10px rgba(45,212,191,.40)}
+  50%{box-shadow:0 0 0 2px var(--teal),0 0 10px rgba(45,212,191,.90)}
+}
 .cell.pop{animation:pop .38s}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
 
@@ -159,7 +188,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   display:none;align-items:flex-end;justify-content:center;padding:14px}
 .ov.open{display:flex}
 .modal{width:min(94vw,390px);background:#122019;border:1px solid rgba(45,212,191,.35);
-  border-radius:16px;padding:16px;animation:up .28s cubic-bezier(.2,.9,.3,1.2)}
+  border-radius:16px;padding:16px;animation:up .28s cubic-bezier(.2,.9,.3,1.2);max-height:92vh;overflow-y:auto}
 @keyframes up{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}
 .m-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .m-id{display:flex;align-items:center;gap:10px;min-width:0}
@@ -170,10 +199,11 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .m-top b{font:800 14px 'Golos Text';display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .m-top span{font:600 10px 'JetBrains Mono';color:var(--mut)}
 .m-lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin-top:12px}
-#m-amount,.fld{width:100%;margin:6px 0 8px;background:var(--panel2);border:1px solid var(--line);
+#m-amount,.fld,.ta{width:100%;margin:6px 0 8px;background:var(--panel2);border:1px solid var(--line);
   border-radius:10px;color:var(--ink);font:700 14px 'JetBrains Mono';padding:10px 12px;outline:none}
 #m-amount{font-weight:800;font-size:19px}
-#m-amount:focus,.fld:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(45,212,191,.2)}
+#m-amount:focus,.fld:focus,.ta:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(45,212,191,.2)}
+.ta{font-size:11px;line-height:1.5;resize:vertical;min-height:96px;font-family:'JetBrains Mono'}
 .m-hint{font-size:10px;color:var(--mut);margin:-3px 0 10px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
 .qchip{font:700 10.5px 'JetBrains Mono';background:var(--panel2);border:1px solid var(--line);
@@ -199,6 +229,15 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .ei-hint{font-size:10px;color:var(--mut);background:var(--panel2);border:1px dashed var(--line);
   border-radius:8px;padding:7px 10px;margin:0 0 12px;line-height:1.4}
 
+/* ── окно облака ── */
+.cs-status{display:flex;align-items:center;gap:8px;font:700 12px 'Golos Text';
+  background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin:12px 0 4px}
+.cs-status .d{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
+.cs-status.off{color:var(--mut)} .cs-status.boot{color:var(--amber)} .cs-status.boot .d{animation:blink 1s infinite}
+.cs-status.on{color:var(--green)} .cs-status.on .d{animation:blink 2.6s infinite} .cs-status.err{color:var(--red)}
+.cs-steps{font-size:10.5px;color:var(--mut);line-height:1.55;margin:10px 0 4px}
+.cs-steps b{color:var(--ink)} .cs-steps ol{margin:6px 0 0 16px} .cs-steps li{margin:3px 0}
+
 .addpvz{display:block;width:100%;margin-top:15px;padding:12px;border-radius:11px;
   border:1px dashed rgba(45,212,191,.4);color:var(--teal);font:700 12px 'Golos Text';transition:.15s}
 .addpvz:hover{background:rgba(45,212,191,.08)}
@@ -222,6 +261,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     <div><h1>ТАБЕЛЬ ПВЗ</h1><span>пункты выдачи OZON · by DKBZ</span></div>
   </div>
   <div class="nav">
+    <button class="cstat off" id="cstat" data-act="cloud-setup"><span class="d"></span><span id="cstat-txt">локально</span></button>
     <div class="paychip" id="paychip"></div>
     <div class="mnav">
       <button data-act="prev">‹</button>
@@ -247,7 +287,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
   </section>
 
-  <p class="legend rv"><span class="g">■</span> зелёная — смена. <span class="r">■</span> красная — штраф. <b>Тап</b> по пустой = ставка. <b>Тап</b> по занятой = изменить. <b>Зажал</b> пустую = особая сумма. <b>Тап</b> по имени = контакты. <b>Зажал</b> имя = редактировать.</p>
+  <p class="legend rv"><span class="g">■</span> зелёная — отработано. <span class="r">■</span> красная — штраф. <span class="t">◉</span> светящееся кольцо = сегодня (лента сама к нему приезжает). <b>Тап</b> по пустой = ставка. <b>Тап</b> по занятой = изменить. <b>Зажал</b> пустую = особая сумма. <b>Свайп</b> по клеткам или ‹ › = листать дни. <b>Тап</b> по имени = контакты. <b>Зажал</b> имя = редактировать.</p>
 
   <section class="rv" id="pvz-list"></section>
   <button class="addpvz rv" data-act="addpvz">＋ добавить ПВЗ</button>
@@ -256,11 +296,12 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 
   <footer class="foot rv">
     <div class="fbtns">
+      <button class="mini" data-act="cloud-setup">⚙ Облако</button>
       <button class="mini" data-act="export">⬇ Экспорт</button>
       <button class="mini" data-act="importbtn">⬆ Импорт</button>
       <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
     </div>
-    <p>Данные хранятся на этом телефоне · Автор: <b>DKBZ</b></p>
+    <p>Автор: <b>DKBZ</b> · облако = общий табель для двух телефонов</p>
   </footer>
 </main>
 
@@ -322,12 +363,46 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </div>
 </div>
 
+<!-- настройки облака -->
+<div id="cloud-setup" class="ov">
+  <div class="modal">
+    <div class="m-top">
+      <div class="m-id-txt"><b>☁️ Облако</b><span>общий табель для двух телефонов</span></div>
+      <button class="mini" data-act="cs-close">✕</button>
+    </div>
+    <div class="cs-status off" id="cs-status"><span class="d"></span><span id="cs-status-txt">не подключено</span></div>
+    <div class="cs-steps">
+      <b>Как получить конфиг (один раз):</b>
+      <ol>
+        <li>Зайди на <b>firebase.google.com</b>, войди своим Google.</li>
+        <li>«Добавить проект» → имя любое → аналитику <b>выключи</b> → создать.</li>
+        <li>Слева <b>Build → Realtime Database → Создать базу</b> → регион <b>Europe</b>.</li>
+        <li>Вкладка <b>Rules</b> → вставь <b>{"rules":{".read":true,".write":true}}</b> → Опубликовать.</li>
+        <li>⚙ шестерёнка → <b>Настройки проекта</b> → вниз «Ваши приложения» → значок <b>&lt;/&gt;</b> (веб) → зарегистрировать → хостинг НЕ надо.</li>
+        <li>Скопируй блок <b>firebaseConfig = { … }</b> целиком (все фигурные скобки).</li>
+      </ol>
+    </div>
+    <label class="m-lbl">Вставь сюда конфиг { … }</label>
+    <textarea id="cfg-in" class="ta" placeholder='{ "apiKey": "...", "authDomain": "...", "databaseURL": "...", "projectId": "...", ... }'></textarea>
+    <div class="m-hint">Конфиг хранится только на этом телефоне. На втором телефоне вставь тот же конфиг — табель подтянется сам.</div>
+    <div class="m-act">
+      <button class="btn danger" data-act="cs-off">Отключить</button>
+      <button class="btn primary" data-act="cs-save">Подключить</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 <input type="file" id="imp" accept="application/json" hidden>
+
+<!-- Firebase (нужен только если подключаешь облако) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
 // ═══ ДАННЫЕ ═══
 const LS='dkbz_timesheet_v2';
+const CFG_LS='dkbz_fb_cfg';
 const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 const MG=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 const WD=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
@@ -342,14 +417,7 @@ const initial=s=>{const c=(s||'').trim().charAt(0);return c?c.toUpperCase():'?';
 let now=new Date();
 let view={y:now.getFullYear(),m:now.getMonth()};
 let state=load();
-function load(){
-  let s;
-  try{s=JSON.parse(localStorage.getItem(LS));}catch(e){s=null;}
-  if(s&&s.emp&&s.pvz){
-    s.rate=s.rate||1700;
-    s.emp.forEach(e=>{e.phone=e.phone||'';e.bank=e.bank||'';});
-    return s;
-  }
+function defaults(){
   return{
     pvz:{p1:'ПВЗ №1',p2:'БОГДАШКА'},
     emp:[
@@ -361,13 +429,61 @@ function load(){
     shifts:{}, rate:1700, lastAmount:1700
   };
 }
-function persist(){localStorage.setItem(LS,JSON.stringify(state));}
+function mergeDefaults(v){
+  v=v||{};const d=defaults();
+  v.pvz=(v.pvz&&Object.keys(v.pvz).length)?v.pvz:d.pvz;
+  v.emp=Array.isArray(v.emp)&&v.emp.length?v.emp.map(e=>({phone:'',bank:'',...e})):d.emp;
+  v.shifts=v.shifts||{};
+  v.rate=v.rate||1700;v.lastAmount=v.lastAmount||v.rate||1700;
+  return v;
+}
+function load(){
+  let s;try{s=JSON.parse(localStorage.getItem(LS));}catch(e){s=null;}
+  return (s&&s.emp&&s.pvz)?mergeDefaults(s):defaults();
+}
+function persist(push){localStorage.setItem(LS,JSON.stringify(state));if(push!==false)schedulePush();}
 const key=(e,y,m,d)=>e+'@'+y+'-'+pad(m+1)+'-'+pad(d);
 const empById=id=>state.emp.find(e=>e.id===id);
 const empName=id=>{const e=empById(id);return e?e.name:'?';};
 function sumRange(e,d1,d2){let s=0;for(let d=d1;d<=d2;d++){const sh=state.shifts[key(e,view.y,view.m,d)];if(sh)s+=sh.a;}return s;}
 function cntRange(e,d1,d2){let c=0;for(let d=d1;d<=d2;d++){if(state.shifts[key(e,view.y,view.m,d)])c++;}return c;}
 const pvzKeys=()=>Object.keys(state.pvz);
+
+// ═══ ОБЛАКО ═══
+let cloudOn=false, cloudReady=false, dbRef=null, pushT=null;
+function getCfg(){
+  try{const s=localStorage.getItem(CFG_LS);if(s){const c=JSON.parse(s);if(c&&c.apiKey&&c.databaseURL)return c;}}catch(e){}
+  return null;
+}
+function setCloud(cls,txt){
+  const el=$('#cstat');el.className='cstat '+cls;$('#cstat-txt').textContent=txt;
+  const s=$('#cs-status');if(s){s.className='cs-status '+cls;$('#cs-status-txt').textContent=txt;}
+}
+function schedulePush(){
+  if(!cloudOn||!cloudReady||!dbRef)return;
+  clearTimeout(pushT);
+  pushT=setTimeout(()=>{dbRef.set(state).catch(()=>setCloud('err','ошибка записи'));},350);
+}
+function applyRemote(v,first){
+  state=mergeDefaults(v);persist(false);renderAll();
+  if(first)toast('Табель синхронизирован ☁️');
+}
+function initCloud(){
+  const cfg=getCfg();
+  if(!cfg){setCloud('off','локально');return;}
+  if(typeof firebase==='undefined'){setCloud('err','нет связи с Firebase');return;}
+  setCloud('boot','синхр…');
+  try{
+    if(!firebase.apps.length)firebase.initializeApp(cfg);
+    dbRef=firebase.database().ref('dkbz_timesheet_v2');
+  }catch(e){setCloud('err','плохой конфиг');return;}
+  dbRef.once('value').then(snap=>{
+    if(snap.exists())applyRemote(snap.val(),true);
+    else dbRef.set(state).catch(()=>{});
+    cloudOn=true;cloudReady=true;setCloud('on','облако');
+    dbRef.on('value',s=>{if(s.exists())applyRemote(s.val(),false);});
+  }).catch(()=>{cloudOn=false;setCloud('err','ошибка чтения');});
+}
 
 // ═══ РЕНДЕР ═══
 function daysHTML(e,dm){
@@ -399,7 +515,9 @@ function empHTML(e,dm){
    +'<span class="chip">итого: <b class="c-b">'+fmt(tot)+' ₽</b></span>'
    +'<span class="chip">15-го: <b class="c-a">'+fmt(mid)+' ₽</b></span>'
    +'<span class="chip">в конце: <b class="c-g">'+fmt(end)+' ₽</b></span></div>'
-   +'<div class="strip">'+daysHTML(e,dm)+'</div></div>';
+   +'<div class="strip-wrap"><button class="scr-l" data-act="scr" data-dir="-1" aria-label="назад">‹</button>'
+   +'<div class="strip">'+daysHTML(e,dm)+'</div>'
+   +'<button class="scr-r" data-act="scr" data-dir="1" aria-label="вперёд">›</button></div></div>';
 }
 function pvzHTML(n,dm){
   const emps=state.emp.filter(e=>e.pvz===n);
@@ -431,6 +549,27 @@ function animNum(el,target,suf){
     el.textContent=fmt(target*(1-Math.pow(1-p,3)))+(suf||'');
     if(p<1)requestAnimationFrame(step);})(t0);
 }
+function updateStripArrows(strip){
+  const w=strip.closest('.strip-wrap');if(!w)return;
+  const max=strip.scrollWidth-strip.clientWidth-1;
+  w.classList.toggle('at-start',strip.scrollLeft<=1);
+  w.classList.toggle('at-end',strip.scrollLeft>=max);
+}
+function scrollToTodayOrStart(){
+  document.querySelectorAll('.strip').forEach(strip=>{
+    const t=strip.querySelector('.cell.today');
+    if(t){
+      const sr=strip.getBoundingClientRect(), cr=t.getBoundingClientRect();
+      strip.scrollLeft += (cr.left - sr.left) - 6; // сегодня первым в кадре, чуть правее стрелки ‹
+    }else{
+      strip.scrollLeft=0;
+    }
+    updateStripArrows(strip);
+  });
+}
+function bindStrips(){
+  document.querySelectorAll('.strip').forEach(s=>{s.onscroll=()=>updateStripArrows(s);});
+}
 function renderAll(){
   const dm=dim(view.y,view.m);
   $('#mtitle').textContent=MONTHS[view.m]+' '+view.y;
@@ -442,6 +581,8 @@ function renderAll(){
   $('#paygrid').innerHTML=
     panel('АВАНС','выплата 15-го','смены с 1 по 15 число',1,15,'mid')
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
+  bindStrips();
+  scrollToTodayOrStart();
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
   if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
   else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
@@ -472,7 +613,7 @@ function openModalFor(emp,d){
 }
 function closeM(){$('#overlay').classList.remove('open');syncLock();}
 
-// ═══ КАРТОЧКА КОНТАКТОВ / РЕДАКТ. СОТРУДНИКА ═══
+// ═══ КОНТАКТЫ / РЕДАКТ. СОТРУДНИКА ═══
 function openEmpInfo(id){
   const e=empById(id);if(!e)return;curEmp=id;
   $('#ei-av').textContent=initial(e.name);
@@ -498,10 +639,15 @@ function openEmpEdit(id){
   setTimeout(()=>$('#ee-name').focus(),120);
 }
 function closeEmpEdit(){$('#emp-edit').classList.remove('open');syncLock();}
-function syncLock(){
-  const any=document.querySelector('.ov.open');
-  if(!any)document.body.classList.remove('lock');
+
+// ═══ ОКНО ОБЛАКА ═══
+function openCloudSetup(){
+  const cfg=getCfg();
+  $('#cfg-in').value=cfg?JSON.stringify(cfg,null,2):'';
+  $('#cloud-setup').classList.add('open');document.body.classList.add('lock');
 }
+function closeCloudSetup(){$('#cloud-setup').classList.remove('open');syncLock();}
+function syncLock(){if(!document.querySelector('.ov.open'))document.body.classList.remove('lock');}
 
 function popCell(k){const el=document.querySelector('[data-k="'+k+'"]');if(el){el.classList.add('pop');setTimeout(()=>el.classList.remove('pop'),420);}}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2200);}
@@ -515,8 +661,11 @@ function fallbackCopy(txt,cb){
   document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);cb();
 }
 
-// ═══ ТАП / ЗАЖАЛ: КЛЕТКИ + ИМЕНА ═══
+// ═══ ТАП / ЗАЖАЛ / СВАЙП: КЛЕТКИ + ИМЕНА ═══
 let press=null, namePress=null;
+function isScrollGesture(dx,dy){ // горизонтальный свайп = прокрутка ленты, не тап
+  return (Math.abs(dx)>6 && Math.abs(dx)>=Math.abs(dy)) || Math.abs(dy)>8;
+}
 document.addEventListener('pointerdown',e=>{
   const c=e.target.closest('.cell');
   if(c){press={emp:c.dataset.emp,d:+c.dataset.d,x:e.clientX,y:e.clientY,moved:false,long:false,
@@ -526,8 +675,10 @@ document.addEventListener('pointerdown',e=>{
     timer:setTimeout(()=>{if(namePress&&!namePress.moved){namePress.long=true;openEmpEdit(namePress.emp);}},430)};return;}
 });
 document.addEventListener('pointermove',e=>{
-  if(press&&(Math.abs(e.clientX-press.x)>8||Math.abs(e.clientY-press.y)>8)){press.moved=true;clearTimeout(press.timer);}
-  if(namePress&&(Math.abs(e.clientX-namePress.x)>8||Math.abs(e.clientY-namePress.y)>8)){namePress.moved=true;clearTimeout(namePress.timer);}
+  if(press){const dx=e.clientX-press.x,dy=e.clientY-press.y;
+    if(isScrollGesture(dx,dy)){press.moved=true;clearTimeout(press.timer);}}
+  if(namePress){const dx=e.clientX-namePress.x,dy=e.clientY-namePress.y;
+    if(isScrollGesture(dx,dy)){namePress.moved=true;clearTimeout(namePress.timer);}}
 });
 document.addEventListener('pointerup',e=>{
   if(press){const p=press;press=null;clearTimeout(p.timer);
@@ -545,6 +696,8 @@ document.addEventListener('click',e=>{
   const a=el.dataset.act;
   if(a==='prev'){view.m--;if(view.m<0){view.m=11;view.y--;}renderAll();}
   else if(a==='next'){view.m++;if(view.m>11){view.m=0;view.y++;}renderAll();}
+  else if(a==='scr'){const w=el.closest('.strip-wrap');const s=w&&w.querySelector('.strip');
+    if(s)s.scrollBy({left:(el.dataset.dir==='1'?1:-1)*210,behavior:'smooth'});}
   else if(a==='q'){$('#m-amount').value=el.dataset.v;}
   else if(a==='mclose')closeM();
   else if(a==='msave'){
@@ -570,6 +723,21 @@ document.addEventListener('click',e=>{
     if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
     state.emp=state.emp.filter(x=>x.id!==e.id);persist();closeEmpEdit();renderAll();toast('Сотрудник удалён');}
+  // облако
+  else if(a==='cloud-setup')openCloudSetup();
+  else if(a==='cs-close')closeCloudSetup();
+  else if(a==='cs-save'){
+    const txt=$('#cfg-in').value.trim();
+    let c;try{c=JSON.parse(txt);}catch(x){toast('Это не JSON, проверь скобки!');return;}
+    if(!c||!c.apiKey||!c.databaseURL){toast('В конфиге нет apiKey или databaseURL!');return;}
+    localStorage.setItem(CFG_LS,JSON.stringify(c));
+    toast('Подключаю, перезагружаю… ☁️');setTimeout(()=>location.reload(),650);
+  }
+  else if(a==='cs-off'){
+    if(!getCfg()){toast('И так не подключено');return;}
+    if(!confirm('Отключить облако? Табель останется только на этом телефоне.'))return;
+    localStorage.removeItem(CFG_LS);toast('Отключаю…');setTimeout(()=>location.reload(),500);
+  }
   // прочее
   else if(a==='del-emp'){const e=empById(el.dataset.emp);if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
@@ -594,23 +762,23 @@ document.addEventListener('click',e=>{
   else if(a==='export'){const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
     const a2=document.createElement('a');a2.href=URL.createObjectURL(b);a2.download='tabel-dkbz.json';a2.click();toast('Файл сохранён ⬇');}
   else if(a==='importbtn')$('#imp').click();
-  else if(a==='reset'){if(!confirm('Точно сбросить ВЕСЬ табель нахрен?'))return;localStorage.removeItem(LS);state=load();renderAll();toast('Всё сброшено');}
+  else if(a==='reset'){if(!confirm('Точно сбросить ВЕСЬ табель нахрен?'))return;localStorage.removeItem(LS);state=load();persist(false);renderAll();toast('Всё сброшено');}
 });
 $('#rate').addEventListener('input',e=>{const v=parseNum(e.target.value);if(v!==null&&v>0){state.rate=v;persist();}});
-['overlay','emp-info','emp-edit'].forEach(id=>{
+['overlay','emp-info','emp-edit','cloud-setup'].forEach(id=>{
   $('#'+id).addEventListener('click',e=>{if(e.target.id===id){$('#'+id).classList.remove('open');syncLock();}});
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeEmpInfo();closeEmpEdit();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeEmpInfo();closeEmpEdit();closeCloudSetup();}});
 $('#imp').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.emp||!s.pvz||!s.shifts)throw 0;
-    s.rate=s.rate||1700;s.emp.forEach(x=>{x.phone=x.phone||'';x.bank=x.bank||'';});
-    state=s;persist();renderAll();toast('Табель загружен ✔');}catch(x){toast('Файл битый, ёпта!');}};
+    state=mergeDefaults(s);persist();renderAll();toast('Табель загружен ✔');}catch(x){toast('Файл битый, ёпта!');}};
   r.readAsText(f);e.target.value='';
 });
 
 // ═══ ПОЕХАЛИ ═══
 renderAll();
+initCloud();
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:.06});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 </script>
