@@ -110,7 +110,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .ptotal b{font:400 21px 'Yeseva One';line-height:1}
 .pay.mid .ptotal b{color:var(--amber)} .pay.end .ptotal b{color:var(--green)}
 
-/*  ПВЗ и сотрудники ── */
+/* ── ПВЗ и сотрудники ── */
 .pvz-head{display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;
   margin:24px 0 3px;border-top:3px double var(--line);padding-top:12px}
 .pvz-head h2{font:900 16px 'Unbounded';display:flex;align-items:center;gap:7px}
@@ -145,7 +145,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;margin-top:10px}
 .strip::-webkit-scrollbar{display:none}
 
-/* ── клетка дня ─ */
+/* ── клетка дня ── */
 .cell{flex:0 0 auto;scroll-snap-align:start;position:relative;width:46px;height:60px;border-radius:9px;
   border:1px solid var(--line);background:var(--panel2);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
@@ -223,7 +223,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
 .btn.copied{border-color:var(--green)!important;color:var(--green)!important}
 
-/* ── карточка контактов ─ */
+/* ── карточка контактов ── */
 .info-rows{display:flex;flex-direction:column;gap:8px;margin:14px 0 12px}
 .info-row{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
 .info-row span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin-bottom:3px}
@@ -307,7 +307,9 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </footer>
 </main>
 
-<!-- модалка СУММЫ СМЕНЫ (двойной тап) -->
+<!-- модалки и оверлеи как в прошлом коде, без изменений -->
+<!-- ... (весь HTML модалок тот же) ... -->
+
 <div id="overlay" class="ov">
   <div class="modal">
     <div class="m-top">
@@ -323,7 +325,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </div>
 </div>
 
-<!-- модалка ШТРАФА (зажатие) -->
 <div id="penalty" class="ov">
   <div class="modal pen-modal">
     <div class="m-top">
@@ -343,7 +344,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </div>
 </div>
 
-<!-- карточка контактов (тап по имени) -->
 <div id="emp-info" class="ov">
   <div class="modal">
     <div class="m-top">
@@ -351,19 +351,18 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="mini" data-act="ei-close">✕</button>
     </div>
     <div class="info-rows">
-      <div class="info-row" id="ei-row-phone"><span> Телефон</span><b id="ei-phone">—</b></div>
+      <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
       <div class="info-row" id="ei-row-bank"><span>🏦 Банк</span><b id="ei-bank">—</b></div>
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
-      <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
+      <button class="btn ghost" data-act="ei-edit"> Изменить</button>
       <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
       <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
   </div>
 </div>
 
-<!-- редактирование сотрудника (зажал имя) -->
 <div id="emp-edit" class="ov">
   <div class="modal">
     <div class="m-top">
@@ -383,7 +382,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </div>
 </div>
 
-<!-- настройки облака -->
 <div id="cloud-setup" class="ov">
   <div class="modal">
     <div class="m-top">
@@ -398,7 +396,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
         <li>«Добавить проект» → имя любое → аналитику <b>выключи</b> → создать.</li>
         <li>Слева <b>Build → Realtime Database → Создать базу</b> → регион <b>Europe</b>.</li>
         <li>Вкладка <b>Rules</b> → вставь <b>{"rules":{".read":true,".write":true}}</b> → Опубликовать.</li>
-        <li>⚙ шестерёнка → <b>Настройки проекта</b> → вниз «Ваши приложения» → значок <b>&lt;/&gt;</b> (веб) → зарегистрировать → хостинг НЕ надо.</li>
+        <li> шестерёнка → <b>Настройки проекта</b> → вниз «Ваши приложения» → значок <b>&lt;/&gt;</b> (веб) → зарегистрировать → хостинг НЕ надо.</li>
         <li>Скопируй блок <b>firebaseConfig = { … }</b> целиком (все фигурные скобки).</li>
       </ol>
     </div>
@@ -415,12 +413,10 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 <div id="toast"></div>
 <input type="file" id="imp" accept="application/json" hidden>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
-// ═══ ДАННЫЕ ═══
 const LS='dkbz_timesheet_v2';
 const CFG_LS='dkbz_fb_cfg';
 const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
@@ -437,6 +433,8 @@ const initial=s=>{const c=(s||'').trim().charAt(0);return c?c.toUpperCase():'?';
 let now=new Date();
 let view={y:now.getFullYear(),m:now.getMonth()};
 let state=load();
+let cloudOn=false, cloudReady=false, dbRef=null, pushT=null, isRemoteUpdate=false;
+
 function defaults(){
   return{
     pvz:{p1:'ПВЗ №1',p2:'БОГДАШКА'},
@@ -476,7 +474,7 @@ function load(){
   let s;try{s=JSON.parse(localStorage.getItem(LS));}catch(e){s=null;}
   return (s&&s.emp&&s.pvz)?mergeDefaults(s):defaults();
 }
-function persist(push){localStorage.setItem(LS,JSON.stringify(state));if(push!==false)schedulePush();}
+function persist(push){localStorage.setItem(LS,JSON.stringify(state));if(push!==false&&!isRemoteUpdate)schedulePush();}
 const key=(e,y,m,d)=>e+'@'+y+'-'+pad(m+1)+'-'+pad(d);
 const empById=id=>state.emp.find(e=>e.id===id);
 const empName=id=>{const e=empById(id);return e?e.name:'?';};
@@ -486,8 +484,6 @@ function sumRange(e,d1,d2){let s=0;for(let d=d1;d<=d2;d++){const sh=state.shifts
 function cntRange(e,d1,d2){let c=0;for(let d=d1;d<=d2;d++){if(isWorked(state.shifts[key(e,view.y,view.m,d)]))c++;}return c;}
 const pvzKeys=()=>Object.keys(state.pvz);
 
-// ═══ ОБЛАКО ═══
-let cloudOn=false, cloudReady=false, dbRef=null, pushT=null;
 function getCfg(){
   try{const s=localStorage.getItem(CFG_LS);if(s){const c=JSON.parse(s);if(c&&c.apiKey&&c.databaseURL)return c;}}catch(e){}
   return null;
@@ -497,13 +493,16 @@ function setCloud(cls,txt){
   const s=$('#cs-status');if(s){s.className='cs-status '+cls;$('#cs-status-txt').textContent=txt;}
 }
 function schedulePush(){
-  if(!cloudOn||!cloudReady||!dbRef)return;
+  if(!cloudOn||!cloudReady||!dbRef||isRemoteUpdate)return;
   clearTimeout(pushT);
   pushT=setTimeout(()=>{dbRef.set(state).catch(()=>setCloud('err','ошибка записи'));},350);
 }
-function applyRemote(v,first){
-  state=mergeDefaults(v);persist(false);renderAll(false); // false = не прокручивать
-  if(first)toast('Табель синхронизирован ☁️');
+function applyRemote(v){
+  isRemoteUpdate=true;
+  state=mergeDefaults(v);
+  localStorage.setItem(LS,JSON.stringify(state));
+  renderAll(false);
+  setTimeout(()=>{isRemoteUpdate=false;},100);
 }
 function initCloud(){
   const cfg=getCfg();
@@ -515,14 +514,13 @@ function initCloud(){
     dbRef=firebase.database().ref('dkbz_timesheet_v2');
   }catch(e){setCloud('err','плохой конфиг');return;}
   dbRef.once('value').then(snap=>{
-    if(snap.exists())applyRemote(snap.val(),true);
+    if(snap.exists()){applyRemote(snap.val());toast('Табель синхронизирован ☁️');}
     else dbRef.set(state).catch(()=>{});
     cloudOn=true;cloudReady=true;setCloud('on','облако');
-    dbRef.on('value',s=>{if(s.exists())applyRemote(s.val(),false);});
+    dbRef.on('value',s=>{if(s.exists()&&!isRemoteUpdate)applyRemote(s.val());});
   }).catch(()=>{cloudOn=false;setCloud('err','ошибка чтения');});
 }
 
-// ═══ РЕНДЕР ═══
 function daysHTML(e,dm){
   let h='';const t=new Date();
   const isCur=t.getFullYear()===view.y&&t.getMonth()===view.m;
@@ -584,14 +582,14 @@ function animNum(el,target,suf){
     el.textContent=fmt(target*(1-Math.pow(1-p,3)))+(suf||'');
     if(p<1)requestAnimationFrame(step);})(t0);
 }
-function scrollToTodayOrStart(){
+function scrollToToday(){
   document.querySelectorAll('.strip').forEach(strip=>{
     const t=strip.querySelector('.cell.today');
     if(t){const sr=strip.getBoundingClientRect(),cr=t.getBoundingClientRect();strip.scrollLeft+=(cr.left-sr.left)-6;}
     else strip.scrollLeft=0;
   });
 }
-function renderAll(scrollToToday=true){
+function renderAll(){
   const dm=dim(view.y,view.m);
   $('#mtitle').textContent=MONTHS[view.m]+' '+view.y;
   let M=0,E=0,T=0;
@@ -608,15 +606,12 @@ function renderAll(scrollToToday=true){
   $('#paygrid').innerHTML=
     panel('АВАНС','выплата 15-го','смены с 1 по 15 число',1,15,'mid')
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
-  if(scrollToToday) scrollToTodayOrStart();
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
   if(td<=15){const n=15-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
   else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
 }
 
-// ═══ МОДАЛКА СУММЫ (двойной тап) ══
-let cur={k:null,emp:null,d:0};
-let curEmp=null;
+let cur={k:null,emp:null,d:0}, curEmp=null, pen={k:null,emp:null,d:0};
 function openSum(emp,d){
   const k=key(emp,view.y,view.m,d);
   const s=state.shifts[k];
@@ -631,8 +626,6 @@ function openSum(emp,d){
 }
 function closeM(){$('#overlay').classList.remove('open');syncLock();}
 
-// ═══ МОДАЛКА ШТРАФА (зажатие) ═══
-let pen={k:null,emp:null,d:0};
 function updatePenPrev(){
   const s=state.shifts[pen.k];const b=s?s.b:0;
   const p=parseNum($('#p-amount').value)||0;
@@ -659,7 +652,6 @@ function openPenalty(emp,d){
 }
 function closePen(){$('#penalty').classList.remove('open');syncLock();}
 
-// ═══ КОНТАКТЫ / РЕДАКТ. СОТРУДНИКА ══
 function openEmpInfo(id){
   const e=empById(id);if(!e)return;curEmp=id;
   $('#ei-av').textContent=initial(e.name);
@@ -685,7 +677,6 @@ function openEmpEdit(id){
   setTimeout(()=>$('#ee-name').focus(),120);
 }
 function closeEmpEdit(){$('#emp-edit').classList.remove('open');syncLock();}
-
 function openCloudSetup(){
   const cfg=getCfg();
   $('#cfg-in').value=cfg?JSON.stringify(cfg,null,2):'';
@@ -706,19 +697,18 @@ function fallbackCopy(txt,cb){
   document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);cb();
 }
 
-// ═══ ЖЕСТЫ ПО КЛЕТКАМ ═══
 let press=null, namePress=null, cellPending=null;
 function isScrollGesture(dx,dy){return (Math.abs(dx)>6 && Math.abs(dx)>=Math.abs(dy)) || Math.abs(dy)>8;}
 function setRateAt(emp,d){
   const k=key(emp,view.y,view.m,d);
   state.shifts[k]={b:state.rate,p:0,n:''};state.lastAmount=state.rate;
-  persist();renderAll(false);popCell(k);toast('Смена '+fmt(state.rate)+' ₽ ✔');
+  persist();renderAll();popCell(k);toast('Смена '+fmt(state.rate)+' ₽ ✔');
 }
 function removeShift(emp,d){
   const k=key(emp,view.y,view.m,d);
   if(!state.shifts[k])return;
   delete state.shifts[k];
-  persist();renderAll(false);popCell(k);toast('Смена убрана');
+  persist();renderAll();popCell(k);toast('Смена убрана');
 }
 function runTap(emp,d){
   const k=key(emp,view.y,view.m,d);
@@ -759,49 +749,48 @@ document.addEventListener('pointerup',e=>{
 });
 document.addEventListener('pointercancel',()=>{if(press){clearTimeout(press.timer);press=null;}if(namePress){clearTimeout(namePress.timer);namePress=null;}});
 
-// ═══ КНОПКИ ══
 document.addEventListener('click',e=>{
   const el=e.target.closest('[data-act]');if(!el)return;
   const a=el.dataset.act;
-  if(a==='prev'){view.m--;if(view.m<0){view.m=11;view.y--;}renderAll(true);renderAll(true);}
-  else if(a==='next'){view.m++;if(view.m>11){view.m=0;view.y++;}renderAll(true);}
+  if(a==='prev'){view.m--;if(view.m<0){view.m=11;view.y--;}renderAll();scrollToToday();}
+  else if(a==='next'){view.m++;if(view.m>11){view.m=0;view.y++;}renderAll();scrollToToday();}
   else if(a==='mclose')closeM();
   else if(a==='msave'){
     const v=parseNum($('#m-amount').value);
     if(v===null||v<=0){toast('Введи сумму за смену!');return;}
     const s=state.shifts[cur.k];
     if(s){s.b=v;}
-    state.lastAmount=v;persist();closeM();renderAll(false);popCell(cur.k);toast('Сумма смены сохранена ✔');
+    state.lastAmount=v;persist();closeM();renderAll();popCell(cur.k);toast('Сумма смены сохранена ✔');
   }
   else if(a==='pclose')closePen();
   else if(a==='psave'){
     const s=state.shifts[pen.k];if(!s)return;
     const p=parseNum($('#p-amount').value)||0;
     s.p=p;s.n=$('#p-note').value.trim();
-    persist();closePen();renderAll(false);popCell(pen.k);
+    persist();closePen();renderAll();popCell(pen.k);
     toast(p>0?'Штраф '+fmt(p)+' ₽ сохранён ✔':'Штраф убран ✔');
   }
   else if(a==='pclear'){
     const s=state.shifts[pen.k];if(!s)return;
     if(s.b<=0) delete state.shifts[pen.k];
     else {s.p=0;s.n='';}
-    persist();closePen();renderAll(false);popCell(pen.k);toast('Штраф убран ✔');
+    persist();closePen();renderAll();popCell(pen.k);toast('Штраф убран ✔');
   }
   else if(a==='ei-close')closeEmpInfo();
   else if(a==='ei-edit'){const id=curEmp;closeEmpInfo();openEmpEdit(id);}
-  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован 📋');}
+  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован ');}
   else if(a==='ee-close')closeEmpEdit();
   else if(a==='ee-save'){
     const e=empById(curEmp);if(!e)return;
     const nm=$('#ee-name').value.trim();
     if(!nm){toast('Имя не может быть пустым!');return;}
     e.name=nm;e.phone=$('#ee-phone').value.trim();e.bank=$('#ee-bank').value.trim();
-    persist();closeEmpEdit();renderAll(false);toast('Сотрудник сохранён ✔');
+    persist();closeEmpEdit();renderAll();toast('Сотрудник сохранён ✔');
   }
   else if(a==='ee-del'){const e=empById(curEmp);if(!e)return;
     if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
-    state.emp=state.emp.filter(x=>x.id!==e.id);persist();closeEmpEdit();renderAll(false);toast('Сотрудник удалён');}
+    state.emp=state.emp.filter(x=>x.id!==e.id);persist();closeEmpEdit();renderAll();toast('Сотрудник удалён');}
   else if(a==='cloud-setup')openCloudSetup();
   else if(a==='cs-close')closeCloudSetup();
   else if(a==='cs-save'){
@@ -818,28 +807,28 @@ document.addEventListener('click',e=>{
   }
   else if(a==='del-emp'){const e=empById(el.dataset.emp);if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
-    state.emp=state.emp.filter(x=>x.id!==e.id);persist();renderAll(false);toast('Сотрудник удалён');}
+    state.emp=state.emp.filter(x=>x.id!==e.id);persist();renderAll();toast('Сотрудник удалён');}
   else if(a==='add-emp'){const n=prompt('Имя нового сотрудника:','Сотрудник');if(n&&n.trim()){
-    state.emp.push({id:'e'+Date.now(),pvz:el.dataset.pvz,name:n.trim(),phone:'',bank:''});persist();renderAll(false);toast('Сотрудник добавлен ✔');}}
-  else if(a==='ren-pvz'){const n=prompt('Название ПВЗ:',state.pvz[el.dataset.pvz]);if(n&&n.trim()){state.pvz[el.dataset.pvz]=n.trim();persist();renderAll(false);}}
+    state.emp.push({id:'e'+Date.now(),pvz:el.dataset.pvz,name:n.trim(),phone:'',bank:''});persist();renderAll();toast('Сотрудник добавлен ✔');}}
+  else if(a==='ren-pvz'){const n=prompt('Название ПВЗ:',state.pvz[el.dataset.pvz]);if(n&&n.trim()){state.pvz[el.dataset.pvz]=n.trim();persist();renderAll();}}
   else if(a==='del-pvz'){const emps=state.emp.filter(x=>x.pvz===el.dataset.pvz);
     if(!confirm('Удалить ПВЗ «'+state.pvz[el.dataset.pvz]+'» и всех его сотрудников ('+emps.length+' чел.)?'))return;
     emps.forEach(e=>Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];}));
     state.emp=state.emp.filter(x=>x.pvz!==el.dataset.pvz);delete state.pvz[el.dataset.pvz];
     if(pvzKeys().length===0)state.pvz['p'+Date.now()]='ПВЗ №1';
-    persist();renderAll(false);toast('ПВЗ удалён');}
+    persist();renderAll();toast('ПВЗ удалён');}
   else if(a==='addpvz'){const n=prompt('Название нового ПВЗ:','ПВЗ №'+(pvzKeys().length+1));if(n&&n.trim()){
-    state.pvz['p'+Date.now()]=n.trim();persist();renderAll(false);toast('ПВЗ добавлен ✔');}}
+    state.pvz['p'+Date.now()]=n.trim();persist();renderAll();toast('ПВЗ добавлен ✔');}}
   else if(a==='fill'){const e=empById(el.dataset.emp);const dm=dim(view.y,view.m);
     if(!confirm('Раскидать для «'+e.name+'» график 2/2 на '+MONTHS[view.m]+'? (2 рабочих / 2 выходных, ставка '+fmt(state.rate)+' ₽). Старые смены месяца затрутся!'))return;
     for(let d=1;d<=dm;d++){const k=key(e.id,view.y,view.m,d);if(((d-1)%4)<2)state.shifts[k]={b:state.rate,p:0,n:''};else delete state.shifts[k];}
-    persist();renderAll(false);toast('График 2/2 готов ✔');}
+    persist();renderAll();toast('График 2/2 готов ✔');}
   else if(a==='clearemp'){const e=empById(el.dataset.emp);if(!confirm('Стереть ВСЕ смены «'+e.name+'» за '+MONTHS[view.m]+'?'))return;
-    const dm=dim(view.y,view.m);for(let d=1;d<=dm;d++)delete state.shifts[key(e.id,view.y,view.m,d)];persist();renderAll(false);toast('Месяц очищен');}
+    const dm=dim(view.y,view.m);for(let d=1;d<=dm;d++)delete state.shifts[key(e.id,view.y,view.m,d)];persist();renderAll();toast('Месяц очищен');}
   else if(a==='export'){const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
     const a2=document.createElement('a');a2.href=URL.createObjectURL(b);a2.download='tabel-dkbz.json';a2.click();toast('Файл сохранён ⬇');}
   else if(a==='importbtn')$('#imp').click();
-  else if(a==='reset'){if(!confirm('Точно сбросить ВЕСЬ табель нахрен?'))return;localStorage.removeItem(LS);state=load();persist(false);renderAll(true);toast('Всё сброшено');}
+  else if(a==='reset'){if(!confirm('Точно сбросить ВЕСЬ табель нахрен?'))return;localStorage.removeItem(LS);state=load();persist(false);renderAll();scrollToToday();toast('Всё сброшено');}
 });
 $('#rate').addEventListener('input',e=>{const v=parseNum(e.target.value);if(v!==null&&v>0){state.rate=v;persist();}});
 $('#p-amount').addEventListener('input',updatePenPrev);
@@ -850,12 +839,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closePen()
 $('#imp').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.emp||!s.pvz||!s.shifts)throw 0;
-    state=mergeDefaults(s);persist();renderAll(true);toast('Табель загружен ✔');}catch(x){toast('Файл битый, ёпта!');}};
+    state=mergeDefaults(s);persist();renderAll();scrollToToday();toast('Табель загружен ✔');}catch(x){toast('Файл битый, ёпта!');}};
   r.readAsText(f);e.target.value='';
 });
 
-// ═══ ПОЕХАЛИ ═══
-renderAll(true); // true = прокрутить к сегодня при первой загрузке
+renderAll();
+setTimeout(()=>scrollToToday(),100);
 initCloud();
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:.06});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
