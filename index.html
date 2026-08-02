@@ -145,7 +145,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;margin-top:10px}
 .strip::-webkit-scrollbar{display:none}
 
-/* ── клетка дня ── */
+/* ── клетка дня ─ */
 .cell{flex:0 0 auto;scroll-snap-align:start;position:relative;width:46px;height:60px;border-radius:9px;
   border:1px solid var(--line);background:var(--panel2);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
@@ -176,7 +176,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .cell.pop{animation:pop .38s}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
 
-/* ── оверлеи / модалки ── */
+/* ─ оверлеи / модалки ─ */
 .ov{position:fixed;inset:0;z-index:100;background:rgba(4,10,8,.74);
   display:none;align-items:flex-end;justify-content:center;padding:14px}
 .ov.open{display:flex}
@@ -298,7 +298,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 
   <footer class="foot rv">
     <div class="fbtns">
-      <button class="mini" data-act="cloud-setup">⚙ Облако</button>
+      <button class="mini" data-act="cloud-setup"> Облако</button>
       <button class="mini" data-act="export"> Экспорт</button>
       <button class="mini" data-act="importbtn"> Импорт</button>
       <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
@@ -307,7 +307,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </footer>
 </main>
 
-<!-- модалки (тот же HTML что и раньше, без изменений) -->
+<!-- модалки -->
 <div id="overlay" class="ov">
   <div class="modal">
     <div class="m-top">
@@ -384,7 +384,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id-txt"><b>☁️ Облако</b><span>общий табель для двух телефонов</span></div>
-      <button class="mini" data-act="cs-close">✕</button>
+      <button class="mini" data-act="cs-close"></button>
     </div>
     <div class="cs-status off" id="cs-status"><span class="d"></span><span id="cs-status-txt">не подключено</span></div>
     <div class="cs-steps">
@@ -599,7 +599,7 @@ function renderAll(){
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
   if(td<=15){const n=15-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  else{const n=ld-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
 }
 
 let cur={k:null,emp:null,d:0}, curEmp=null, pen={k:null,emp:null,d:0};
