@@ -176,7 +176,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .cell.pop{animation:pop .38s}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
 
-/* ─ оверлеи / модалки ─ */
+/* ── оверлеи / модалки ── */
 .ov{position:fixed;inset:0;z-index:100;background:rgba(4,10,8,.74);
   display:none;align-items:flex-end;justify-content:center;padding:14px}
 .ov.open{display:flex}
@@ -223,7 +223,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
 .btn.copied{border-color:var(--green)!important;color:var(--green)!important}
 
-/* ── карточка контактов ─ */
+/* ── карточка контактов ── */
 .info-rows{display:flex;flex-direction:column;gap:8px;margin:14px 0 12px}
 .info-row{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
 .info-row span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin-bottom:3px}
@@ -298,9 +298,9 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 
   <footer class="foot rv">
     <div class="fbtns">
-      <button class="mini" data-act="cloud-setup"> Облако</button>
-      <button class="mini" data-act="export"> Экспорт</button>
-      <button class="mini" data-act="importbtn"> Импорт</button>
+      <button class="mini" data-act="cloud-setup">⚙ Облако</button>
+      <button class="mini" data-act="export">⬇ Экспорт</button>
+      <button class="mini" data-act="importbtn">⬆ Импорт</button>
       <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
     </div>
     <p>Автор: <b>DKBZ</b> · облако = общий табель для двух телефонов</p>
@@ -349,13 +349,13 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="mini" data-act="ei-close">✕</button>
     </div>
     <div class="info-rows">
-      <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
-      <div class="info-row" id="ei-row-bank"><span>🏦 Банк</span><b id="ei-bank">—</b></div>
+      <div class="info-row" id="ei-row-phone"><span> Телефон</span><b id="ei-phone">—</b></div>
+      <div class="info-row" id="ei-row-bank"><span> Банк</span><b id="ei-bank">—</b></div>
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
-      <button class="btn ghost" data-act="ei-edit"> Изменить</button>
-      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
+      <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
+      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone"> Телефон</button>
       <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
   </div>
@@ -384,7 +384,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id-txt"><b>☁️ Облако</b><span>общий табель для двух телефонов</span></div>
-      <button class="mini" data-act="cs-close"></button>
+      <button class="mini" data-act="cs-close">✕</button>
     </div>
     <div class="cs-status off" id="cs-status"><span class="d"></span><span id="cs-status-txt">не подключено</span></div>
     <div class="cs-steps">
@@ -519,6 +519,21 @@ function initCloud(){
   }).catch(()=>{cloudOn=false;setCloud('err','ошибка чтения');});
 }
 
+// ═══ СОХРАНЕНИЕ/ВОССТАНОВЛЕНИЕ ПРОКРУТКИ ══
+function saveStripScrolls(){
+  const positions=[];
+  document.querySelectorAll('.strip').forEach(s=>{
+    positions.push(s.scrollLeft);
+  });
+  return positions;
+}
+function restoreStripScrolls(positions){
+  const strips=document.querySelectorAll('.strip');
+  positions.forEach((pos,i)=>{
+    if(strips[i]) strips[i].scrollLeft=pos;
+  });
+}
+
 function daysHTML(e,dm){
   let h='';const t=new Date();
   const isCur=t.getFullYear()===view.y&&t.getMonth()===view.m;
@@ -598,8 +613,8 @@ function renderAll(){
     panel('АВАНС','выплата 15-го','смены с 1 по 15 число',1,15,'mid')
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
-  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':' '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
 }
 
 let cur={k:null,emp:null,d:0}, curEmp=null, pen={k:null,emp:null,d:0};
@@ -693,13 +708,15 @@ function isScrollGesture(dx,dy){return (Math.abs(dx)>6 && Math.abs(dx)>=Math.abs
 function setRateAt(emp,d){
   const k=key(emp,view.y,view.m,d);
   state.shifts[k]={b:state.rate,p:0,n:''};state.lastAmount=state.rate;
-  persist();renderAll();popCell(k);toast('Смена '+fmt(state.rate)+' ₽ ✔');
+  const positions=saveStripScrolls();
+  persist();renderAll();restoreStripScrolls(positions);popCell(k);toast('Смена '+fmt(state.rate)+' ₽ ✔');
 }
 function removeShift(emp,d){
   const k=key(emp,view.y,view.m,d);
   if(!state.shifts[k])return;
   delete state.shifts[k];
-  persist();renderAll();popCell(k);toast('Смена убрана');
+  const positions=saveStripScrolls();
+  persist();renderAll();restoreStripScrolls(positions);popCell(k);toast('Смена убрана');
 }
 function runTap(emp,d){
   const k=key(emp,view.y,view.m,d);
@@ -751,37 +768,44 @@ document.addEventListener('click',e=>{
     if(v===null||v<=0){toast('Введи сумму за смену!');return;}
     const s=state.shifts[cur.k];
     if(s){s.b=v;}
-    state.lastAmount=v;persist();closeM();renderAll();popCell(cur.k);toast('Сумма смены сохранена ✔');
+    state.lastAmount=v;
+    const positions=saveStripScrolls();
+    persist();closeM();renderAll();restoreStripScrolls(positions);popCell(cur.k);toast('Сумма смены сохранена ✔');
   }
   else if(a==='pclose')closePen();
   else if(a==='psave'){
     const s=state.shifts[pen.k];if(!s)return;
     const p=parseNum($('#p-amount').value)||0;
     s.p=p;s.n=$('#p-note').value.trim();
-    persist();closePen();renderAll();popCell(pen.k);
+    const positions=saveStripScrolls();
+    persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);
     toast(p>0?'Штраф '+fmt(p)+' ₽ сохранён ✔':'Штраф убран ✔');
   }
   else if(a==='pclear'){
     const s=state.shifts[pen.k];if(!s)return;
     if(s.b<=0) delete state.shifts[pen.k];
     else {s.p=0;s.n='';}
-    persist();closePen();renderAll();popCell(pen.k);toast('Штраф убран ✔');
+    const positions=saveStripScrolls();
+    persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);toast('Штраф убран ✔');
   }
   else if(a==='ei-close')closeEmpInfo();
   else if(a==='ei-edit'){const id=curEmp;closeEmpInfo();openEmpEdit(id);}
-  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован ');}
+  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован 📋');}
   else if(a==='ee-close')closeEmpEdit();
   else if(a==='ee-save'){
     const e=empById(curEmp);if(!e)return;
     const nm=$('#ee-name').value.trim();
     if(!nm){toast('Имя не может быть пустым!');return;}
     e.name=nm;e.phone=$('#ee-phone').value.trim();e.bank=$('#ee-bank').value.trim();
-    persist();closeEmpEdit();renderAll();toast('Сотрудник сохранён ✔');
+    const positions=saveStripScrolls();
+    persist();closeEmpEdit();renderAll();restoreStripScrolls(positions);toast('Сотрудник сохранён ✔');
   }
   else if(a==='ee-del'){const e=empById(curEmp);if(!e)return;
     if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
-    state.emp=state.emp.filter(x=>x.id!==e.id);persist();closeEmpEdit();renderAll();toast('Сотрудник удалён');}
+    state.emp=state.emp.filter(x=>x.id!==e.id);
+    const positions=saveStripScrolls();
+    persist();closeEmpEdit();renderAll();restoreStripScrolls(positions);toast('Сотрудник удалён');}
   else if(a==='cloud-setup')openCloudSetup();
   else if(a==='cs-close')closeCloudSetup();
   else if(a==='cs-save'){
@@ -798,24 +822,36 @@ document.addEventListener('click',e=>{
   }
   else if(a==='del-emp'){const e=empById(el.dataset.emp);if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
-    state.emp=state.emp.filter(x=>x.id!==e.id);persist();renderAll();toast('Сотрудник удалён');}
+    state.emp=state.emp.filter(x=>x.id!==e.id);
+    const positions=saveStripScrolls();
+    persist();renderAll();restoreStripScrolls(positions);toast('Сотрудник удалён');}
   else if(a==='add-emp'){const n=prompt('Имя нового сотрудника:','Сотрудник');if(n&&n.trim()){
-    state.emp.push({id:'e'+Date.now(),pvz:el.dataset.pvz,name:n.trim(),phone:'',bank:''});persist();renderAll();toast('Сотрудник добавлен ✔');}}
-  else if(a==='ren-pvz'){const n=prompt('Название ПВЗ:',state.pvz[el.dataset.pvz]);if(n&&n.trim()){state.pvz[el.dataset.pvz]=n.trim();persist();renderAll();}}
+    state.emp.push({id:'e'+Date.now(),pvz:el.dataset.pvz,name:n.trim(),phone:'',bank:''});
+    const positions=saveStripScrolls();
+    persist();renderAll();restoreStripScrolls(positions);toast('Сотрудник добавлен ✔');}}
+  else if(a==='ren-pvz'){const n=prompt('Название ПВЗ:',state.pvz[el.dataset.pvz]);if(n&&n.trim()){state.pvz[el.dataset.pvz]=n.trim();
+    const positions=saveStripScrolls();
+    persist();renderAll();restoreStripScrolls(positions);}}
   else if(a==='del-pvz'){const emps=state.emp.filter(x=>x.pvz===el.dataset.pvz);
     if(!confirm('Удалить ПВЗ «'+state.pvz[el.dataset.pvz]+'» и всех его сотрудников ('+emps.length+' чел.)?'))return;
     emps.forEach(e=>Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];}));
     state.emp=state.emp.filter(x=>x.pvz!==el.dataset.pvz);delete state.pvz[el.dataset.pvz];
     if(pvzKeys().length===0)state.pvz['p'+Date.now()]='ПВЗ №1';
-    persist();renderAll();toast('ПВЗ удалён');}
+    const positions=saveStripScrolls();
+    persist();renderAll();restoreStripScrolls(positions);toast('ПВЗ удалён');}
   else if(a==='addpvz'){const n=prompt('Название нового ПВЗ:','ПВЗ №'+(pvzKeys().length+1));if(n&&n.trim()){
-    state.pvz['p'+Date.now()]=n.trim();persist();renderAll();toast('ПВЗ добавлен ✔');}}
+    state.pvz['p'+Date.now()]=n.trim();
+    const positions=saveStripScrolls();
+    persist();renderAll();restoreStripScrolls(positions);toast('ПВЗ добавлен ✔');}}
   else if(a==='fill'){const e=empById(el.dataset.emp);const dm=dim(view.y,view.m);
     if(!confirm('Раскидать для «'+e.name+'» график 2/2 на '+MONTHS[view.m]+'? (2 рабочих / 2 выходных, ставка '+fmt(state.rate)+' ₽). Старые смены месяца затрутся!'))return;
     for(let d=1;d<=dm;d++){const k=key(e.id,view.y,view.m,d);if(((d-1)%4)<2)state.shifts[k]={b:state.rate,p:0,n:''};else delete state.shifts[k];}
-    persist();renderAll();toast('График 2/2 готов ✔');}
+    const positions=saveStripScrolls();
+    persist();renderAll();restoreStripScrolls(positions);toast('График 2/2 готов ✔');}
   else if(a==='clearemp'){const e=empById(el.dataset.emp);if(!confirm('Стереть ВСЕ смены «'+e.name+'» за '+MONTHS[view.m]+'?'))return;
-    const dm=dim(view.y,view.m);for(let d=1;d<=dm;d++)delete state.shifts[key(e.id,view.y,view.m,d)];persist();renderAll();toast('Месяц очищен');}
+    const dm=dim(view.y,view.m);for(let d=1;d<=dm;d++)delete state.shifts[key(e.id,view.y,view.m,d)];
+    const positions=saveStripScrolls();
+    persist();renderAll();restoreStripScrolls(positions);toast('Месяц очищен');}
   else if(a==='export'){const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
     const a2=document.createElement('a');a2.href=URL.createObjectURL(b);a2.download='tabel-dkbz.json';a2.click();toast('Файл сохранён ⬇');}
   else if(a==='importbtn')$('#imp').click();
@@ -834,7 +870,7 @@ $('#imp').addEventListener('change',e=>{
   r.readAsText(f);e.target.value='';
 });
 
-// ═══ ПОЕХАЛИ ══
+// ═══ ПОЕХАЛИ ═══
 renderAll();
 initCloud();
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:.06});
