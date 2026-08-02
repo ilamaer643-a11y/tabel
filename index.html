@@ -71,6 +71,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .stat b{font:800 17px 'JetBrains Mono'}
 .s-a{border-color:var(--amber)} .s-a b{color:var(--amber)}
 .s-g{border-color:var(--green)} .s-g b{color:var(--green)}
+.s-b{border-color:var(--teal)} .s-b b{color:var(--teal)}
 
 /* ── ставка  */
 .ratebox{margin:14px 0 4px;border:1px solid rgba(244,183,64,.4);border-radius:13px;
@@ -87,17 +88,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 #rate{width:96px;background:none;border:none;outline:none;color:var(--amber);
   font:800 19px 'JetBrains Mono';text-align:right}
 .rate-cur{font:800 14px 'JetBrains Mono';color:var(--mut)}
-
-/* ── раскладка жестов ── */
-.gest{margin:12px 0 4px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
-.gest-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);font-size:10.5px}
-.gest-row:last-child{border-bottom:none}
-.gest-k{flex:0 0 auto;min-width:96px;font:700 9.5px 'JetBrains Mono';text-transform:uppercase;letter-spacing:.05em;
-  color:var(--teal);background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:5px 8px;text-align:center}
-.gest-row.g-pen .gest-k{color:var(--pen);border-color:rgba(255,92,92,.4)}
-.gest-row.g-sum .gest-k{color:var(--amber);border-color:rgba(244,183,64,.4)}
-.gest-row.g-name .gest-k{color:#7FE3D2}
-.gest-v{color:var(--mut);line-height:1.4} .gest-v b{color:var(--ink)}
 
 /* ── выплаты  */
 .h2{font:700 13px 'Unbounded';margin:18px 0 10px;display:flex;align-items:center;gap:7px}
@@ -120,7 +110,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .ptotal b{font:400 21px 'Yeseva One';line-height:1}
 .pay.mid .ptotal b{color:var(--amber)} .pay.end .ptotal b{color:var(--green)}
 
-/* ── ПВЗ и сотрудники ── */
+/* ─ ПВЗ и сотрудники ── */
 .pvz-head{display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;
   margin:24px 0 3px;border-top:3px double var(--line);padding-top:12px}
 .pvz-head h2{font:900 16px 'Unbounded';display:flex;align-items:center;gap:7px}
@@ -211,7 +201,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 #p-amount:focus{border-color:var(--pen);box-shadow:0 0 0 3px rgba(255,92,92,.2)}
 .ta{font-size:11px;line-height:1.5;resize:vertical;min-height:96px;font-family:'JetBrains Mono'}
 .m-hint{font-size:10px;color:var(--mut);margin:-3px 0 10px}
-/* база-инфо и живой превью в меню штрафа */
 .pen-base{display:flex;justify-content:space-between;align-items:center;background:var(--panel2);
   border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin:12px 0 2px;font-size:11px;color:var(--mut)}
 .pen-base b{font:800 15px 'JetBrains Mono';color:var(--ink)}
@@ -234,7 +223,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
 .btn.copied{border-color:var(--green)!important;color:var(--green)!important}
 
-/* ── карточка контактов ── */
+/* ── карточка контактов ─ */
 .info-rows{display:flex;flex-direction:column;gap:8px;margin:14px 0 12px}
 .info-row{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
 .info-row span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin-bottom:3px}
@@ -289,6 +278,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <section class="stats rv">
     <div class="stat s-a"><span>К выплате 15-го</span><b id="st-mid">0 ₽</b></div>
     <div class="stat s-g"><span>К выплате в конце</span><b id="st-end">0 ₽</b></div>
+    <div class="stat s-b"><span>Общая за месяц</span><b id="st-total">0 ₽</b></div>
   </section>
 
   <section class="ratebox rv">
@@ -299,14 +289,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     <div class="rate-r">
       <div class="rate-input-wrap"><input id="rate" type="text" inputmode="numeric"><span class="rate-cur">₽</span></div>
     </div>
-  </section>
-
-  <section class="gest rv">
-    <div class="gest-row"><span class="gest-k">тап / зажал<br>по пустой</span><span class="gest-v">поставить смену по ставке</span></div>
-    <div class="gest-row g-pen"><span class="gest-k">тап / зажал<br>по смене</span><span class="gest-v"><b>штраф</b> — впиши сумму (без −) и за что</span></div>
-    <div class="gest-row g-sum"><span class="gest-k">двойной тап</span><span class="gest-v"><b>сумма смены</b> — поменять базу / удалить смену</span></div>
-    <div class="gest-row"><span class="gest-k">свайп ←→</span><span class="gest-v">листать дни</span></div>
-    <div class="gest-row g-name"><span class="gest-k">тап / зажал<br>по имени</span><span class="gest-v">контакты / редактировать сотрудника</span></div>
   </section>
 
   <section class="rv" id="pvz-list"></section>
@@ -334,20 +316,19 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <label class="m-lbl">Сумма за смену, ₽</label>
     <input id="m-amount" type="text" inputmode="numeric">
-    <div class="m-hint">Это база смены. Штраф навешивается отдельно — тапом по клетке.</div>
+    <div class="m-hint">Только сумма. Смена убирается одиночным тапом по клетке.</div>
     <div class="m-act">
-      <button id="m-del" class="btn danger" data-act="mdel">Удалить смену</button>
       <button class="btn primary" data-act="msave">Сохранить</button>
     </div>
   </div>
 </div>
 
-<!-- модалка ШТРАФА (тап/зажатие по смене) -->
+<!-- модалка ШТРАФА (зажатие) -->
 <div id="penalty" class="ov">
   <div class="modal pen-modal">
     <div class="m-top">
       <div class="m-id-txt"><b id="p-emp"></b><span id="p-date"></span></div>
-      <button class="mini" data-act="pclose">✕</button>
+      <button class="mini" data-act="pclose"></button>
     </div>
     <div class="pen-base"><span>Смена (основа)</span><b id="p-base">0 ₽</b></div>
     <label class="m-lbl">Сумма штрафа, ₽ — пиши БЕЗ минуса</label>
@@ -367,7 +348,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id"><div class="av" id="ei-av">?</div><div class="m-id-txt"><b id="ei-name"></b><span>контакты сотрудника</span></div></div>
-      <button class="mini" data-act="ei-close">✕</button>
+      <button class="mini" data-act="ei-close"></button>
     </div>
     <div class="info-rows">
       <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
@@ -376,8 +357,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
       <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
-      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
-      <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
+      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone"> Телефон</button>
+      <a class="btn primary" id="ei-call" href="#"> Позвонить</a>
     </div>
   </div>
 </div>
@@ -439,7 +420,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
-// ═══ ДАННЫЕ ═══
+// ═══ ДАННЫЕ ══
 const LS='dkbz_timesheet_v2';
 const CFG_LS='dkbz_fb_cfg';
 const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
@@ -580,7 +561,7 @@ function pvzHTML(n,dm){
   return '<div class="pvz-head"><h2>'+esc(state.pvz[n])+'</h2>'
    +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'">✎ имя</button>'
    +'<button class="mini" data-act="add-emp" data-pvz="'+n+'">＋ сотрудник</button>'
-   +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'">🗑 ПВЗ</button></div>'
+   +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'"> ПВЗ</button></div>'
    +'<div class="pvz-total">Итого за месяц по ПВЗ: <b>'+fmt(tot)+' ₽</b></div></div>'+rows;
 }
 function panel(title,dateLbl,sub,d1,d2,cls){
@@ -613,9 +594,15 @@ function scrollToTodayOrStart(){
 function renderAll(){
   const dm=dim(view.y,view.m);
   $('#mtitle').textContent=MONTHS[view.m]+' '+view.y;
-  let M=0,E=0;
-  state.emp.forEach(e=>{M+=sumRange(e.id,1,15);E+=sumRange(e.id,16,dm);});
-  animNum($('#st-mid'),M,' ₽');animNum($('#st-end'),E,' ₽');
+  let M=0,E=0,T=0;
+  state.emp.forEach(e=>{
+    M+=sumRange(e.id,1,15);
+    E+=sumRange(e.id,16,dm);
+    T+=sumRange(e.id,1,dm);
+  });
+  animNum($('#st-mid'),M,' ₽');
+  animNum($('#st-end'),E,' ₽');
+  animNum($('#st-total'),T,' ₽');
   $('#rate').value=state.rate;
   $('#pvz-list').innerHTML=pvzKeys().map(n=>pvzHTML(n,dm)).join('');
   $('#paygrid').innerHTML=
@@ -624,7 +611,7 @@ function renderAll(){
   scrollToTodayOrStart();
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
   if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':' '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
 }
 
 // ═══ МОДАЛКА СУММЫ (двойной тап) ═══
@@ -633,18 +620,18 @@ let curEmp=null;
 function openSum(emp,d){
   const k=key(emp,view.y,view.m,d);
   const s=state.shifts[k];
+  if(!s){toast('Сначала поставь смену тапом');return;}
   cur={k,emp,d};
   $('#m-emp').textContent=empName(emp);
   const dw=new Date(view.y,view.m,d).getDay();
   $('#m-date').textContent=d+' '+MG[view.m]+' '+view.y+', '+WD[dw];
-  $('#m-amount').value=s?s.b:state.rate;
-  $('#m-del').style.display=s?'block':'none';
+  $('#m-amount').value=s.b;
   $('#overlay').classList.add('open');document.body.classList.add('lock');
   setTimeout(()=>$('#m-amount').focus(),120);
 }
 function closeM(){$('#overlay').classList.remove('open');syncLock();}
 
-// ═══ МОДАЛКА ШТРАФА (тап/зажатие по смене) ═══
+// ═══ МОДАЛКА ШТРАФА (зажатие) ═══
 let pen={k:null,emp:null,d:0};
 function updatePenPrev(){
   const s=state.shifts[pen.k];const b=s?s.b:0;
@@ -653,11 +640,12 @@ function updatePenPrev(){
   $('#p-prev-val').textContent=fmt(tot)+' ₽';
   const el=$('#p-prev');el.classList.remove('ok','cut','neg');
   el.classList.add(tot<0?'neg':(p>0?'cut':'ok'));
-  el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump'); // отдача от ввода
+  el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');
 }
 function openPenalty(emp,d){
   const k=key(emp,view.y,view.m,d);
-  const s=state.shifts[k];if(!s)return;
+  if(!state.shifts[k]) state.shifts[k]={b:0,p:0,n:''};
+  const s=state.shifts[k];
   pen={k,emp,d};
   $('#p-emp').textContent=empName(emp);
   const dw=new Date(view.y,view.m,d).getDay();
@@ -726,14 +714,28 @@ function setRateAt(emp,d){
   state.shifts[k]={b:state.rate,p:0,n:''};state.lastAmount=state.rate;
   persist();renderAll();popCell(k);toast('Смена '+fmt(state.rate)+' ₽ ✔');
 }
-function runSingle(emp,d){
+function removeShift(emp,d){
   const k=key(emp,view.y,view.m,d);
-  if(state.shifts[k])openPenalty(emp,d); else setRateAt(emp,d);
+  if(!state.shifts[k])return;
+  delete state.shifts[k];
+  persist();renderAll();popCell(k);toast('Смена убрана');
+}
+// тап: по пустой = поставить, по занятой = убрать
+function runTap(emp,d){
+  const k=key(emp,view.y,view.m,d);
+  if(state.shifts[k]) removeShift(emp,d);
+  else setRateAt(emp,d);
+}
+// зажатие: всегда штраф (создаёт запись если нет)
+function runLong(emp,d){
+  const k=key(emp,view.y,view.m,d);
+  if(!state.shifts[k]) state.shifts[k]={b:0,p:0,n:''};
+  openPenalty(emp,d);
 }
 document.addEventListener('pointerdown',e=>{
   const c=e.target.closest('.cell');
   if(c){press={emp:c.dataset.emp,d:+c.dataset.d,x:e.clientX,y:e.clientY,moved:false,long:false,
-    timer:setTimeout(()=>{if(press&&!press.moved){press.long=true;runSingle(press.emp,press.d);}},430)};return;}
+    timer:setTimeout(()=>{if(press&&!press.moved){press.long=true;runLong(press.emp,press.d);}},430)};return;}
   const n=e.target.closest('.ename');
   if(n){namePress={emp:n.dataset.emp,x:e.clientX,y:e.clientY,moved:false,long:false,
     timer:setTimeout(()=>{if(namePress&&!namePress.moved){namePress.long=true;openEmpEdit(namePress.emp);}},430)};return;}
@@ -742,14 +744,14 @@ document.addEventListener('pointermove',e=>{
   if(press){const dx=e.clientX-press.x,dy=e.clientY-press.y;if(isScrollGesture(dx,dy)){press.moved=true;clearTimeout(press.timer);}}
   if(namePress){const dx=e.clientX-namePress.x,dy=e.clientY-namePress.y;if(isScrollGesture(dx,dy)){namePress.moved=true;clearTimeout(namePress.timer);}}
 });
-function firePending(){if(!cellPending)return;const p=cellPending;cellPending=null;runSingle(p.emp,p.d);}
+function firePending(){if(!cellPending)return;const p=cellPending;cellPending=null;runTap(p.emp,p.d);}
 document.addEventListener('pointerup',e=>{
   if(press){const p=press;press=null;clearTimeout(p.timer);
     if(!(p.moved||p.long)){
       if(cellPending && cellPending.emp===p.emp && cellPending.d===p.d){
         clearTimeout(cellPending.timer);cellPending=null;openSum(p.emp,p.d);
       }else{
-        if(cellPending){clearTimeout(cellPending.timer);runSingle(cellPending.emp,cellPending.d);}
+        if(cellPending){clearTimeout(cellPending.timer);runTap(cellPending.emp,cellPending.d);}
         cellPending={emp:p.emp,d:p.d,timer:setTimeout(firePending,300)};
       }
     }
@@ -759,7 +761,7 @@ document.addEventListener('pointerup',e=>{
 });
 document.addEventListener('pointercancel',()=>{if(press){clearTimeout(press.timer);press=null;}if(namePress){clearTimeout(namePress.timer);namePress=null;}});
 
-// ═══ КНОПКИ ═══
+// ═══ КНОПКИ ══
 document.addEventListener('click',e=>{
   const el=e.target.closest('[data-act]');if(!el)return;
   const a=el.dataset.act;
@@ -770,10 +772,9 @@ document.addEventListener('click',e=>{
     const v=parseNum($('#m-amount').value);
     if(v===null||v<=0){toast('Введи сумму за смену!');return;}
     const s=state.shifts[cur.k];
-    if(s){s.b=v;}else{state.shifts[cur.k]={b:v,p:0,n:''};}
+    if(s){s.b=v;}
     state.lastAmount=v;persist();closeM();renderAll();popCell(cur.k);toast('Сумма смены сохранена ✔');
   }
-  else if(a==='mdel'){delete state.shifts[cur.k];persist();closeM();renderAll();toast('Смена удалена');}
   else if(a==='pclose')closePen();
   else if(a==='psave'){
     const s=state.shifts[pen.k];if(!s)return;
@@ -782,7 +783,12 @@ document.addEventListener('click',e=>{
     persist();closePen();renderAll();popCell(pen.k);
     toast(p>0?'Штраф '+fmt(p)+' ₽ сохранён ✔':'Штраф убран ✔');
   }
-  else if(a==='pclear'){const s=state.shifts[pen.k];if(!s)return;s.p=0;s.n='';persist();closePen();renderAll();popCell(pen.k);toast('Штраф убран ✔');}
+  else if(a==='pclear'){
+    const s=state.shifts[pen.k];if(!s)return;
+    if(s.b<=0) delete state.shifts[pen.k];
+    else {s.p=0;s.n='';}
+    persist();closePen();renderAll();popCell(pen.k);toast('Штраф убран ✔');
+  }
   else if(a==='ei-close')closeEmpInfo();
   else if(a==='ei-edit'){const id=curEmp;closeEmpInfo();openEmpEdit(id);}
   else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован 📋');}
