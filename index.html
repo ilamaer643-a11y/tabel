@@ -34,7 +34,7 @@ body.lock{overflow:hidden}
 button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .app{position:relative;z-index:1;max-width:1020px;margin:0 auto;padding:0 12px 50px}
 
-/* ── шапка ── */
+/* ─ шапка ── */
 .top{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
   gap:8px;flex-wrap:wrap;padding:9px 13px;background:rgba(12,21,18,.92);
   border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
@@ -120,7 +120,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .pvz-total{font-size:11px;color:var(--mut);width:100%}
 .pvz-total b{font:800 14px 'JetBrains Mono';color:var(--ink)}
 .emp{background:var(--panel);border:1px solid var(--line);border-radius:13px;
-  padding:12px;margin-top:10px;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:border-color .2s}
+  padding:12px;margin-top:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);transition:border-color .2s}
 .emp:hover{border-color:rgba(45,212,191,.4)}
 .emp-top{display:flex;justify-content:space-between;align-items:center;gap:7px;flex-wrap:wrap}
 .ename-wrap{display:flex;align-items:center;gap:5px}
@@ -138,14 +138,14 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .sums{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chip{background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:4px 8px;font-size:10px;color:var(--mut)}
 .chip b{font:700 10.5px 'JetBrains Mono';color:var(--ink)}
-.c-b{color:#7FE3D2!important}.c-a{color:var(--amber)!important}.c-g{color:var(--green)!important}
+.c-b{color:#2A9D6A!important} .c-a{color:var(--amber)!important} .c-g{color:var(--green)!important}
 
-/* ── лента дней ─ */
+/* ── лента дней ── */
 .strip{display:flex;gap:5px;overflow-x:auto;padding:10px 2px;scroll-snap-type:x proximity;
   -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;margin-top:10px}
 .strip::-webkit-scrollbar{display:none}
 
-/* ── клетка дня ─ */
+/* ── клетка дня ── */
 .cell{flex:0 0 auto;scroll-snap-align:start;position:relative;width:46px;height:60px;border-radius:9px;
   border:1px solid var(--line);background:var(--panel2);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
@@ -155,7 +155,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .cell b{font-size:13px;font-weight:800}
 .cell u{text-decoration:none;font-size:8px;font-weight:700;color:#B9D7CC;transition:color .15s}
 .cell .dot{color:rgba(150,200,180,.3);font-size:10px}
-.cell.we i,.cell.we b{color:#D99}
+.cell.we i,.cell.we b{color:#D95555}
 .cell:hover{transform:translateY(-3px);border-color:var(--teal)}
 .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.42),rgba(70,209,138,.22));border-color:rgba(70,209,138,.82)}
 .cell.has-pos i{color:#C7F2DD} .cell.has-pos u{color:#E9FFF4}
@@ -182,7 +182,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .ov.open{display:flex}
 .modal{width:min(94vw,390px);background:#122019;border:1px solid rgba(45,212,191,.35);
   border-radius:16px;padding:16px;animation:up .28s cubic-bezier(.2,.9,.3,1.2);max-height:92vh;overflow-y:auto}
-.modal.pen-modal{border-color:rgba(255,92,92,.5)}
 @keyframes up{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}
 .m-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .m-id{display:flex;align-items:center;gap:10px;min-width:0}
@@ -223,7 +222,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
 .btn.copied{border-color:var(--green)!important;color:var(--green)!important}
 
-/* ─ карточка контактов ── */
+/* ── карточка контактов ── */
 .info-rows{display:flex;flex-direction:column;gap:8px;margin:14px 0 12px}
 .info-row{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
 .info-row span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin-bottom:3px}
@@ -254,6 +253,13 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 #toast.show{transform:translate(-50%,0);opacity:1}
 .rv{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
 .rv.in{opacity:1;transform:none}
+
+/* ─ переключатель тем ── */
+.theme-switch{display:flex;justify-content:center;gap:8px;margin-bottom:12px}
+.t-btn{width:36px;height:36px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);
+  font-size:18px;display:grid;place-items:center;transition:.15s}
+.t-btn:hover{border-color:var(--teal);transform:translateY(-2px)}
+.t-btn.active{background:rgba(45,212,191,.2);border-color:var(--teal)}
 </style>
 </head>
 <body>
@@ -297,8 +303,13 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <section class="rv"><h2 class="h2">💰 Выплаты</h2><div class="pay-grid" id="paygrid"></div></section>
 
   <footer class="foot rv">
+    <div class="theme-switch">
+      <button class="t-btn" data-act="theme" data-val="light" title="Светлая">️</button>
+      <button class="t-btn" data-act="theme" data-val="dark" title="Тёмная">🌙</button>
+      <button class="t-btn" data-act="theme" data-val="system" title="Как в системе">📱</button>
+    </div>
     <div class="fbtns">
-      <button class="mini" data-act="cloud-setup"> Облако</button>
+      <button class="mini" data-act="cloud-setup">⚙ Облако</button>
       <button class="mini" data-act="export">⬇ Экспорт</button>
       <button class="mini" data-act="importbtn">⬆ Импорт</button>
       <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
@@ -312,7 +323,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id-txt"><b id="m-emp"></b><span id="m-date"></span></div>
-      <button class="mini" data-act="mclose"></button>
+      <button class="mini" data-act="mclose">✕</button>
     </div>
     <label class="m-lbl">Сумма за смену, ₽</label>
     <input id="m-amount" type="text" inputmode="numeric">
@@ -327,7 +338,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal pen-modal">
     <div class="m-top">
       <div class="m-id-txt"><b id="p-emp"></b><span id="p-date"></span></div>
-      <button class="mini" data-act="pclose"></button>
+      <button class="mini" data-act="pclose">✕</button>
     </div>
     <div class="pen-base"><span>Смена (основа)</span><b id="p-base">0 ₽</b></div>
     <label class="m-lbl">Сумма штрафа, ₽ — пиши БЕЗ минуса</label>
@@ -350,12 +361,12 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <div class="info-rows">
       <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
-      <div class="info-row" id="ei-row-bank"><span>🏦 Банк</span><b id="ei-bank">—</b></div>
+      <div class="info-row" id="ei-row-bank"><span> Банк</span><b id="ei-bank">—</b></div>
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
-      <button class="btn ghost" data-act="ei-edit"> Изменить</button>
-      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
+      <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
+      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone"> Телефон</button>
       <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
   </div>
@@ -519,23 +530,15 @@ function initCloud(){
   }).catch(()=>{cloudOn=false;setCloud('err','ошибка чтения');});
 }
 
-// ═══ СОХРАНЕНИЕ/ВОССТАНОВЛЕНИЕ ПРОКРУТКИ С requestAnimationFrame ═══
 function saveStripScrolls(){
   const positions=[];
-  document.querySelectorAll('.strip').forEach(s=>{
-    positions.push(s.scrollLeft);
-  });
+  document.querySelectorAll('.strip').forEach(s=>{ positions.push(s.scrollLeft); });
   return positions;
 }
 function restoreStripScrolls(positions){
-  // Используем requestAnimationFrame чтобы дать браузеру время отрисовать DOM
   requestAnimationFrame(()=>{
     const strips=document.querySelectorAll('.strip');
-    positions.forEach((pos,i)=>{
-      if(strips[i]){
-        strips[i].scrollLeft=pos;
-      }
-    });
+    positions.forEach((pos,i)=>{ if(strips[i]) strips[i].scrollLeft=pos; });
   });
 }
 
@@ -563,7 +566,7 @@ function empHTML(e,dm){
    +'<button class="ename" data-emp="'+e.id+'">'+esc(e.name)+'</button>'
    +'<button class="del-emp" data-act="del-emp" data-emp="'+e.id+'" title="удалить">✕</button></div>'
    +'<div class="tools"><button class="mini" data-act="fill" data-emp="'+e.id+'">график 2/2</button>'
-   +'<button class="mini danger" data-act="clearemp" data-emp="'+e.id+'"> месяц</button></div></div>'
+   +'<button class="mini danger" data-act="clearemp" data-emp="'+e.id+'">✕ месяц</button></div></div>'
    +'<div class="sums"><span class="chip">смен: <b>'+cnt+'</b></span>'
    +'<span class="chip">итого: <b class="c-b">'+fmt(tot)+' ₽</b></span>'
    +'<span class="chip">15-го: <b class="c-a">'+fmt(mid)+' ₽</b></span>'
@@ -577,7 +580,7 @@ function pvzHTML(n,dm){
   return '<div class="pvz-head"><h2>'+esc(state.pvz[n])+'</h2>'
    +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'">✎ имя</button>'
    +'<button class="mini" data-act="add-emp" data-pvz="'+n+'">＋ сотрудник</button>'
-   +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'"> ПВЗ</button></div>'
+   +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'">🗑 ПВЗ</button></div>'
    +'<div class="pvz-total">Итого за месяц по ПВЗ: <b>'+fmt(tot)+' ₽</b></div></div>'+rows;
 }
 function panel(title,dateLbl,sub,d1,d2,cls){
@@ -618,8 +621,8 @@ function renderAll(){
     panel('АВАНС','выплата 15-го','смены с 1 по 15 число',1,15,'mid')
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
-  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':' 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  else{const n=ld-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
 }
 
 let cur={k:null,emp:null,d:0}, curEmp=null, pen={k:null,emp:null,d:0};
@@ -767,6 +770,7 @@ document.addEventListener('click',e=>{
   const a=el.dataset.act;
   if(a==='prev'){view.m--;if(view.m<0){view.m=11;view.y--;}renderAll();}
   else if(a==='next'){view.m++;if(view.m>11){view.m=0;view.y++;}renderAll();}
+  else if(a==='theme'){applyTheme(el.dataset.val);}
   else if(a==='mclose')closeM();
   else if(a==='msave'){
     const v=parseNum($('#m-amount').value);
@@ -875,7 +879,25 @@ $('#imp').addEventListener('change',e=>{
   r.readAsText(f);e.target.value='';
 });
 
+// ═══ ТЕМЫ ═══
+function applyTheme(theme){
+  localStorage.setItem('dkbz_theme', theme);
+  if(theme === 'system'){
+    document.documentElement.removeAttribute('data-theme');
+  }else{
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+  document.querySelectorAll('.t-btn').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.val === theme);
+  });
+}
+function initTheme(){
+  const saved = localStorage.getItem('dkbz_theme') || 'system';
+  applyTheme(saved);
+}
+
 // ═══ ПОЕХАЛИ ═══
+initTheme();
 renderAll();
 initCloud();
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:.06});
