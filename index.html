@@ -11,11 +11,55 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;900&family=Golos+Text:wght@400;500;600;800&family=JetBrains+Mono:wght@500;700;800&family=Yeseva+One&display=swap" rel="stylesheet">
 <style>
+/* ═══ ТЁМНАЯ ТЕМА (по умолчанию) ═══ */
 :root{
   --bg:#0C1512; --panel:#13211C; --panel2:#0E1A16;
   --ink:#ECF3EE; --mut:#8AA399; --line:rgba(150,200,180,.13);
   --teal:#2DD4BF; --amber:#F4B740; --green:#46D18A; --red:#FF5C5C; --pen:#FF5C5C;
 }
+
+/* ═══ СВЕТЛАЯ ТЕМА ═══ */
+[data-theme="light"]{
+  --bg:#F0F4F3; --panel:#FFFFFF; --panel2:#E8ECEB;
+  --ink:#1A2B25; --mut:#5A7A6D; --line:rgba(0,40,20,.1);
+}
+[data-theme="light"] body::before{
+  background-image:linear-gradient(rgba(0,40,20,.05) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(0,40,20,.05) 1px,transparent 1px);
+}
+[data-theme="light"] .top{background:rgba(240,244,243,.92)}
+[data-theme="light"] .emp{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+[data-theme="light"] .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.25),rgba(70,209,138,.08));border-color:rgba(70,209,138,.6)}
+[data-theme="light"] .cell.has-pos i,[data-theme="light"] .cell.has-pos u{color:#2A7A4A}
+[data-theme="light"] .cell.has-pen{background:linear-gradient(180deg,rgba(255,92,92,.25),rgba(214,40,40,.08));border-color:rgba(255,92,92,.6);box-shadow:0 0 12px rgba(255,92,92,.15)}
+[data-theme="light"] .cell.has-pen i,[data-theme="light"] .cell.has-pen b,[data-theme="light"] .cell.has-pen u,[data-theme="light"] .cell.has-pen::after{color:#8A2020}
+[data-theme="light"] .modal{background:#FFFFFF;border-color:rgba(45,212,191,.3)}
+[data-theme="light"] .ov{background:rgba(0,20,10,.6)}
+[data-theme="light"] #toast{background:#FFFFFF;border-color:var(--teal);color:var(--ink)}
+[data-theme="light"] .c-b{color:#2A9D6A!important}
+
+/* ═══ СИСТЕМНАЯ СВЕТЛАЯ ═══ */
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#F0F4F3; --panel:#FFFFFF; --panel2:#E8ECEB;
+    --ink:#1A2B25; --mut:#5A7A6D; --line:rgba(0,40,20,.1);
+  }
+  :root:not([data-theme="dark"]) body::before{
+    background-image:linear-gradient(rgba(0,40,20,.05) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(0,40,20,.05) 1px,transparent 1px);
+  }
+  :root:not([data-theme="dark"]) .top{background:rgba(240,244,243,.92)}
+  :root:not([data-theme="dark"]) .emp{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+  :root:not([data-theme="dark"]) .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.25),rgba(70,209,138,.08));border-color:rgba(70,209,138,.6)}
+  :root:not([data-theme="dark"]) .cell.has-pos i,:root:not([data-theme="dark"]) .cell.has-pos u{color:#2A7A4A}
+  :root:not([data-theme="dark"]) .cell.has-pen{background:linear-gradient(180deg,rgba(255,92,92,.25),rgba(214,40,40,.08));border-color:rgba(255,92,92,.6);box-shadow:0 0 12px rgba(255,92,92,.15)}
+  :root:not([data-theme="dark"]) .cell.has-pen i,:root:not([data-theme="dark"]) .cell.has-pen b,:root:not([data-theme="dark"]) .cell.has-pen u,:root:not([data-theme="dark"]) .cell.has-pen::after{color:#8A2020}
+  :root:not([data-theme="dark"]) .modal{background:#FFFFFF;border-color:rgba(45,212,191,.3)}
+  :root:not([data-theme="dark"]) .ov{background:rgba(0,20,10,.6)}
+  :root:not([data-theme="dark"]) #toast{background:#FFFFFF;border-color:var(--teal);color:var(--ink)}
+  :root:not([data-theme="dark"]) .c-b{color:#2A9D6A!important}
+}
+
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{
@@ -34,7 +78,6 @@ body.lock{overflow:hidden}
 button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .app{position:relative;z-index:1;max-width:1020px;margin:0 auto;padding:0 12px 50px}
 
-/* ─ шапка ── */
 .top{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
   gap:8px;flex-wrap:wrap;padding:9px 13px;background:rgba(12,21,18,.92);
   border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
@@ -64,7 +107,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .mnav button:hover{background:rgba(45,212,191,.2);color:#fff}
 .mnav b{font:700 11px 'Unbounded';min-width:98px;text-align:center}
 
-/* ── статистика ── */
 .stats{display:flex;flex-wrap:wrap;gap:13px 26px;padding:17px 2px 2px}
 .stat{border-left:3px solid var(--mut);padding-left:10px}
 .stat span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut)}
@@ -73,7 +115,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .s-g{border-color:var(--green)} .s-g b{color:var(--green)}
 .s-b{border-color:var(--teal)} .s-b b{color:var(--teal)}
 
-/* ── ставка  */
 .ratebox{margin:14px 0 4px;border:1px solid rgba(244,183,64,.4);border-radius:13px;
   padding:12px 15px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
   background:linear-gradient(150deg,rgba(244,183,64,.12),rgba(244,183,64,.02));position:relative;overflow:hidden}
@@ -89,7 +130,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   font:800 19px 'JetBrains Mono';text-align:right}
 .rate-cur{font:800 14px 'JetBrains Mono';color:var(--mut)}
 
-/* ── выплаты  */
 .h2{font:700 13px 'Unbounded';margin:18px 0 10px;display:flex;align-items:center;gap:7px}
 .pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:740px){.pay-grid{grid-template-columns:1fr}}
@@ -110,7 +150,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .ptotal b{font:400 21px 'Yeseva One';line-height:1}
 .pay.mid .ptotal b{color:var(--amber)} .pay.end .ptotal b{color:var(--green)}
 
-/* ── ПВЗ и сотрудники ── */
 .pvz-head{display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;
   margin:24px 0 3px;border-top:3px double var(--line);padding-top:12px}
 .pvz-head h2{font:900 16px 'Unbounded';display:flex;align-items:center;gap:7px}
@@ -120,7 +159,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .pvz-total{font-size:11px;color:var(--mut);width:100%}
 .pvz-total b{font:800 14px 'JetBrains Mono';color:var(--ink)}
 .emp{background:var(--panel);border:1px solid var(--line);border-radius:13px;
-  padding:12px;margin-top:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);transition:border-color .2s}
+  padding:12px;margin-top:10px;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:border-color .2s}
 .emp:hover{border-color:rgba(45,212,191,.4)}
 .emp-top{display:flex;justify-content:space-between;align-items:center;gap:7px;flex-wrap:wrap}
 .ename-wrap{display:flex;align-items:center;gap:5px}
@@ -138,14 +177,12 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .sums{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chip{background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:4px 8px;font-size:10px;color:var(--mut)}
 .chip b{font:700 10.5px 'JetBrains Mono';color:var(--ink)}
-.c-b{color:#2A9D6A!important} .c-a{color:var(--amber)!important} .c-g{color:var(--green)!important}
+.c-b{color:#7FE3D2!important}.c-a{color:var(--amber)!important}.c-g{color:var(--green)!important}
 
-/* ── лента дней ── */
 .strip{display:flex;gap:5px;overflow-x:auto;padding:10px 2px;scroll-snap-type:x proximity;
   -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;margin-top:10px}
 .strip::-webkit-scrollbar{display:none}
 
-/* ── клетка дня ── */
 .cell{flex:0 0 auto;scroll-snap-align:start;position:relative;width:46px;height:60px;border-radius:9px;
   border:1px solid var(--line);background:var(--panel2);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
@@ -155,7 +192,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .cell b{font-size:13px;font-weight:800}
 .cell u{text-decoration:none;font-size:8px;font-weight:700;color:#B9D7CC;transition:color .15s}
 .cell .dot{color:rgba(150,200,180,.3);font-size:10px}
-.cell.we i,.cell.we b{color:#D95555}
+.cell.we i,.cell.we b{color:#D99}
 .cell:hover{transform:translateY(-3px);border-color:var(--teal)}
 .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.42),rgba(70,209,138,.22));border-color:rgba(70,209,138,.82)}
 .cell.has-pos i{color:#C7F2DD} .cell.has-pos u{color:#E9FFF4}
@@ -176,12 +213,12 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .cell.pop{animation:pop .38s}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
 
-/* ── оверлеи / модалки ── */
 .ov{position:fixed;inset:0;z-index:100;background:rgba(4,10,8,.74);
   display:none;align-items:flex-end;justify-content:center;padding:14px}
 .ov.open{display:flex}
 .modal{width:min(94vw,390px);background:#122019;border:1px solid rgba(45,212,191,.35);
   border-radius:16px;padding:16px;animation:up .28s cubic-bezier(.2,.9,.3,1.2);max-height:92vh;overflow-y:auto}
+.modal.pen-modal{border-color:rgba(255,92,92,.5)}
 @keyframes up{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}
 .m-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .m-id{display:flex;align-items:center;gap:10px;min-width:0}
@@ -222,7 +259,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
 .btn.copied{border-color:var(--green)!important;color:var(--green)!important}
 
-/* ── карточка контактов ── */
 .info-rows{display:flex;flex-direction:column;gap:8px;margin:14px 0 12px}
 .info-row{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
 .info-row span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin-bottom:3px}
@@ -231,7 +267,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .ei-hint{font-size:10px;color:var(--mut);background:var(--panel2);border:1px dashed var(--line);
   border-radius:8px;padding:7px 10px;margin:0 0 12px;line-height:1.4}
 
-/* ── окно облака ── */
 .cs-status{display:flex;align-items:center;gap:8px;font:700 12px 'Golos Text';
   background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin:12px 0 4px}
 .cs-status .d{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
@@ -254,10 +289,9 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .rv{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
 .rv.in{opacity:1;transform:none}
 
-/* ─ переключатель тем ── */
 .theme-switch{display:flex;justify-content:center;gap:8px;margin-bottom:12px}
-.t-btn{width:36px;height:36px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);
-  font-size:18px;display:grid;place-items:center;transition:.15s}
+.t-btn{width:40px;height:40px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);
+  font-size:20px;display:grid;place-items:center;transition:.15s;cursor:pointer}
 .t-btn:hover{border-color:var(--teal);transform:translateY(-2px)}
 .t-btn.active{background:rgba(45,212,191,.2);border-color:var(--teal)}
 </style>
@@ -312,13 +346,12 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="mini" data-act="cloud-setup">⚙ Облако</button>
       <button class="mini" data-act="export">⬇ Экспорт</button>
       <button class="mini" data-act="importbtn">⬆ Импорт</button>
-      <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
+      <button class="mini danger" data-act="reset"> Сбросить всё</button>
     </div>
     <p>Автор: <b>DKBZ</b> · облако = общий табель для двух телефонов</p>
   </footer>
 </main>
 
-<!-- модалки -->
 <div id="overlay" class="ov">
   <div class="modal">
     <div class="m-top">
@@ -361,12 +394,12 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <div class="info-rows">
       <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
-      <div class="info-row" id="ei-row-bank"><span> Банк</span><b id="ei-bank">—</b></div>
+      <div class="info-row" id="ei-row-bank"><span>🏦 Банк</span><b id="ei-bank">—</b></div>
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
       <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
-      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone"> Телефон</button>
+      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
       <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
   </div>
@@ -405,7 +438,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
         <li>«Добавить проект» → имя любое → аналитику <b>выключи</b> → создать.</li>
         <li>Слева <b>Build → Realtime Database → Создать базу</b> → регион <b>Europe</b>.</li>
         <li>Вкладка <b>Rules</b> → вставь <b>{"rules":{".read":true,".write":true}}</b> → Опубликовать.</li>
-        <li>⚙ шестерёнка → <b>Настройки проекта</b> → вниз «Ваши приложения» → значок <b>&lt;/&gt;</b> (веб) → зарегистрировать → хостинг НЕ надо.</li>
+        <li> шестерёнка → <b>Настройки проекта</b> → вниз «Ваши приложения» → значок <b>&lt;/&gt;</b> (веб) → зарегистрировать → хостинг НЕ надо.</li>
         <li>Скопируй блок <b>firebaseConfig = { … }</b> целиком (все фигурные скобки).</li>
       </ol>
     </div>
@@ -799,7 +832,7 @@ document.addEventListener('click',e=>{
   }
   else if(a==='ei-close')closeEmpInfo();
   else if(a==='ei-edit'){const id=curEmp;closeEmpInfo();openEmpEdit(id);}
-  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован 📋');}
+  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован ');}
   else if(a==='ee-close')closeEmpEdit();
   else if(a==='ee-save'){
     const e=empById(curEmp);if(!e)return;
@@ -822,7 +855,7 @@ document.addEventListener('click',e=>{
     let c;try{c=JSON.parse(txt);}catch(x){toast('Это не JSON, проверь скобки!');return;}
     if(!c||!c.apiKey||!c.databaseURL){toast('В конфиге нет apiKey или databaseURL!');return;}
     localStorage.setItem(CFG_LS,JSON.stringify(c));
-    toast('Подключаю, перезагружаю… ☁️');setTimeout(()=>location.reload(),650);
+    toast('Подключаю, перезагружаю… ️');setTimeout(()=>location.reload(),650);
   }
   else if(a==='cs-off'){
     if(!getCfg()){toast('И так не подключено');return;}
@@ -879,7 +912,6 @@ $('#imp').addEventListener('change',e=>{
   r.readAsText(f);e.target.value='';
 });
 
-// ═══ ТЕМЫ ═══
 function applyTheme(theme){
   localStorage.setItem('dkbz_theme', theme);
   if(theme === 'system'){
@@ -896,7 +928,6 @@ function initTheme(){
   applyTheme(saved);
 }
 
-// ═══ ПОЕХАЛИ ═══
 initTheme();
 renderAll();
 initCloud();
