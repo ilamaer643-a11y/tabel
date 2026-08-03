@@ -885,11 +885,34 @@ document.addEventListener('click',e=>{
     state.pvz['p'+Date.now()]=n.trim();
     const positions=saveStripScrolls();
     persist();renderAll();restoreStripScrolls(positions);toast('ПВЗ добавлен ✔');}}
-  else if(a==='fill'){const e=empById(el.dataset.emp);const dm=dim(view.y,view.m);
-    if(!confirm('Раскидать для «'+e.name+'» график 2/2 на '+MONTHS[view.m]+'? (2 рабочих / 2 выходных, ставка '+fmt(state.rate)+' ₽). Старые смены месяца затрутся!'))return;
-    for(let d=1;d<=dm;d++){const k=key(e.id,view.y,view.m,d);if(((d-1)%4)<2)state.shifts[k]={b:state.rate,p:0,n:''};else delete state.shifts[k];}
-    const positions=saveStripScrolls();
-    persist();renderAll();restoreStripScrolls(positions);toast('График 2/2 готов ✔');}
+  else if(a==='fill'){
+  const e=empById(el.dataset.emp);
+  const dm=dim(view.y,view.m);
+  const startDay=prompt('С какого дня начать график 2/2? (1-'+dm+')','1');
+  if(!startDay)return;
+  const start=parseInt(startDay);
+  if(isNaN(start)||start<1||start>dm){toast('Неверный день!');return;}
+  if(!confirm('Раскидать для «'+e.name+'» график 2/2 с '+start+' числа? (2 рабочих / 2 выходных, ставка '+fmt(state.rate)+' ₽). Смены до '+start+' числа не тронутся, после — затрутся!'))return;
+  
+  // Очищаем смены только с start дня до конца месяца
+  for(let d=start;d<=dm;d++){
+    const k=key(e.id,view.y,view.m,d);
+    delete state.shifts[k];
+  }
+  
+  // Строим график 2/2 начиная с start
+  let workDays=0;
+  for(let d=start;d<=dm;d++){
+    const k=key(e.id,view.y,view.m,d);
+    const cycleDay=(d-start)%4;
+    if(cycleDay<2){
+      state.shifts[k]={b:state.rate,p:0,n:''};
+    }
+  }
+  
+  const positions=saveStripScrolls();
+  persist();renderAll();restoreStripScrolls(positions);toast('График 2/2 с '+start+' числа готов ✔');
+}
   else if(a==='clearemp'){const e=empById(el.dataset.emp);if(!confirm('Стереть ВСЕ смены «'+e.name+'» за '+MONTHS[view.m]+'?'))return;
     const dm=dim(view.y,view.m);for(let d=1;d<=dm;d++)delete state.shifts[key(e.id,view.y,view.m,d)];
     const positions=saveStripScrolls();
