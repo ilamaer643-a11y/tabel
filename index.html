@@ -389,8 +389,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="mini" data-act="ei-close">✕</button>
     </div>
     <div class="info-rows">
-      <div class="info-row" id="ei-row-phone"><span> Телефон</span><b id="ei-phone">—</b></div>
-      <div class="info-row" id="ei-row-bank"><span> Банк</span><b id="ei-bank">—</b></div>
+      <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
+      <div class="info-row" id="ei-row-bank"><span>🏦 Банк</span><b id="ei-bank">—</b></div>
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
@@ -405,7 +405,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id-txt"><b>Сотрудник</b><span>имя · телефон · банк</span></div>
-      <button class="mini" data-act="ee-close"></button>
+      <button class="mini" data-act="ee-close">✕</button>
     </div>
     <label class="m-lbl">Имя / ФИО</label>
     <input id="ee-name" class="fld" type="text">
@@ -424,7 +424,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id-txt"><b>☁️ Облако</b><span>общий табель для двух телефонов</span></div>
-      <button class="mini" data-act="cs-close">✕</button>
+      <button class="mini" data-act="cs-close"></button>
     </div>
     <div class="cs-status off" id="cs-status"><span class="d"></span><span id="cs-status-txt">не подключено</span></div>
     <div class="cs-steps">
@@ -434,7 +434,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
         <li>«Добавить проект» → имя любое → аналитику <b>выключи</b> → создать.</li>
         <li>Слева <b>Build → Realtime Database → Создать базу</b> → регион <b>Europe</b>.</li>
         <li>Вкладка <b>Rules</b> → вставь <b>{"rules":{".read":true,".write":true}}</b> → Опубликовать.</li>
-        <li> шестерёнка → <b>Настройки проекта</b> → вниз «Ваши приложения» → значок <b>&lt;/&gt;</b> (веб) → зарегистрировать → хостинг НЕ надо.</li>
+        <li>⚙ шестерёнка → <b>Настройки проекта</b> → вниз «Ваши приложения» → значок <b>&lt;/&gt;</b> (веб) → зарегистрировать → хостинг НЕ надо.</li>
         <li>Скопируй блок <b>firebaseConfig = { … }</b> целиком (все фигурные скобки).</li>
       </ol>
     </div>
@@ -559,55 +559,52 @@ function initCloud(){
   }).catch(()=>{cloudOn=false;setCloud('err','ошибка чтения');});
 }
 
-// ═══ СОХРАНЕНИЕ/ВОССТАНОВЛЕНИЕ ПРОКРУТКИ (УСИЛЕННОЕ) ═══
+// ═══ СОХРАНЕНИЕ/ВОССТАНОВЛЕНИЕ ПРОКРУТКИ ПО EMP ID ═══
 function saveStripScrolls(){
-  const positions=[];
-  document.querySelectorAll('.strip').forEach(s=>{ positions.push(s.scrollLeft); });
+  const positions={};
+  document.querySelectorAll('.emp').forEach(emp=>{
+    const strip=emp.querySelector('.strip');
+    if(strip && emp.dataset.empId){
+      positions[emp.dataset.empId]=strip.scrollLeft;
+    }
+  });
   return positions;
 }
+
 function restoreStripScrolls(positions){
-  // Двойной requestAnimationFrame + setTimeout для надёжности
-  requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>{
-      const strips=document.querySelectorAll('.strip');
-      positions.forEach((pos,i)=>{
-        if(strips[i]) strips[i].scrollLeft=pos;
-      });
-      setTimeout(()=>{
-        const strips2=document.querySelectorAll('.strip');
-        positions.forEach((pos,i)=>{
-          if(strips2[i]) strips2[i].scrollLeft=pos;
-        });
-      },50);
+  setTimeout(()=>{
+    document.querySelectorAll('.emp').forEach(emp=>{
+      const strip=emp.querySelector('.strip');
+      if(strip && emp.dataset.empId && positions[emp.dataset.empId]!==undefined){
+        strip.scrollLeft=positions[emp.dataset.empId];
+      }
     });
-  });
+  }, 150);
 }
 
-// ═══ СИНХРОННАЯ ПРОКРУТКА ЛЕНТ ОДНОГО ПВЗ ═══
-function bindSyncScroll(){
-  document.querySelectorAll('.strip').forEach(strip=>{
-    // Убираем старые обработчики через клонирование
-    const newStrip=strip.cloneNode(true);
-    strip.parentNode.replaceChild(newStrip,strip);
-    
-    let isSyncing=false;
-    newStrip.addEventListener('scroll',()=>{
-      if(isSyncing) return;
-      isSyncing=true;
-      // Находим все ленты того же ПВЗ
-      const empEl=newStrip.closest('.emp');
-      const pvzEl=empEl?empEl.closest('[data-pvz]'):null;
-      if(pvzEl){
-        pvzEl.querySelectorAll('.strip').forEach(otherStrip=>{
-          if(otherStrip!==newStrip){
-            otherStrip.scrollLeft=newStrip.scrollLeft;
+// ═══ СИНХРОННАЯ ПРОКРУТКА ЧЕРЕЗ ДЕЛЕГИРОВАНИЕ ═══
+document.addEventListener('scroll', (e)=>{
+  if(e.target.classList && e.target.classList.contains('strip')){
+    const strip = e.target;
+    const empEl = strip.closest('.emp');
+    const pvzHead = empEl?.previousElementSibling;
+    if(pvzHead && pvzHead.classList.contains('pvz-head')){
+      const pvzId = pvzHead.dataset.pvz;
+      if(pvzId){
+        document.querySelectorAll(`.pvz-head[data-pvz="${pvzId}"]`).forEach(head=>{
+          let next = head.nextElementSibling;
+          while(next && next.classList && next.classList.contains('emp')){
+            const s = next.querySelector('.strip');
+            if(s && s !== strip){
+              s.scrollLeft = strip.scrollLeft;
+            }
+            next = next.nextElementSibling;
           }
         });
       }
-      requestAnimationFrame(()=>{isSyncing=false;});
-    });
-  });
-}
+    }
+  }
+}, {passive: true});
 
 function daysHTML(e,dm){
   let h='';const t=new Date();
@@ -628,7 +625,7 @@ function daysHTML(e,dm){
 }
 function empHTML(e,dm){
   const cnt=cntRange(e.id,1,dm),tot=sumRange(e.id,1,dm),mid=sumRange(e.id,1,15),end=sumRange(e.id,16,dm);
-  return '<div class="emp">'
+  return '<div class="emp" data-emp-id="'+e.id+'">'
    +'<div class="emp-top"><div class="ename-wrap">'
    +'<button class="ename" data-emp="'+e.id+'">'+esc(e.name)+'</button>'
    +'<button class="del-emp" data-act="del-emp" data-emp="'+e.id+'" title="удалить">✕</button></div>'
@@ -688,9 +685,8 @@ function renderAll(){
     panel('АВАНС','выплата 15-го','смены с 1 по 15 число',1,15,'mid')
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
-  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  bindSyncScroll();
+  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  else{const n=ld-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
 }
 
 let cur={k:null,emp:null,d:0}, curEmp=null, pen={k:null,emp:null,d:0};
@@ -947,7 +943,7 @@ document.addEventListener('click',e=>{
     const positions=saveStripScrolls();
     persist();renderAll();restoreStripScrolls(positions);toast('Месяц очищен');}
   else if(a==='export'){const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
-    const a2=document.createElement('a');a2.href=URL.createObjectURL(b);a2.download='tabel-dkbz.json';a2.click();toast('Файл сохранён ⬇');}
+    const a2=document.createElement('a');a2.href=URL.createObjectURL(b);a2.download='tabel-dkbz.json';a2.click();toast('Файл сохранён ');}
   else if(a==='importbtn')$('#imp').click();
   else if(a==='reset'){if(!confirm('Точно сбросить ВЕСЬ табель нахрен?'))return;localStorage.removeItem(LS);state=load();persist(false);renderAll();toast('Всё сброшено');}
 });
