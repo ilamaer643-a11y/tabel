@@ -11,14 +11,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;900&family=Golos+Text:wght@400;500;600;800&family=JetBrains+Mono:wght@500;700;800&family=Yeseva+One&display=swap" rel="stylesheet">
 <style>
-/* ═══ ТЁМНАЯ ТЕМА (по умолчанию) ═══ */
 :root{
   --bg:#0C1512; --panel:#13211C; --panel2:#0E1A16;
   --ink:#ECF3EE; --mut:#8AA399; --line:rgba(150,200,180,.13);
   --teal:#2DD4BF; --amber:#F4B740; --green:#46D18A; --red:#FF5C5C; --pen:#FF5C5C;
 }
-
-/* ═══ СВЕТЛАЯ ТЕМА ═══ */
 [data-theme="light"]{
   --bg:#F0F4F3; --panel:#FFFFFF; --panel2:#E8ECEB;
   --ink:#1A2B25; --mut:#5A7A6D; --line:rgba(0,40,20,.1);
@@ -38,7 +35,6 @@
 [data-theme="light"] #toast{background:#FFFFFF;border-color:var(--teal);color:var(--ink)}
 [data-theme="light"] .c-b{color:#2A9D6A!important}
 
-/* ═══ СИСТЕМНАЯ СВЕТЛАЯ ═══ */
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]){
     --bg:#F0F4F3; --panel:#FFFFFF; --panel2:#E8ECEB;
@@ -338,7 +334,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 
   <footer class="foot rv">
     <div class="theme-switch">
-      <button class="t-btn" data-act="theme" data-val="light" title="Светлая">️☀️</button>
+      <button class="t-btn" data-act="theme" data-val="light" title="Светлая">☀️</button>
       <button class="t-btn" data-act="theme" data-val="dark" title="Тёмная">🌙</button>
       <button class="t-btn" data-act="theme" data-val="system" title="Как в системе">📱</button>
     </div>
@@ -346,7 +342,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="mini" data-act="cloud-setup">⚙ Облако</button>
       <button class="mini" data-act="export">⬇ Экспорт</button>
       <button class="mini" data-act="importbtn">⬆ Импорт</button>
-      <button class="mini danger" data-act="reset"> Сбросить всё</button>
+      <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
     </div>
     <p>Автор: <b>DKBZ</b> · облако = общий табель для двух телефонов</p>
   </footer>
@@ -393,8 +389,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="mini" data-act="ei-close">✕</button>
     </div>
     <div class="info-rows">
-      <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
-      <div class="info-row" id="ei-row-bank"><span>🏦 Банк</span><b id="ei-bank">—</b></div>
+      <div class="info-row" id="ei-row-phone"><span> Телефон</span><b id="ei-phone">—</b></div>
+      <div class="info-row" id="ei-row-bank"><span> Банк</span><b id="ei-bank">—</b></div>
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
@@ -409,7 +405,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id-txt"><b>Сотрудник</b><span>имя · телефон · банк</span></div>
-      <button class="mini" data-act="ee-close">✕</button>
+      <button class="mini" data-act="ee-close"></button>
     </div>
     <label class="m-lbl">Имя / ФИО</label>
     <input id="ee-name" class="fld" type="text">
@@ -563,15 +559,53 @@ function initCloud(){
   }).catch(()=>{cloudOn=false;setCloud('err','ошибка чтения');});
 }
 
+// ═══ СОХРАНЕНИЕ/ВОССТАНОВЛЕНИЕ ПРОКРУТКИ (УСИЛЕННОЕ) ═══
 function saveStripScrolls(){
   const positions=[];
   document.querySelectorAll('.strip').forEach(s=>{ positions.push(s.scrollLeft); });
   return positions;
 }
 function restoreStripScrolls(positions){
+  // Двойной requestAnimationFrame + setTimeout для надёжности
   requestAnimationFrame(()=>{
-    const strips=document.querySelectorAll('.strip');
-    positions.forEach((pos,i)=>{ if(strips[i]) strips[i].scrollLeft=pos; });
+    requestAnimationFrame(()=>{
+      const strips=document.querySelectorAll('.strip');
+      positions.forEach((pos,i)=>{
+        if(strips[i]) strips[i].scrollLeft=pos;
+      });
+      setTimeout(()=>{
+        const strips2=document.querySelectorAll('.strip');
+        positions.forEach((pos,i)=>{
+          if(strips2[i]) strips2[i].scrollLeft=pos;
+        });
+      },50);
+    });
+  });
+}
+
+// ═══ СИНХРОННАЯ ПРОКРУТКА ЛЕНТ ОДНОГО ПВЗ ═══
+function bindSyncScroll(){
+  document.querySelectorAll('.strip').forEach(strip=>{
+    // Убираем старые обработчики через клонирование
+    const newStrip=strip.cloneNode(true);
+    strip.parentNode.replaceChild(newStrip,strip);
+    
+    let isSyncing=false;
+    newStrip.addEventListener('scroll',()=>{
+      if(isSyncing) return;
+      isSyncing=true;
+      // Находим все ленты того же ПВЗ
+      const empEl=newStrip.closest('.emp');
+      const pvzEl=empEl?empEl.closest('[data-pvz]'):null;
+      if(pvzEl){
+        pvzEl.querySelectorAll('.strip').forEach(otherStrip=>{
+          if(otherStrip!==newStrip){
+            otherStrip.scrollLeft=newStrip.scrollLeft;
+          }
+        });
+      }
+      requestAnimationFrame(()=>{isSyncing=false;});
+    });
   });
 }
 
@@ -610,7 +644,7 @@ function pvzHTML(n,dm){
   const emps=state.emp.filter(e=>e.pvz===n);
   let tot=0,rows='';
   emps.forEach(e=>{tot+=sumRange(e.id,1,dm);rows+=empHTML(e,dm);});
-  return '<div class="pvz-head"><h2>'+esc(state.pvz[n])+'</h2>'
+  return '<div class="pvz-head" data-pvz="'+n+'"><h2>'+esc(state.pvz[n])+'</h2>'
    +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'">✎ имя</button>'
    +'<button class="mini" data-act="add-emp" data-pvz="'+n+'">＋ сотрудник</button>'
    +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'">🗑 ПВЗ</button></div>'
@@ -654,8 +688,9 @@ function renderAll(){
     panel('АВАНС','выплата 15-го','смены с 1 по 15 число',1,15,'mid')
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
-  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  else{const n=ld-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  bindSyncScroll();
 }
 
 let cur={k:null,emp:null,d:0}, curEmp=null, pen={k:null,emp:null,d:0};
@@ -832,7 +867,7 @@ document.addEventListener('click',e=>{
   }
   else if(a==='ei-close')closeEmpInfo();
   else if(a==='ei-edit'){const id=curEmp;closeEmpInfo();openEmpEdit(id);}
-  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован ');}
+  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован 📋');}
   else if(a==='ee-close')closeEmpEdit();
   else if(a==='ee-save'){
     const e=empById(curEmp);if(!e)return;
@@ -855,7 +890,7 @@ document.addEventListener('click',e=>{
     let c;try{c=JSON.parse(txt);}catch(x){toast('Это не JSON, проверь скобки!');return;}
     if(!c||!c.apiKey||!c.databaseURL){toast('В конфиге нет apiKey или databaseURL!');return;}
     localStorage.setItem(CFG_LS,JSON.stringify(c));
-    toast('Подключаю, перезагружаю… ️');setTimeout(()=>location.reload(),650);
+    toast('Подключаю, перезагружаю… ☁️');setTimeout(()=>location.reload(),650);
   }
   else if(a==='cs-off'){
     if(!getCfg()){toast('И так не подключено');return;}
@@ -886,33 +921,27 @@ document.addEventListener('click',e=>{
     const positions=saveStripScrolls();
     persist();renderAll();restoreStripScrolls(positions);toast('ПВЗ добавлен ✔');}}
   else if(a==='fill'){
-  const e=empById(el.dataset.emp);
-  const dm=dim(view.y,view.m);
-  const startDay=prompt('С какого дня начать график 2/2? (1-'+dm+')','1');
-  if(!startDay)return;
-  const start=parseInt(startDay);
-  if(isNaN(start)||start<1||start>dm){toast('Неверный день!');return;}
-  if(!confirm('Раскидать для «'+e.name+'» график 2/2 с '+start+' числа? (2 рабочих / 2 выходных, ставка '+fmt(state.rate)+' ₽). Смены до '+start+' числа не тронутся, после — затрутся!'))return;
-  
-  // Очищаем смены только с start дня до конца месяца
-  for(let d=start;d<=dm;d++){
-    const k=key(e.id,view.y,view.m,d);
-    delete state.shifts[k];
-  }
-  
-  // Строим график 2/2 начиная с start
-  let workDays=0;
-  for(let d=start;d<=dm;d++){
-    const k=key(e.id,view.y,view.m,d);
-    const cycleDay=(d-start)%4;
-    if(cycleDay<2){
-      state.shifts[k]={b:state.rate,p:0,n:''};
+    const e=empById(el.dataset.emp);
+    const dm=dim(view.y,view.m);
+    const startDay=prompt('С какого дня начать график 2/2? (1-'+dm+')','1');
+    if(!startDay)return;
+    const start=parseInt(startDay);
+    if(isNaN(start)||start<1||start>dm){toast('Неверный день!');return;}
+    if(!confirm('Раскидать для «'+e.name+'» график 2/2 с '+start+' числа? (2 рабочих / 2 выходных, ставка '+fmt(state.rate)+' ₽). Смены до '+start+' числа не тронутся, после — затрутся!'))return;
+    for(let d=start;d<=dm;d++){
+      const k=key(e.id,view.y,view.m,d);
+      delete state.shifts[k];
     }
+    for(let d=start;d<=dm;d++){
+      const k=key(e.id,view.y,view.m,d);
+      const cycleDay=(d-start)%4;
+      if(cycleDay<2){
+        state.shifts[k]={b:state.rate,p:0,n:''};
+      }
+    }
+    const positions=saveStripScrolls();
+    persist();renderAll();restoreStripScrolls(positions);toast('График 2/2 с '+start+' числа готов ✔');
   }
-  
-  const positions=saveStripScrolls();
-  persist();renderAll();restoreStripScrolls(positions);toast('График 2/2 с '+start+' числа готов ✔');
-}
   else if(a==='clearemp'){const e=empById(el.dataset.emp);if(!confirm('Стереть ВСЕ смены «'+e.name+'» за '+MONTHS[view.m]+'?'))return;
     const dm=dim(view.y,view.m);for(let d=1;d<=dm;d++)delete state.shifts[key(e.id,view.y,view.m,d)];
     const positions=saveStripScrolls();
