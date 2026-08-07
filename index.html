@@ -340,8 +340,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <div class="fbtns">
       <button class="mini" data-act="cloud-setup">⚙ Облако</button>
-      <button class="mini" data-act="export">⬇ Экспорт</button>
-      <button class="mini" data-act="importbtn">⬆ Импорт</button>
+      <button class="mini" data-act="export"> Экспорт</button>
+      <button class="mini" data-act="importbtn"> Импорт</button>
       <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
     </div>
     <p>Автор: <b>DKBZ</b> · облако = общий табель для двух телефонов</p>
@@ -424,7 +424,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id-txt"><b>☁️ Облако</b><span>общий табель для двух телефонов</span></div>
-      <button class="mini" data-act="cs-close"></button>
+      <button class="mini" data-act="cs-close">✕</button>
     </div>
     <div class="cs-status off" id="cs-status"><span class="d"></span><span id="cs-status-txt">не подключено</span></div>
     <div class="cs-steps">
@@ -582,29 +582,41 @@ function restoreStripScrolls(positions){
   }, 150);
 }
 
-// ═══ СИНХРОННАЯ ПРОКРУТКА ЧЕРЕЗ ДЕЛЕГИРОВАНИЕ ═══
-document.addEventListener('scroll', (e)=>{
-  if(e.target.classList && e.target.classList.contains('strip')){
-    const strip = e.target;
-    const empEl = strip.closest('.emp');
-    const pvzHead = empEl?.previousElementSibling;
-    if(pvzHead && pvzHead.classList.contains('pvz-head')){
-      const pvzId = pvzHead.dataset.pvz;
-      if(pvzId){
-        document.querySelectorAll(`.pvz-head[data-pvz="${pvzId}"]`).forEach(head=>{
-          let next = head.nextElementSibling;
-          while(next && next.classList && next.classList.contains('emp')){
-            const s = next.querySelector('.strip');
-            if(s && s !== strip){
-              s.scrollLeft = strip.scrollLeft;
+// ═══ СИНХРОННАЯ ПРОКРУТКА — НАВЕШИВАЕМ НА КАЖДУЮ ЛЕНТУ ═══
+function setupSyncScroll(){
+  document.querySelectorAll('.strip').forEach(strip=>{
+    // Проверяем что обработчик ещё не навешан
+    if(strip.dataset.syncBound) return;
+    strip.dataset.syncBound='1';
+    
+    let isSyncing=false;
+    strip.addEventListener('scroll', function(){
+      if(isSyncing) return;
+      isSyncing=true;
+      
+      const empEl=this.closest('.emp');
+      const pvzHead=empEl?.previousElementSibling;
+      if(pvzHead && pvzHead.classList.contains('pvz-head')){
+        const pvzId=pvzHead.dataset.pvz;
+        if(pvzId){
+          // Находим все ленты этого ПВЗ
+          document.querySelectorAll(`.pvz-head[data-pvz="${pvzId}"]`).forEach(head=>{
+            let next=head.nextElementSibling;
+            while(next && next.classList && next.classList.contains('emp')){
+              const s=next.querySelector('.strip');
+              if(s && s!==this){
+                s.scrollLeft=this.scrollLeft;
+              }
+              next=next.nextElementSibling;
             }
-            next = next.nextElementSibling;
-          }
-        });
+          });
+        }
       }
-    }
-  }
-}, {passive: true});
+      
+      requestAnimationFrame(()=>{isSyncing=false;});
+    }, {passive:true});
+  });
+}
 
 function daysHTML(e,dm){
   let h='';const t=new Date();
@@ -642,7 +654,7 @@ function pvzHTML(n,dm){
   let tot=0,rows='';
   emps.forEach(e=>{tot+=sumRange(e.id,1,dm);rows+=empHTML(e,dm);});
   return '<div class="pvz-head" data-pvz="'+n+'"><h2>'+esc(state.pvz[n])+'</h2>'
-   +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'">✎ имя</button>'
+   +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'"> имя</button>'
    +'<button class="mini" data-act="add-emp" data-pvz="'+n+'">＋ сотрудник</button>'
    +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'">🗑 ПВЗ</button></div>'
    +'<div class="pvz-total">Итого за месяц по ПВЗ: <b>'+fmt(tot)+' ₽</b></div></div>'+rows;
@@ -686,7 +698,9 @@ function renderAll(){
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
   if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  else{const n=ld-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  // Навешиваем синхронную прокрутку после рендера
+  setTimeout(()=>{setupSyncScroll();}, 200);
 }
 
 let cur={k:null,emp:null,d:0}, curEmp=null, pen={k:null,emp:null,d:0};
@@ -863,7 +877,7 @@ document.addEventListener('click',e=>{
   }
   else if(a==='ei-close')closeEmpInfo();
   else if(a==='ei-edit'){const id=curEmp;closeEmpInfo();openEmpEdit(id);}
-  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован 📋');}
+  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован ');}
   else if(a==='ee-close')closeEmpEdit();
   else if(a==='ee-save'){
     const e=empById(curEmp);if(!e)return;
