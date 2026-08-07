@@ -177,7 +177,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .c-b{color:#7FE3D2!important}.c-a{color:var(--amber)!important}.c-g{color:var(--green)!important}
 
 .strip{display:flex;gap:5px;overflow-x:auto;padding:10px 2px;scroll-snap-type:x proximity;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;margin-top:10px}
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;margin-top:10px;
+  scroll-behavior:auto}
 .strip::-webkit-scrollbar{display:none}
 
 .cell{flex:0 0 auto;scroll-snap-align:start;position:relative;width:46px;height:60px;border-radius:9px;
@@ -473,8 +474,6 @@ let now=new Date();
 let view={y:now.getFullYear(),m:now.getMonth()};
 let state=load();
 let cloudOn=false, cloudReady=false, dbRef=null, pushT=null, isRemoteUpdate=false;
-let userIsScrolling=false;
-let userScrollTimer=null;
 
 function defaults(){
   return{
@@ -562,7 +561,7 @@ function initCloud(){
   }).catch(()=>{cloudOn=false;setCloud('err','ошибка чтения');});
 }
 
-// ═══ СОХРАНЕНИЕ/ВОССТАНОВЛЕНИЕ ПРОКРУТКИ ПО EMP ID ═══
+// ═══ СОХРАНЕНИЕ/ВОССТАНОВЛЕНИЕ ПРОКРУТКИ - СИНХРОННО БЕЗ ЗАДЕРЖЕК ═══
 function saveStripScrolls(){
   const positions={};
   document.querySelectorAll('.emp').forEach(emp=>{
@@ -575,54 +574,29 @@ function saveStripScrolls(){
 }
 
 function restoreStripScrolls(positions){
-  // Ждём 400мс и проверяем что пользователь не скроллит
-  setTimeout(()=>{
-    if(userIsScrolling) return;
-    document.querySelectorAll('.emp').forEach(emp=>{
-      const strip=emp.querySelector('.strip');
-      if(strip && emp.dataset.empId && positions[emp.dataset.empId]!==undefined){
-        strip.scrollLeft=positions[emp.dataset.empId];
-      }
-    });
-  }, 400);
+  // СИНХРОННО - без setTimeout, без requestAnimationFrame
+  document.querySelectorAll('.emp').forEach(emp=>{
+    const strip=emp.querySelector('.strip');
+    if(strip && emp.dataset.empId && positions[emp.dataset.empId]!==undefined){
+      strip.scrollLeft=positions[emp.dataset.empId];
+    }
+  });
 }
 
 // ═══ СИНХРОННАЯ ПРОКРУТКА ЧЕРЕЗ КОНТЕЙНЕР PVZ-BLOCK ═══
 function setupSyncScroll(){
-  // Отслеживаем когда пользователь скроллит
   document.querySelectorAll('.strip').forEach(strip=>{
     if(strip.dataset.syncBound) return;
     strip.dataset.syncBound='1';
     
     let isSyncing=false;
     
-    // Отмечаем что пользователь скроллит
-    strip.addEventListener('scrollstart', ()=>{
-      userIsScrolling=true;
-      clearTimeout(userScrollTimer);
-    }, {passive:true});
-    
-    strip.addEventListener('touchstart', ()=>{
-      userIsScrolling=true;
-      clearTimeout(userScrollTimer);
-    }, {passive:true});
-    
-    strip.addEventListener('touchend', ()=>{
-      userScrollTimer=setTimeout(()=>{userIsScrolling=false;}, 500);
-    }, {passive:true});
-    
     strip.addEventListener('scroll', function(){
       if(isSyncing) return;
       isSyncing=true;
       
-      userIsScrolling=true;
-      clearTimeout(userScrollTimer);
-      userScrollTimer=setTimeout(()=>{userIsScrolling=false;}, 300);
-      
-      // Находим контейнер pvz-block
       const pvzBlock=this.closest('.pvz-block');
       if(pvzBlock){
-        // Синхронизируем все ленты внутри этого блока
         pvzBlock.querySelectorAll('.strip').forEach(otherStrip=>{
           if(otherStrip!==this){
             otherStrip.scrollLeft=this.scrollLeft;
@@ -716,10 +690,9 @@ function renderAll(){
     panel('АВАНС','выплата 15-го','смены с 1 по 15 число',1,15,'mid')
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
-  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':' '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  // Навешиваем синхронную прокрутку после рендера
-  setTimeout(()=>{setupSyncScroll();}, 300);
+  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  setupSyncScroll();
 }
 
 let cur={k:null,emp:null,d:0}, curEmp=null, pen={k:null,emp:null,d:0};
@@ -1017,4 +990,3 @@ document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 </script>
 </body>
 </html>
-
