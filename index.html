@@ -146,6 +146,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .ptotal b{font:400 21px 'Yeseva One';line-height:1}
 .pay.mid .ptotal b{color:var(--amber)} .pay.end .ptotal b{color:var(--green)}
 
+.pvz-block{margin-bottom:10px}
 .pvz-head{display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;
   margin:24px 0 3px;border-top:3px double var(--line);padding-top:12px}
 .pvz-head h2{font:900 16px 'Unbounded';display:flex;align-items:center;gap:7px}
@@ -334,15 +335,15 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 
   <footer class="foot rv">
     <div class="theme-switch">
-      <button class="t-btn" data-act="theme" data-val="light" title="Светлая">☀️</button>
+      <button class="t-btn" data-act="theme" data-val="light" title="Светлая">️</button>
       <button class="t-btn" data-act="theme" data-val="dark" title="Тёмная">🌙</button>
       <button class="t-btn" data-act="theme" data-val="system" title="Как в системе">📱</button>
     </div>
     <div class="fbtns">
       <button class="mini" data-act="cloud-setup">⚙ Облако</button>
-      <button class="mini" data-act="export"> Экспорт</button>
-      <button class="mini" data-act="importbtn"> Импорт</button>
-      <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
+      <button class="mini" data-act="export">⬇ Экспорт</button>
+      <button class="mini" data-act="importbtn">⬆ Импорт</button>
+      <button class="mini danger" data-act="reset"> Сбросить всё</button>
     </div>
     <p>Автор: <b>DKBZ</b> · облако = общий табель для двух телефонов</p>
   </footer>
@@ -472,6 +473,8 @@ let now=new Date();
 let view={y:now.getFullYear(),m:now.getMonth()};
 let state=load();
 let cloudOn=false, cloudReady=false, dbRef=null, pushT=null, isRemoteUpdate=false;
+let userIsScrolling=false;
+let userScrollTimer=null;
 
 function defaults(){
   return{
@@ -572,45 +575,59 @@ function saveStripScrolls(){
 }
 
 function restoreStripScrolls(positions){
+  // Ждём 400мс и проверяем что пользователь не скроллит
   setTimeout(()=>{
+    if(userIsScrolling) return;
     document.querySelectorAll('.emp').forEach(emp=>{
       const strip=emp.querySelector('.strip');
       if(strip && emp.dataset.empId && positions[emp.dataset.empId]!==undefined){
         strip.scrollLeft=positions[emp.dataset.empId];
       }
     });
-  }, 150);
+  }, 400);
 }
 
-// ═══ СИНХРОННАЯ ПРОКРУТКА — НАВЕШИВАЕМ НА КАЖДУЮ ЛЕНТУ ═══
+// ═══ СИНХРОННАЯ ПРОКРУТКА ЧЕРЕЗ КОНТЕЙНЕР PVZ-BLOCK ═══
 function setupSyncScroll(){
+  // Отслеживаем когда пользователь скроллит
   document.querySelectorAll('.strip').forEach(strip=>{
-    // Проверяем что обработчик ещё не навешан
     if(strip.dataset.syncBound) return;
     strip.dataset.syncBound='1';
     
     let isSyncing=false;
+    
+    // Отмечаем что пользователь скроллит
+    strip.addEventListener('scrollstart', ()=>{
+      userIsScrolling=true;
+      clearTimeout(userScrollTimer);
+    }, {passive:true});
+    
+    strip.addEventListener('touchstart', ()=>{
+      userIsScrolling=true;
+      clearTimeout(userScrollTimer);
+    }, {passive:true});
+    
+    strip.addEventListener('touchend', ()=>{
+      userScrollTimer=setTimeout(()=>{userIsScrolling=false;}, 500);
+    }, {passive:true});
+    
     strip.addEventListener('scroll', function(){
       if(isSyncing) return;
       isSyncing=true;
       
-      const empEl=this.closest('.emp');
-      const pvzHead=empEl?.previousElementSibling;
-      if(pvzHead && pvzHead.classList.contains('pvz-head')){
-        const pvzId=pvzHead.dataset.pvz;
-        if(pvzId){
-          // Находим все ленты этого ПВЗ
-          document.querySelectorAll(`.pvz-head[data-pvz="${pvzId}"]`).forEach(head=>{
-            let next=head.nextElementSibling;
-            while(next && next.classList && next.classList.contains('emp')){
-              const s=next.querySelector('.strip');
-              if(s && s!==this){
-                s.scrollLeft=this.scrollLeft;
-              }
-              next=next.nextElementSibling;
-            }
-          });
-        }
+      userIsScrolling=true;
+      clearTimeout(userScrollTimer);
+      userScrollTimer=setTimeout(()=>{userIsScrolling=false;}, 300);
+      
+      // Находим контейнер pvz-block
+      const pvzBlock=this.closest('.pvz-block');
+      if(pvzBlock){
+        // Синхронизируем все ленты внутри этого блока
+        pvzBlock.querySelectorAll('.strip').forEach(otherStrip=>{
+          if(otherStrip!==this){
+            otherStrip.scrollLeft=this.scrollLeft;
+          }
+        });
       }
       
       requestAnimationFrame(()=>{isSyncing=false;});
@@ -653,11 +670,13 @@ function pvzHTML(n,dm){
   const emps=state.emp.filter(e=>e.pvz===n);
   let tot=0,rows='';
   emps.forEach(e=>{tot+=sumRange(e.id,1,dm);rows+=empHTML(e,dm);});
-  return '<div class="pvz-head" data-pvz="'+n+'"><h2>'+esc(state.pvz[n])+'</h2>'
-   +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'"> имя</button>'
+  return '<div class="pvz-block" data-pvz="'+n+'">'
+   +'<div class="pvz-head"><h2>'+esc(state.pvz[n])+'</h2>'
+   +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'">✎ имя</button>'
    +'<button class="mini" data-act="add-emp" data-pvz="'+n+'">＋ сотрудник</button>'
-   +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'">🗑 ПВЗ</button></div>'
-   +'<div class="pvz-total">Итого за месяц по ПВЗ: <b>'+fmt(tot)+' ₽</b></div></div>'+rows;
+   +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'"> ПВЗ</button></div>'
+   +'<div class="pvz-total">Итого за месяц по ПВЗ: <b>'+fmt(tot)+' ₽</b></div></div>'
+   +rows+'</div>';
 }
 function panel(title,dateLbl,sub,d1,d2,cls){
   let rows='',grand=0;
@@ -698,9 +717,9 @@ function renderAll(){
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
   if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':' '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
   // Навешиваем синхронную прокрутку после рендера
-  setTimeout(()=>{setupSyncScroll();}, 200);
+  setTimeout(()=>{setupSyncScroll();}, 300);
 }
 
 let cur={k:null,emp:null,d:0}, curEmp=null, pen={k:null,emp:null,d:0};
@@ -877,7 +896,7 @@ document.addEventListener('click',e=>{
   }
   else if(a==='ei-close')closeEmpInfo();
   else if(a==='ei-edit'){const id=curEmp;closeEmpInfo();openEmpEdit(id);}
-  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован ');}
+  else if(a==='ei-copyphone'){const e=empById(curEmp);if(e&&e.phone)copyText(e.phone,el,'Телефон скопирован 📋');}
   else if(a==='ee-close')closeEmpEdit();
   else if(a==='ee-save'){
     const e=empById(curEmp);if(!e)return;
@@ -957,7 +976,7 @@ document.addEventListener('click',e=>{
     const positions=saveStripScrolls();
     persist();renderAll();restoreStripScrolls(positions);toast('Месяц очищен');}
   else if(a==='export'){const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
-    const a2=document.createElement('a');a2.href=URL.createObjectURL(b);a2.download='tabel-dkbz.json';a2.click();toast('Файл сохранён ');}
+    const a2=document.createElement('a');a2.href=URL.createObjectURL(b);a2.download='tabel-dkbz.json';a2.click();toast('Файл сохранён ⬇');}
   else if(a==='importbtn')$('#imp').click();
   else if(a==='reset'){if(!confirm('Точно сбросить ВЕСЬ табель нахрен?'))return;localStorage.removeItem(LS);state=load();persist(false);renderAll();toast('Всё сброшено');}
 });
@@ -998,3 +1017,4 @@ document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 </script>
 </body>
 </html>
+
