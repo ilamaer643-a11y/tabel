@@ -342,8 +342,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <div class="fbtns">
       <button class="mini" data-act="cloud-setup">⚙ Облако</button>
-      <button class="mini" data-act="export">⬇ Экспорт</button>
-      <button class="mini" data-act="importbtn">⬆ Импорт</button>
+      <button class="mini" data-act="export"> Экспорт</button>
+      <button class="mini" data-act="importbtn"> Импорт</button>
       <button class="mini danger" data-act="reset"> Сбросить всё</button>
     </div>
     <p>Автор: <b>DKBZ</b> · облако = общий табель для двух телефонов</p>
@@ -396,7 +396,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
-      <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
+      <button class="btn ghost" data-act="ei-edit"> Изменить</button>
       <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
       <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
@@ -473,7 +473,9 @@ const initial=s=>{const c=(s||'').trim().charAt(0);return c?c.toUpperCase():'?';
 let now=new Date();
 let view={y:now.getFullYear(),m:now.getMonth()};
 let state=load();
-let cloudOn=false, cloudReady=false, dbRef=null, pushT=null, isRemoteUpdate=false;
+let cloudOn=false, cloudReady=false, dbRef=null, pushT=null;
+let justPushed=false;
+let justPushedTimer=null;
 
 function defaults(){
   return{
@@ -514,7 +516,7 @@ function load(){
   let s;try{s=JSON.parse(localStorage.getItem(LS));}catch(e){s=null;}
   return (s&&s.emp&&s.pvz)?mergeDefaults(s):defaults();
 }
-function persist(push){localStorage.setItem(LS,JSON.stringify(state));if(push!==false&&!isRemoteUpdate)schedulePush();}
+function persist(push){localStorage.setItem(LS,JSON.stringify(state));schedulePush();}
 const key=(e,y,m,d)=>e+'@'+y+'-'+pad(m+1)+'-'+pad(d);
 const empById=id=>state.emp.find(e=>e.id===id);
 const empName=id=>{const e=empById(id);return e?e.name:'?';};
@@ -533,16 +535,19 @@ function setCloud(cls,txt){
   const s=$('#cs-status');if(s){s.className='cs-status '+cls;$('#cs-status-txt').textContent=txt;}
 }
 function schedulePush(){
-  if(!cloudOn||!cloudReady||!dbRef||isRemoteUpdate)return;
+  if(!cloudOn||!cloudReady||!dbRef)return;
   clearTimeout(pushT);
-  pushT=setTimeout(()=>{dbRef.set(state).catch(()=>setCloud('err','ошибка записи'));},350);
+  pushT=setTimeout(()=>{
+    justPushed=true;
+    clearTimeout(justPushedTimer);
+    justPushedTimer=setTimeout(()=>{justPushed=false;}, 2000);
+    dbRef.set(state).catch(()=>setCloud('err','ошибка записи'));
+  },350);
 }
 function applyRemote(v){
-  isRemoteUpdate=true;
   state=mergeDefaults(v);
   localStorage.setItem(LS,JSON.stringify(state));
   renderAll();
-  setTimeout(()=>{isRemoteUpdate=false;},100);
 }
 function initCloud(){
   const cfg=getCfg();
@@ -557,11 +562,17 @@ function initCloud(){
     if(snap.exists()){applyRemote(snap.val());toast('Табель синхронизирован ☁️');}
     else dbRef.set(state).catch(()=>{});
     cloudOn=true;cloudReady=true;setCloud('on','облако');
-    dbRef.on('value',s=>{if(s.exists()&&!isRemoteUpdate)applyRemote(s.val());});
+    dbRef.on('value',s=>{
+      if(!s.exists()) return;
+      if(justPushed) return;
+      const remote=JSON.stringify(s.val());
+      const local=JSON.stringify(state);
+      if(remote===local) return;
+      applyRemote(s.val());
+    });
   }).catch(()=>{cloudOn=false;setCloud('err','ошибка чтения');});
 }
 
-// ═══ СОХРАНЕНИЕ/ВОССТАНОВЛЕНИЕ ПРОКРУТКИ - СИНХРОННО БЕЗ ЗАДЕРЖЕК ═══
 function saveStripScrolls(){
   const positions={};
   document.querySelectorAll('.emp').forEach(emp=>{
@@ -574,7 +585,6 @@ function saveStripScrolls(){
 }
 
 function restoreStripScrolls(positions){
-  // СИНХРОННО - без setTimeout, без requestAnimationFrame
   document.querySelectorAll('.emp').forEach(emp=>{
     const strip=emp.querySelector('.strip');
     if(strip && emp.dataset.empId && positions[emp.dataset.empId]!==undefined){
@@ -583,18 +593,14 @@ function restoreStripScrolls(positions){
   });
 }
 
-// ═══ СИНХРОННАЯ ПРОКРУТКА ЧЕРЕЗ КОНТЕЙНЕР PVZ-BLOCK ═══
 function setupSyncScroll(){
   document.querySelectorAll('.strip').forEach(strip=>{
     if(strip.dataset.syncBound) return;
     strip.dataset.syncBound='1';
-    
     let isSyncing=false;
-    
     strip.addEventListener('scroll', function(){
       if(isSyncing) return;
       isSyncing=true;
-      
       const pvzBlock=this.closest('.pvz-block');
       if(pvzBlock){
         pvzBlock.querySelectorAll('.strip').forEach(otherStrip=>{
@@ -603,7 +609,6 @@ function setupSyncScroll(){
           }
         });
       }
-      
       requestAnimationFrame(()=>{isSyncing=false;});
     }, {passive:true});
   });
@@ -648,7 +653,7 @@ function pvzHTML(n,dm){
    +'<div class="pvz-head"><h2>'+esc(state.pvz[n])+'</h2>'
    +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'">✎ имя</button>'
    +'<button class="mini" data-act="add-emp" data-pvz="'+n+'">＋ сотрудник</button>'
-   +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'"> ПВЗ</button></div>'
+   +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'">🗑 ПВЗ</button></div>'
    +'<div class="pvz-total">Итого за месяц по ПВЗ: <b>'+fmt(tot)+' ₽</b></div></div>'
    +rows+'</div>';
 }
@@ -690,7 +695,7 @@ function renderAll(){
     panel('АВАНС','выплата 15-го','смены с 1 по 15 число',1,15,'mid')
    +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
   const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
-  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?' Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
   else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
   setupSyncScroll();
 }
