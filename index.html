@@ -14,7 +14,7 @@
 :root{
   --bg:#0C1512; --panel:#13211C; --panel2:#0E1A16;
   --ink:#ECF3EE; --mut:#8AA399; --line:rgba(150,200,180,.13);
-  --teal:#2DD4BF; --amber:#F4B740; --green:#46D18A; --red:#FF5C5C; --pen:#FF5C5C;
+  --teal:#2DD4BF; --amber:#F4B740; --green:#46D18A; --red:#FF5C5C; --pen:#FF5C5C; --yellow:#FFD93D;
 }
 [data-theme="light"]{
   --bg:#F0F4F3; --panel:#FFFFFF; --panel2:#E8ECEB;
@@ -30,6 +30,9 @@
 [data-theme="light"] .cell.has-pos i,[data-theme="light"] .cell.has-pos u{color:#2A7A4A}
 [data-theme="light"] .cell.has-pen{background:linear-gradient(180deg,rgba(255,92,92,.25),rgba(214,40,40,.08));border-color:rgba(255,92,92,.6);box-shadow:0 0 12px rgba(255,92,92,.15)}
 [data-theme="light"] .cell.has-pen i,[data-theme="light"] .cell.has-pen b,[data-theme="light"] .cell.has-pen u,[data-theme="light"] .cell.has-pen::after{color:#8A2020}
+[data-theme="light"] .cell.has-sub{background:linear-gradient(180deg,rgba(255,217,61,.3),rgba(255,217,61,.1));border-color:rgba(255,217,61,.7)}
+[data-theme="light"] .cell.has-sub i,[data-theme="light"] .cell.has-sub b,[data-theme="light"] .cell.has-sub u{color:#8A6A00}
+[data-theme="light"] .cell.has-sub .sub-label{color:#8A6A00}
 [data-theme="light"] .modal{background:#FFFFFF;border-color:rgba(45,212,191,.3)}
 [data-theme="light"] .ov{background:rgba(0,20,10,.6)}
 [data-theme="light"] #toast{background:#FFFFFF;border-color:var(--teal);color:var(--ink)}
@@ -50,6 +53,9 @@
   :root:not([data-theme="dark"]) .cell.has-pos i,:root:not([data-theme="dark"]) .cell.has-pos u{color:#2A7A4A}
   :root:not([data-theme="dark"]) .cell.has-pen{background:linear-gradient(180deg,rgba(255,92,92,.25),rgba(214,40,40,.08));border-color:rgba(255,92,92,.6);box-shadow:0 0 12px rgba(255,92,92,.15)}
   :root:not([data-theme="dark"]) .cell.has-pen i,:root:not([data-theme="dark"]) .cell.has-pen b,:root:not([data-theme="dark"]) .cell.has-pen u,:root:not([data-theme="dark"]) .cell.has-pen::after{color:#8A2020}
+  :root:not([data-theme="dark"]) .cell.has-sub{background:linear-gradient(180deg,rgba(255,217,61,.3),rgba(255,217,61,.1));border-color:rgba(255,217,61,.7)}
+  :root:not([data-theme="dark"]) .cell.has-sub i,:root:not([data-theme="dark"]) .cell.has-sub b,:root:not([data-theme="dark"]) .cell.has-sub u{color:#8A6A00}
+  :root:not([data-theme="dark"]) .cell.has-sub .sub-label{color:#8A6A00}
   :root:not([data-theme="dark"]) .modal{background:#FFFFFF;border-color:rgba(45,212,191,.3)}
   :root:not([data-theme="dark"]) .ov{background:rgba(0,20,10,.6)}
   :root:not([data-theme="dark"]) #toast{background:#FFFFFF;border-color:var(--teal);color:var(--ink)}
@@ -96,7 +102,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .cstat.err{color:var(--red);border-color:rgba(255,92,92,.4)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 .paychip{font:700 10px 'JetBrains Mono';color:var(--amber);background:rgba(244,183,64,.1);
-  border:1px solid rgba(244,183,64,.4);border-radius:99px;padding:5px 10px;animation:pulse 2.4s infinite}
+  border:1px solid rgba(244,183,64,.4);border-radius:99px;padding:5px 10px;animation:pulse 2.4s infinite;cursor:pointer}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(244,183,64,.25)}50%{box-shadow:0 0 0 6px rgba(244,183,64,0)}}
 .mnav{display:flex;align-items:center;gap:5px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:4px 6px}
 .mnav button{width:27px;height:27px;border-radius:7px;font-size:16px;color:var(--mut);transition:.15s}
@@ -190,6 +196,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .cell b{font-size:13px;font-weight:800}
 .cell u{text-decoration:none;font-size:8px;font-weight:700;color:#B9D7CC;transition:color .15s}
 .cell .dot{color:rgba(150,200,180,.3);font-size:10px}
+.cell .sub-label{position:absolute;top:1px;left:50%;transform:translateX(-50%);font-size:6px;font-weight:700;
+  color:var(--yellow);letter-spacing:.02em;white-space:nowrap;pointer-events:none}
 .cell.we i,.cell.we b{color:#D99}
 .cell:hover{transform:translateY(-3px);border-color:var(--teal)}
 .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.42),rgba(70,209,138,.22));border-color:rgba(70,209,138,.82)}
@@ -198,6 +206,10 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   box-shadow:0 0 12px rgba(255,92,92,.32)}
 .cell.has-pen i{color:#FFD2D2} .cell.has-pen b{color:#FFF} .cell.has-pen u{color:#FFE2E2}
 .cell.has-pen::after{content:'!';position:absolute;top:2px;right:3px;font:800 8px 'JetBrains Mono';color:rgba(255,255,255,.78)}
+.cell.has-sub{background:linear-gradient(180deg,rgba(255,217,61,.35),rgba(255,217,61,.12));border-color:rgba(255,217,61,.75);
+  box-shadow:0 0 10px rgba(255,217,61,.25)}
+.cell.has-sub i{color:#FFE88A} .cell.has-sub b{color:#FFF} .cell.has-sub u{color:#FFF4C0}
+.cell.has-sub .sub-label{color:#FFE88A}
 .cell.today{z-index:3;animation:todayGlow 2.2s ease-in-out infinite}
 @keyframes todayGlow{
   0%,100%{box-shadow:0 0 0 2px var(--teal),0 0 10px rgba(45,212,191,.40)}
@@ -207,6 +219,11 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 @keyframes todayGlowPen{
   0%,100%{box-shadow:0 0 0 2px var(--teal),0 0 10px rgba(45,212,191,.40),0 0 12px rgba(255,92,92,.32)}
   50%{box-shadow:0 0 0 2px var(--teal),0 0 10px rgba(45,212,191,.90),0 0 12px rgba(255,92,92,.32)}
+}
+.cell.today.has-sub{animation:todayGlowSub 2.2s ease-in-out infinite}
+@keyframes todayGlowSub{
+  0%,100%{box-shadow:0 0 0 2px var(--teal),0 0 10px rgba(45,212,191,.40),0 0 10px rgba(255,217,61,.25)}
+  50%{box-shadow:0 0 0 2px var(--teal),0 0 10px rgba(45,212,191,.90),0 0 10px rgba(255,217,61,.25)}
 }
 .cell.pop{animation:pop .38s}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
@@ -238,12 +255,21 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 .pen-base{display:flex;justify-content:space-between;align-items:center;background:var(--panel2);
   border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin:12px 0 2px;font-size:11px;color:var(--mut)}
 .pen-base b{font:800 15px 'JetBrains Mono';color:var(--ink)}
+.pen-type{display:flex;gap:6px;margin:10px 0 4px}
+.pen-type-btn{flex:1;padding:10px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);
+  color:var(--mut);font:700 12px 'Golos Text';text-align:center;cursor:pointer;transition:.15s}
+.pen-type-btn:hover{border-color:var(--teal)}
+.pen-type-btn.active.pen{background:rgba(255,92,92,.15);border-color:rgba(255,92,92,.5);color:var(--red)}
+.pen-type-btn.active.sub{background:rgba(255,217,61,.15);border-color:rgba(255,217,61,.5);color:var(--yellow)}
+.pen-fields{margin-top:8px}
+.pen-fields.hidden{display:none}
 .pen-prev{display:flex;justify-content:space-between;align-items:center;border-radius:10px;padding:10px 12px;
   margin:10px 0 12px;font-size:11px;font-weight:600;border:1px solid var(--line);background:var(--panel2);transition:.2s}
 .pen-prev b{font:800 18px 'JetBrains Mono';transition:color .2s}
 .pen-prev.ok{border-color:rgba(70,209,138,.4)} .pen-prev.ok b{color:var(--green)}
 .pen-prev.cut{border-color:rgba(255,92,92,.55);background:rgba(255,92,92,.1)} .pen-prev.cut b{color:var(--pen)}
 .pen-prev.neg{border-color:transparent;background:linear-gradient(140deg,#FF6161,#D62828);color:#fff} .pen-prev.neg b{color:#fff}
+.pen-prev.sub{border-color:rgba(255,217,61,.5);background:rgba(255,217,61,.1)} .pen-prev.sub b{color:var(--yellow)}
 .pen-prev.bump{animation:bump .3s ease-out}
 @keyframes bump{0%{transform:scale(1)}35%{transform:scale(1.04)}100%{transform:scale(1)}}
 .m-act{display:flex;gap:7px;flex-wrap:wrap}
@@ -252,6 +278,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   box-shadow:0 5px 15px rgba(45,212,191,.3)}
 .btn.primary:active{transform:scale(.97)}
 .btn.primary.pen{background:linear-gradient(140deg,#FF7676,#D62828);color:#fff;box-shadow:0 5px 15px rgba(255,92,92,.35)}
+.btn.primary.sub{background:linear-gradient(140deg,#FFE066,#D4A017);color:#1A1A00;box-shadow:0 5px 15px rgba(255,217,61,.35)}
 .btn.danger{background:rgba(255,92,92,.1);border:1px solid rgba(255,92,92,.45);color:var(--red)}
 .btn.ghost{background:var(--panel2);border:1px solid var(--line);color:var(--ink)}
 .btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
@@ -303,7 +330,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </div>
   <div class="nav">
     <button class="cstat off" id="cstat" data-act="cloud-setup"><span class="d"></span><span id="cstat-txt">локально</span></button>
-    <div class="paychip" id="paychip"></div>
+    <div class="paychip" id="paychip" data-act="email-setup"></div>
     <div class="mnav">
       <button data-act="prev">‹</button>
       <b id="mtitle"></b>
@@ -314,8 +341,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 
 <main class="app">
   <section class="stats rv">
-    <div class="stat s-a"><span>К выплате 15-го</span><b id="st-mid">0 ₽</b></div>
-    <div class="stat s-g"><span>К выплате в конце</span><b id="st-end">0 ₽</b></div>
+    <div class="stat s-a"><span>К выплате 16-го</span><b id="st-mid">0 ₽</b></div>
+    <div class="stat s-g"><span>К выплате 1-го</span><b id="st-end">0 ₽</b></div>
     <div class="stat s-b"><span>Общая за месяц</span><b id="st-total">0 ₽</b></div>
   </section>
 
@@ -332,19 +359,20 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <section class="rv" id="pvz-list"></section>
   <button class="addpvz rv" data-act="addpvz">＋ добавить ПВЗ</button>
 
-  <section class="rv"><h2 class="h2">💰 Выплаты</h2><div class="pay-grid" id="paygrid"></div></section>
+  <section class="rv"><h2 class="h2"> Выплаты</h2><div class="pay-grid" id="paygrid"></div></section>
 
   <footer class="foot rv">
     <div class="theme-switch">
-      <button class="t-btn" data-act="theme" data-val="light" title="Светлая">️☀️</button>
+      <button class="t-btn" data-act="theme" data-val="light" title="Светлая">☀️</button>
       <button class="t-btn" data-act="theme" data-val="dark" title="Тёмная">🌙</button>
-      <button class="t-btn" data-act="theme" data-val="system" title="Как в системе">📱</button>
+      <button class="t-btn" data-act="theme" data-val="system" title="Как в системе"></button>
     </div>
     <div class="fbtns">
-      <button class="mini" data-act="cloud-setup">⚙ Облако</button>
-      <button class="mini" data-act="export"> Экспорт</button>
-      <button class="mini" data-act="importbtn"> Импорт</button>
-      <button class="mini danger" data-act="reset"> Сбросить всё</button>
+      <button class="mini" data-act="cloud-setup"> Облако</button>
+      <button class="mini" data-act="email-setup">📧 Напоминания</button>
+      <button class="mini" data-act="export">⬇ Экспорт</button>
+      <button class="mini" data-act="importbtn">⬆ Импорт</button>
+      <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
     </div>
     <p>Автор: <b>DKBZ</b> · облако = общий табель для двух телефонов</p>
   </footer>
@@ -372,14 +400,30 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="mini" data-act="pclose">✕</button>
     </div>
     <div class="pen-base"><span>Смена (основа)</span><b id="p-base">0 ₽</b></div>
-    <label class="m-lbl">Сумма штрафа, ₽ — пиши БЕЗ минуса</label>
-    <input id="p-amount" type="text" inputmode="numeric" placeholder="0">
-    <label class="m-lbl">За что (комментарий)</label>
-    <input id="p-note" class="fld" type="text" placeholder="опоздание, недостача, косяк…">
-    <div class="pen-prev ok" id="p-prev"><span>Итог за день</span><b id="p-prev-val">0 ₽</b></div>
+    
+    <label class="m-lbl">Тип действия</label>
+    <div class="pen-type">
+      <button class="pen-type-btn pen active" data-type="pen" onclick="setPenType('pen')">⚠️ Штраф</button>
+      <button class="pen-type-btn sub" data-type="sub" onclick="setPenType('sub')">🔄 Подмена</button>
+    </div>
+    
+    <div class="pen-fields" id="pen-fields-pen">
+      <label class="m-lbl">Сумма штрафа, ₽ — пиши БЕЗ минуса</label>
+      <input id="p-amount" type="text" inputmode="numeric" placeholder="0">
+      <label class="m-lbl">За что (комментарий)</label>
+      <input id="p-note" class="fld" type="text" placeholder="опоздание, недостача, косяк…">
+    </div>
+    
+    <div class="pen-fields hidden" id="pen-fields-sub">
+      <div class="m-hint" style="margin:10px 0;padding:10px;background:rgba(255,217,61,.1);border:1px solid rgba(255,217,61,.3);border-radius:8px;color:var(--yellow)">
+        🔄 Подмена — день будет отмечен жёлтым, сумма за смену остаётся полной.
+      </div>
+    </div>
+    
+    <div class="pen-prev ok" id="p-prev"><span id="p-prev-label">Итог за день</span><b id="p-prev-val">0 ₽</b></div>
     <div class="m-act">
-      <button class="btn danger" data-act="pclear">Убрать штраф</button>
-      <button class="btn primary pen" data-act="psave">Сохранить штраф</button>
+      <button class="btn danger" data-act="pclear">Убрать</button>
+      <button class="btn primary pen" id="psave-btn" data-act="psave">Сохранить штраф</button>
     </div>
   </div>
 </div>
@@ -388,7 +432,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id"><div class="av" id="ei-av">?</div><div class="m-id-txt"><b id="ei-name"></b><span>контакты сотрудника</span></div></div>
-      <button class="mini" data-act="ei-close">✕</button>
+      <button class="mini" data-act="ei-close"></button>
     </div>
     <div class="info-rows">
       <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
@@ -396,9 +440,9 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
-      <button class="btn ghost" data-act="ei-edit"> Изменить</button>
-      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
-      <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
+      <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
+      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone"> Телефон</button>
+      <a class="btn primary" id="ei-call" href="#"> Позвонить</a>
     </div>
   </div>
 </div>
@@ -450,15 +494,55 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </div>
 </div>
 
+<div id="email-setup" class="ov">
+  <div class="modal">
+    <div class="m-top">
+      <div class="m-id-txt"><b>📧 Напоминания</b><span>email уведомления о выплатах</span></div>
+      <button class="mini" data-act="es-close">✕</button>
+    </div>
+    <div class="cs-steps">
+      <b>Настройка EmailJS (один раз):</b>
+      <ol>
+        <li>Зайди на <b>emailjs.com</b> → зарегистрируйся через Google.</li>
+        <li><b>Email Services</b> → Add New Service → выбери <b>Gmail</b> → подключи свой Gmail → скопируй <b>Service ID</b>.</li>
+        <li><b>Email Templates</b> → Create New Template → вставь в тело:
+<pre style="background:var(--panel2);padding:8px;border-radius:6px;font-size:9px;overflow-x:auto;margin:6px 0">Привет!
+
+Напоминаю о выплате {{type}}.
+Сумма: {{amount}} ₽
+Дата: {{date}}
+
+Не забудь проверить табель!</pre>
+        → скопируй <b>Template ID</b>.</li>
+        <li><b>Account</b> → скопируй <b>Public Key</b>.</li>
+      </ol>
+    </div>
+    <label class="m-lbl">Public Key</label>
+    <input id="es-public" class="fld" type="text" placeholder="user_abc123">
+    <label class="m-lbl">Service ID</label>
+    <input id="es-service" class="fld" type="text" placeholder="service_abc123">
+    <label class="m-lbl">Template ID</label>
+    <input id="es-template" class="fld" type="text" placeholder="template_xyz789">
+    <label class="m-lbl">Email получателя</label>
+    <input id="es-email" class="fld" type="email" placeholder="your@email.com">
+    <div class="m-act">
+      <button class="btn ghost" data-act="es-test"> Тест</button>
+      <button class="btn primary" data-act="es-save"> Сохранить</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 <input type="file" id="imp" accept="application/json" hidden>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
 <script>
 const LS='dkbz_timesheet_v2';
 const CFG_LS='dkbz_fb_cfg';
+const EMAIL_LS='dkbz_email_cfg';
 const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 const MG=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 const WD=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
@@ -491,10 +575,10 @@ function defaults(){
 }
 function normShift(r){
   if(!r)return null;
-  if(typeof r.b==='number')return {b:r.b, p:r.p||0, n:r.n||''};
+  if(typeof r.b==='number')return {b:r.b, p:r.p||0, n:r.n||'', sub:r.sub?1:0};
   if(typeof r.a==='number'){const a=r.a;
-    if(a>0)return {b:a,p:0,n:''};
-    if(a<0)return {b:0,p:-a,n:''};
+    if(a>0)return {b:a,p:0,n:'',sub:0};
+    if(a<0)return {b:0,p:-a,n:'',sub:0};
     return null;}
   return null;
 }
@@ -622,10 +706,15 @@ function daysHTML(e,dm){
     const s=state.shifts[k];
     const dw=new Date(view.y,view.m,d).getDay();
     const cls=['cell'];
-    if(s){cls.push((s.p>0)?'has-pen':'has-pos');}
+    if(s){
+      if(s.sub) cls.push('has-sub');
+      else if(s.p>0) cls.push('has-pen');
+      else cls.push('has-pos');
+    }
     if(dw===0||dw===6)cls.push('we');
     if(isCur&&d===t.getDate())cls.push('today');
     h+='<button class="'+cls.join(' ')+'" data-emp="'+e.id+'" data-d="'+d+'" data-k="'+k+'">'
+      +(s&&s.sub?'<span class="sub-label">Подмена</span>':'')
       +'<i>'+WD[dw]+'</i><b>'+d+'</b>'
       +(s?'<u>'+fmt(daySum(s))+'</u>':'<span class="dot">·</span>')+'</button>';
   }
@@ -638,11 +727,11 @@ function empHTML(e,dm){
    +'<button class="ename" data-emp="'+e.id+'">'+esc(e.name)+'</button>'
    +'<button class="del-emp" data-act="del-emp" data-emp="'+e.id+'" title="удалить">✕</button></div>'
    +'<div class="tools"><button class="mini" data-act="fill" data-emp="'+e.id+'">график 2/2</button>'
-   +'<button class="mini danger" data-act="clearemp" data-emp="'+e.id+'">✕ месяц</button></div></div>'
+   +'<button class="mini danger" data-act="clearemp" data-emp="'+e.id+'"> месяц</button></div></div>'
    +'<div class="sums"><span class="chip">смен: <b>'+cnt+'</b></span>'
    +'<span class="chip">итого: <b class="c-b">'+fmt(tot)+' ₽</b></span>'
-   +'<span class="chip">15-го: <b class="c-a">'+fmt(mid)+' ₽</b></span>'
-   +'<span class="chip">в конце: <b class="c-g">'+fmt(end)+' ₽</b></span></div>'
+   +'<span class="chip">16-го: <b class="c-a">'+fmt(mid)+' ₽</b></span>'
+   +'<span class="chip">1-го: <b class="c-g">'+fmt(end)+' ₽</b></span></div>'
    +'<div class="strip">'+daysHTML(e,dm)+'</div></div>';
 }
 function pvzHTML(n,dm){
@@ -692,15 +781,51 @@ function renderAll(){
   $('#rate').value=state.rate;
   $('#pvz-list').innerHTML=pvzKeys().map(n=>pvzHTML(n,dm)).join('');
   $('#paygrid').innerHTML=
-    panel('АВАНС','выплата 15-го','смены с 1 по 15 число',1,15,'mid')
-   +panel('РАСЧЁТ','выплата в конце месяца','смены с 16 по '+dm+' число',16,dm,'end');
-  const t=new Date(),td=t.getDate(),ld=dim(t.getFullYear(),t.getMonth());
-  if(td<=15){const n=15-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 15.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
-  else{const n=ld-td;$('#paychip').textContent=n===0?'🔥 Сегодня выплата!':'💸 '+ld+'.'+pad(t.getMonth()+1)+' · через '+n+' дн.';}
+    panel('АВАНС','выплата 16-го','смены с 1 по 15 число',1,15,'mid')
+   +panel('ЗАРПЛАТА','выплата 1-го','смены с 16 по '+dm+' число',16,dm,'end');
+  updatePayChip();
   setupSyncScroll();
 }
 
+function updatePayChip(){
+  const t=new Date();
+  const td=t.getDate();
+  const tm=t.getMonth();
+  const ty=t.getFullYear();
+  const ld=dim(ty,tm);
+  const advDate=new Date(ty,tm,16);
+  const advDays=Math.ceil((advDate-t)/(1000*60*60*24));
+  const salDate=new Date(ty,tm+1,1);
+  const salDays=Math.ceil((salDate-t)/(1000*60*60*24));
+  let chipText='';
+  if(td===16){chipText='🔥 Сегодня аванс!';}
+  else if(td===1){chipText='🔥 Сегодня зарплата!';}
+  else if(advDays<=salDays){chipText='💸 Аванс 16.'+pad(tm+1)+' · через '+advDays+' дн.';}
+  else{chipText='💸 Зарплата 1.'+pad((tm+1)%12+1)+' · через '+salDays+' дн.';}
+  $('#paychip').textContent=chipText;
+}
+
 let cur={k:null,emp:null,d:0}, curEmp=null, pen={k:null,emp:null,d:0};
+let currentPenType='pen';
+
+function setPenType(type){
+  currentPenType=type;
+  document.querySelectorAll('.pen-type-btn').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.type===type);
+  });
+  $('#pen-fields-pen').classList.toggle('hidden', type!=='pen');
+  $('#pen-fields-sub').classList.toggle('hidden', type!=='sub');
+  const saveBtn=$('#psave-btn');
+  if(type==='sub'){
+    saveBtn.textContent='Оформить подмену';
+    saveBtn.className='btn primary sub';
+  }else{
+    saveBtn.textContent='Сохранить штраф';
+    saveBtn.className='btn primary pen';
+  }
+  updatePenPrev();
+}
+
 function openSum(emp,d){
   const k=key(emp,view.y,view.m,d);
   const s=state.shifts[k];
@@ -717,16 +842,28 @@ function closeM(){$('#overlay').classList.remove('open');syncLock();}
 
 function updatePenPrev(){
   const s=state.shifts[pen.k];const b=s?s.b:0;
-  const p=parseNum($('#p-amount').value)||0;
-  const tot=b-p;
-  $('#p-prev-val').textContent=fmt(tot)+' ₽';
-  const el=$('#p-prev');el.classList.remove('ok','cut','neg');
-  el.classList.add(tot<0?'neg':(p>0?'cut':'ok'));
+  const el=$('#p-prev');
+  const labelEl=$('#p-prev-label');
+  const valEl=$('#p-prev-val');
+  el.classList.remove('ok','cut','neg','sub');
+  
+  if(currentPenType==='sub'){
+    valEl.textContent=fmt(b)+' ₽';
+    el.classList.add('sub');
+    labelEl.textContent='Итог за день (подмена)';
+  }else{
+    const p=parseNum($('#p-amount').value)||0;
+    const tot=b-p;
+    valEl.textContent=fmt(tot)+' ₽';
+    el.classList.add(tot<0?'neg':(p>0?'cut':'ok'));
+    labelEl.textContent='Итог за день';
+  }
   el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');
 }
+
 function openPenalty(emp,d){
   const k=key(emp,view.y,view.m,d);
-  if(!state.shifts[k]) state.shifts[k]={b:0,p:0,n:''};
+  if(!state.shifts[k]) state.shifts[k]={b:0,p:0,n:'',sub:0};
   const s=state.shifts[k];
   pen={k,emp,d};
   $('#p-emp').textContent=empName(emp);
@@ -735,9 +872,12 @@ function openPenalty(emp,d){
   $('#p-base').textContent=fmt(s.b)+' ₽';
   $('#p-amount').value=s.p||'';
   $('#p-note').value=s.n||'';
-  updatePenPrev();
+  currentPenType=s.sub?'sub':'pen';
+  setPenType(currentPenType);
   $('#penalty').classList.add('open');document.body.classList.add('lock');
-  setTimeout(()=>$('#p-amount').focus(),120);
+  setTimeout(()=>{
+    if(currentPenType==='pen') $('#p-amount').focus();
+  },120);
 }
 function closePen(){$('#penalty').classList.remove('open');syncLock();}
 
@@ -790,7 +930,7 @@ let press=null, namePress=null, cellPending=null;
 function isScrollGesture(dx,dy){return (Math.abs(dx)>6 && Math.abs(dx)>=Math.abs(dy)) || Math.abs(dy)>8;}
 function setRateAt(emp,d){
   const k=key(emp,view.y,view.m,d);
-  state.shifts[k]={b:state.rate,p:0,n:''};state.lastAmount=state.rate;
+  state.shifts[k]={b:state.rate,p:0,n:'',sub:0};state.lastAmount=state.rate;
   const positions=saveStripScrolls();
   persist();renderAll();restoreStripScrolls(positions);popCell(k);toast('Смена '+fmt(state.rate)+' ₽ ✔');
 }
@@ -808,7 +948,7 @@ function runTap(emp,d){
 }
 function runLong(emp,d){
   const k=key(emp,view.y,view.m,d);
-  if(!state.shifts[k]) state.shifts[k]={b:0,p:0,n:''};
+  if(!state.shifts[k]) state.shifts[k]={b:state.rate,p:0,n:'',sub:0};
   openPenalty(emp,d);
 }
 document.addEventListener('pointerdown',e=>{
@@ -859,18 +999,25 @@ document.addEventListener('click',e=>{
   else if(a==='pclose')closePen();
   else if(a==='psave'){
     const s=state.shifts[pen.k];if(!s)return;
-    const p=parseNum($('#p-amount').value)||0;
-    s.p=p;s.n=$('#p-note').value.trim();
-    const positions=saveStripScrolls();
-    persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);
-    toast(p>0?'Штраф '+fmt(p)+' ₽ сохранён ✔':'Штраф убран ✔');
+    if(currentPenType==='sub'){
+      s.sub=1;s.p=0;s.n='Подмена';
+      const positions=saveStripScrolls();
+      persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);
+      toast('Подмена оформлена ✔');
+    }else{
+      const p=parseNum($('#p-amount').value)||0;
+      s.sub=0;s.p=p;s.n=$('#p-note').value.trim();
+      const positions=saveStripScrolls();
+      persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);
+      toast(p>0?'Штраф '+fmt(p)+' ₽ сохранён ✔':'Штраф убран ✔');
+    }
   }
   else if(a==='pclear'){
     const s=state.shifts[pen.k];if(!s)return;
     if(s.b<=0) delete state.shifts[pen.k];
-    else {s.p=0;s.n='';}
+    else {s.p=0;s.n='';s.sub=0;}
     const positions=saveStripScrolls();
-    persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);toast('Штраф убран ✔');
+    persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);toast('Очистлено ✔');
   }
   else if(a==='ei-close')closeEmpInfo();
   else if(a==='ei-edit'){const id=curEmp;closeEmpInfo();openEmpEdit(id);}
@@ -904,6 +1051,10 @@ document.addEventListener('click',e=>{
     if(!confirm('Отключить облако? Табель останется только на этом телефоне.'))return;
     localStorage.removeItem(CFG_LS);toast('Отключаю…');setTimeout(()=>location.reload(),500);
   }
+  else if(a==='email-setup')openEmailSetup();
+  else if(a==='es-close')closeEmailSetup();
+  else if(a==='es-save')saveEmailConfig();
+  else if(a==='es-test')testEmail();
   else if(a==='del-emp'){const e=empById(el.dataset.emp);if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
     state.emp=state.emp.filter(x=>x.id!==e.id);
@@ -943,7 +1094,7 @@ document.addEventListener('click',e=>{
       const k=key(e.id,view.y,view.m,d);
       const cycleDay=(d-start)%4;
       if(cycleDay<2){
-        state.shifts[k]={b:state.rate,p:0,n:''};
+        state.shifts[k]={b:state.rate,p:0,n:'',sub:0};
       }
     }
     const positions=saveStripScrolls();
@@ -960,10 +1111,10 @@ document.addEventListener('click',e=>{
 });
 $('#rate').addEventListener('input',e=>{const v=parseNum(e.target.value);if(v!==null&&v>0){state.rate=v;persist();}});
 $('#p-amount').addEventListener('input',updatePenPrev);
-['overlay','penalty','emp-info','emp-edit','cloud-setup'].forEach(id=>{
+['overlay','penalty','emp-info','emp-edit','cloud-setup','email-setup'].forEach(id=>{
   $('#'+id).addEventListener('click',e=>{if(e.target.id===id){$('#'+id).classList.remove('open');syncLock();}});
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closePen();closeEmpInfo();closeEmpEdit();closeCloudSetup();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closePen();closeEmpInfo();closeEmpEdit();closeCloudSetup();closeEmailSetup();}});
 $('#imp').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.emp||!s.pvz||!s.shifts)throw 0;
@@ -987,9 +1138,63 @@ function initTheme(){
   applyTheme(saved);
 }
 
+function getEmailConfig(){
+  try{const s=localStorage.getItem(EMAIL_LS);if(s) return JSON.parse(s);}catch(e){}
+  return null;
+}
+function openEmailSetup(){
+  const cfg=getEmailConfig();
+  if(cfg){$('#es-public').value=cfg.publicKey||'';$('#es-service').value=cfg.serviceId||'';$('#es-template').value=cfg.templateId||'';$('#es-email').value=cfg.email||'';}
+  else{$('#es-public').value='';$('#es-service').value='';$('#es-template').value='';$('#es-email').value='';}
+  $('#email-setup').classList.add('open');document.body.classList.add('lock');
+}
+function closeEmailSetup(){$('#email-setup').classList.remove('open');syncLock();}
+function saveEmailConfig(){
+  const cfg={publicKey:$('#es-public').value.trim(),serviceId:$('#es-service').value.trim(),templateId:$('#es-template').value.trim(),email:$('#es-email').value.trim()};
+  if(!cfg.publicKey||!cfg.serviceId||!cfg.templateId||!cfg.email){toast('Заполни все поля!');return;}
+  localStorage.setItem(EMAIL_LS,JSON.stringify(cfg));
+  if(typeof emailjs!=='undefined') emailjs.init(cfg.publicKey);
+  toast('Настройки сохранены ✔');
+  closeEmailSetup();
+}
+function sendEmail(type,amount,date){
+  const cfg=getEmailConfig();
+  if(!cfg){toast('Email не настроен!');return Promise.reject();}
+  if(typeof emailjs==='undefined') return Promise.reject();
+  emailjs.init(cfg.publicKey);
+  return emailjs.send(cfg.serviceId,cfg.templateId,{type:type,amount:fmt(amount),date:date,to_email:cfg.email});
+}
+function testEmail(){
+  const cfg={publicKey:$('#es-public').value.trim(),serviceId:$('#es-service').value.trim(),templateId:$('#es-template').value.trim(),email:$('#es-email').value.trim()};
+  if(!cfg.publicKey||!cfg.serviceId||!cfg.templateId||!cfg.email){toast('Заполни все поля!');return;}
+  toast('Отправляю тест…');
+  sendEmail('ТЕСТОВОЕ НАПОМИНАНИЕ',0,'сегодня').then(()=>{toast('Тестовое письмо отправлено! ');}).catch((err)=>{toast('Ошибка: '+JSON.stringify(err));});
+}
+function checkAndSendReminders(){
+  const cfg=getEmailConfig();if(!cfg) return;
+  const t=new Date();const td=t.getDate();const tm=t.getMonth();const ty=t.getFullYear();
+  if(td===16){
+    const lastSent=localStorage.getItem('dkbz_adv_sent_'+ty+'_'+tm);
+    if(!lastSent){
+      const amount=state.emp.reduce((sum,e)=>sum+sumRange(e.id,1,15),0);
+      sendEmail('АВАНС',amount,'16.'+pad(tm+1)+'.'+ty).then(()=>{localStorage.setItem('dkbz_adv_sent_'+ty+'_'+tm,'1');toast('Напоминание об авансе отправлено! 📧');}).catch(()=>{});
+    }
+  }
+  if(td===1){
+    const lastMonth=tm===0?11:tm-1;const lastYear=tm===0?ty-1:ty;
+    const lastSent=localStorage.getItem('dkbz_sal_sent_'+lastYear+'_'+lastMonth);
+    if(!lastSent){
+      const dm=dim(lastYear,lastMonth);
+      const amount=state.emp.reduce((sum,e)=>sum+sumRange(e.id,16,dm),0);
+      sendEmail('ЗАРПЛАТА',amount,'1.'+pad(tm+1)+'.'+ty).then(()=>{localStorage.setItem('dkbz_sal_sent_'+lastYear+'_'+lastMonth,'1');toast('Напоминание о зарплате отправлено! 📧');}).catch(()=>{});
+    }
+  }
+}
+
 initTheme();
 renderAll();
 initCloud();
+checkAndSendReminders();
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:.06});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 </script>
