@@ -17,49 +17,69 @@
   --teal:#2DD4BF; --amber:#F4B740; --green:#46D18A; --red:#FF5C5C; --pen:#FF5C5C; --yellow:#FFD93D;
 }
 [data-theme="light"]{
-  --bg:#F0F4F3; --panel:#FFFFFF; --panel2:#E8ECEB;
-  --ink:#1A2B25; --mut:#5A7A6D; --line:rgba(0,40,20,.1);
+  --bg:#F5F7F6; --panel:#FFFFFF; --panel2:#E8ECEF;
+  --ink:#1A2B25; --mut:#4A6B61; --line:rgba(0,40,30,.25);
 }
 [data-theme="light"] body::before{
-  background-image:linear-gradient(rgba(0,40,20,.05) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(0,40,20,.05) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(0,40,30,.08) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(0,40,30,.08) 1px,transparent 1px);
 }
-[data-theme="light"] .top{background:rgba(240,244,243,.92)}
-[data-theme="light"] .emp{box-shadow:0 4px 16px rgba(0,0,0,.06)}
-[data-theme="light"] .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.25),rgba(70,209,138,.08));border-color:rgba(70,209,138,.6)}
-[data-theme="light"] .cell.has-pos i,[data-theme="light"] .cell.has-pos u{color:#2A7A4A}
-[data-theme="light"] .cell.has-pen{background:linear-gradient(180deg,rgba(255,92,92,.25),rgba(214,40,40,.08));border-color:rgba(255,92,92,.6);box-shadow:0 0 12px rgba(255,92,92,.15)}
-[data-theme="light"] .cell.has-pen i,[data-theme="light"] .cell.has-pen b,[data-theme="light"] .cell.has-pen u,[data-theme="light"] .cell.has-pen::after{color:#8A2020}
-[data-theme="light"] .cell.has-sub{background:linear-gradient(180deg,rgba(255,217,61,.3),rgba(255,217,61,.1));border-color:rgba(255,217,61,.7)}
+[data-theme="light"] .top{background:rgba(255,255,255,.95); border-bottom:2px solid #B0C4BE}
+[data-theme="light"] .emp{box-shadow:0 4px 16px rgba(0,0,0,.08); border:2px solid #D0E0DB}
+[data-theme="light"] .cell{border:2px solid #B0C4BE}
+[data-theme="light"] .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.35),rgba(70,209,138,.15));border:2px solid #2DD4BF}
+[data-theme="light"] .cell.has-pos i,[data-theme="light"] .cell.has-pos u{color:#1A7A5A}
+[data-theme="light"] .cell.has-pen{background:linear-gradient(180deg,rgba(255,92,92,.35),rgba(214,40,40,.15));border:2px solid #FF5C5C;box-shadow:0 0 12px rgba(255,92,92,.25)}
+[data-theme="light"] .cell.has-pen i,[data-theme="light"] .cell.has-pen b,[data-theme="light"] .cell.has-pen u{color:#8A2020}
+[data-theme="light"] .cell.has-pen::after{color:rgba(138,32,32,.8)}
+[data-theme="light"] .cell.has-sub{background:linear-gradient(180deg,rgba(255,217,61,.4),rgba(255,217,61,.2));border:2px solid #FFD93D;box-shadow:0 0 10px rgba(255,217,61,.3)}
 [data-theme="light"] .cell.has-sub i,[data-theme="light"] .cell.has-sub b,[data-theme="light"] .cell.has-sub u{color:#8A6A00}
 [data-theme="light"] .cell.has-sub .sub-label{color:#8A6A00}
-[data-theme="light"] .modal{background:#FFFFFF;border-color:rgba(45,212,191,.3)}
-[data-theme="light"] .ov{background:rgba(0,20,10,.6)}
-[data-theme="light"] #toast{background:#FFFFFF;border-color:var(--teal);color:var(--ink)}
-[data-theme="light"] .c-b{color:#2A9D6A!important}
+[data-theme="light"] .modal{background:#FFFFFF;border:2px solid #2DD4BF}
+[data-theme="light"] .ov{background:rgba(0,30,20,.7)}
+[data-theme="light"] #toast{background:#FFFFFF;border:2px solid var(--teal);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.15)}
+[data-theme="light"] .c-b{color:#1A7A5A!important}
+[data-theme="light"] .stat{border-left:4px solid var(--mut)}
+[data-theme="light"] .ratebox{border:2px solid rgba(244,183,64,.6)}
+[data-theme="light"] .pay{border:2px solid var(--line)}
+[data-theme="light"] .pvz-head{border-top:3px double #B0C4BE}
+[data-theme="light"] .chip{border:2px solid var(--line)}
+[data-theme="light"] .ename{border-bottom:2px dashed var(--mut)}
+[data-theme="light"] .mini{border:2px solid var(--line)}
+[data-theme="light"] .btn{border:2px solid var(--line)}
 
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]){
-    --bg:#F0F4F3; --panel:#FFFFFF; --panel2:#E8ECEB;
-    --ink:#1A2B25; --mut:#5A7A6D; --line:rgba(0,40,20,.1);
+    --bg:#F5F7F6; --panel:#FFFFFF; --panel2:#E8ECEF;
+    --ink:#1A2B25; --mut:#4A6B61; --line:rgba(0,40,30,.25);
   }
   :root:not([data-theme="dark"]) body::before{
-    background-image:linear-gradient(rgba(0,40,20,.05) 1px,transparent 1px),
-                     linear-gradient(90deg,rgba(0,40,20,.05) 1px,transparent 1px);
+    background-image:linear-gradient(rgba(0,40,30,.08) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(0,40,30,.08) 1px,transparent 1px);
   }
-  :root:not([data-theme="dark"]) .top{background:rgba(240,244,243,.92)}
-  :root:not([data-theme="dark"]) .emp{box-shadow:0 4px 16px rgba(0,0,0,.06)}
-  :root:not([data-theme="dark"]) .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.25),rgba(70,209,138,.08));border-color:rgba(70,209,138,.6)}
-  :root:not([data-theme="dark"]) .cell.has-pos i,:root:not([data-theme="dark"]) .cell.has-pos u{color:#2A7A4A}
-  :root:not([data-theme="dark"]) .cell.has-pen{background:linear-gradient(180deg,rgba(255,92,92,.25),rgba(214,40,40,.08));border-color:rgba(255,92,92,.6);box-shadow:0 0 12px rgba(255,92,92,.15)}
-  :root:not([data-theme="dark"]) .cell.has-pen i,:root:not([data-theme="dark"]) .cell.has-pen b,:root:not([data-theme="dark"]) .cell.has-pen u,:root:not([data-theme="dark"]) .cell.has-pen::after{color:#8A2020}
-  :root:not([data-theme="dark"]) .cell.has-sub{background:linear-gradient(180deg,rgba(255,217,61,.3),rgba(255,217,61,.1));border-color:rgba(255,217,61,.7)}
+  :root:not([data-theme="dark"]) .top{background:rgba(255,255,255,.95); border-bottom:2px solid #B0C4BE}
+  :root:not([data-theme="dark"]) .emp{box-shadow:0 4px 16px rgba(0,0,0,.08); border:2px solid #D0E0DB}
+  :root:not([data-theme="dark"]) .cell{border:2px solid #B0C4BE}
+  :root:not([data-theme="dark"]) .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.35),rgba(70,209,138,.15));border:2px solid #2DD4BF}
+  :root:not([data-theme="dark"]) .cell.has-pos i,:root:not([data-theme="dark"]) .cell.has-pos u{color:#1A7A5A}
+  :root:not([data-theme="dark"]) .cell.has-pen{background:linear-gradient(180deg,rgba(255,92,92,.35),rgba(214,40,40,.15));border:2px solid #FF5C5C;box-shadow:0 0 12px rgba(255,92,92,.25)}
+  :root:not([data-theme="dark"]) .cell.has-pen i,:root:not([data-theme="dark"]) .cell.has-pen b,:root:not([data-theme="dark"]) .cell.has-pen u{color:#8A2020}
+  :root:not([data-theme="dark"]) .cell.has-pen::after{color:rgba(138,32,32,.8)}
+  :root:not([data-theme="dark"]) .cell.has-sub{background:linear-gradient(180deg,rgba(255,217,61,.4),rgba(255,217,61,.2));border:2px solid #FFD93D;box-shadow:0 0 10px rgba(255,217,61,.3)}
   :root:not([data-theme="dark"]) .cell.has-sub i,:root:not([data-theme="dark"]) .cell.has-sub b,:root:not([data-theme="dark"]) .cell.has-sub u{color:#8A6A00}
   :root:not([data-theme="dark"]) .cell.has-sub .sub-label{color:#8A6A00}
-  :root:not([data-theme="dark"]) .modal{background:#FFFFFF;border-color:rgba(45,212,191,.3)}
-  :root:not([data-theme="dark"]) .ov{background:rgba(0,20,10,.6)}
-  :root:not([data-theme="dark"]) #toast{background:#FFFFFF;border-color:var(--teal);color:var(--ink)}
-  :root:not([data-theme="dark"]) .c-b{color:#2A9D6A!important}
+  :root:not([data-theme="dark"]) .modal{background:#FFFFFF;border:2px solid #2DD4BF}
+  :root:not([data-theme="dark"]) .ov{background:rgba(0,30,20,.7)}
+  :root:not([data-theme="dark"]) #toast{background:#FFFFFF;border:2px solid var(--teal);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.15)}
+  :root:not([data-theme="dark"]) .c-b{color:#1A7A5A!important}
+  :root:not([data-theme="dark"]) .stat{border-left:4px solid var(--mut)}
+  :root:not([data-theme="dark"]) .ratebox{border:2px solid rgba(244,183,64,.6)}
+  :root:not([data-theme="dark"]) .pay{border:2px solid var(--line)}
+  :root:not([data-theme="dark"]) .pvz-head{border-top:3px double #B0C4BE}
+  :root:not([data-theme="dark"]) .chip{border:2px solid var(--line)}
+  :root:not([data-theme="dark"]) .ename{border-bottom:2px dashed var(--mut)}
+  :root:not([data-theme="dark"]) .mini{border:2px solid var(--line)}
+  :root:not([data-theme="dark"]) .btn{border:2px solid var(--line)}
 }
 
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -319,13 +339,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   font-size:20px;display:grid;place-items:center;transition:.15s;cursor:pointer}
 .t-btn:hover{border-color:var(--teal);transform:translateY(-2px)}
 .t-btn.active{background:rgba(45,212,191,.2);border-color:var(--teal)}
-
-.tg-status{display:flex;align-items:center;gap:8px;font:700 12px 'Golos Text';
-  background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin:12px 0 4px}
-.tg-status .d{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
-.tg-status.off{color:var(--mut)}
-.tg-status.on{color:var(--green)}
-.tg-status.err{color:var(--red)}
 </style>
 </head>
 <body>
@@ -337,7 +350,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </div>
   <div class="nav">
     <button class="cstat off" id="cstat" data-act="cloud-setup"><span class="d"></span><span id="cstat-txt">локально</span></button>
-    <div class="paychip" id="paychip" data-act="tg-setup"></div>
+    <div class="paychip" id="paychip"></div>
     <div class="mnav">
       <button data-act="prev">‹</button>
       <b id="mtitle"></b>
@@ -376,7 +389,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <div class="fbtns">
       <button class="mini" data-act="cloud-setup">⚙ Облако</button>
-      <button class="mini" data-act="tg-setup">📱 Telegram</button>
       <button class="mini" data-act="export">⬇ Экспорт</button>
       <button class="mini" data-act="importbtn">⬆ Импорт</button>
       <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
@@ -443,12 +455,12 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <div class="info-rows">
       <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
-      <div class="info-row" id="ei-row-bank"><span>🏦 Банк</span><b id="ei-bank">—</b></div>
+      <div class="info-row" id="ei-row-bank"><span> Банк</span><b id="ei-bank">—</b></div>
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
       <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
-      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone"> Телефон</button>
+      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
       <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
   </div>
@@ -501,35 +513,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </div>
 </div>
 
-<div id="tg-setup" class="ov">
-  <div class="modal">
-    <div class="m-top">
-      <div class="m-id-txt"><b>📱 Telegram</b><span>уведомления о выплатах</span></div>
-      <button class="mini" data-act="tg-close">✕</button>
-    </div>
-    <div class="tg-status off" id="tg-status"><span class="d"></span><span id="tg-status-txt">не настроено</span></div>
-    <div class="cs-steps">
-      <b>Настройка (один раз):</b>
-      <ol>
-        <li>В Telegram найди <b>@BotFather</b> → напиши <b>/newbot</b> → придумай имя и username (должен заканчиваться на <b>bot</b>) → скопируй <b>токен</b>.</li>
-        <li>Найди своего бота в Telegram → напиши ему любое сообщение (например "привет").</li>
-        <li>Открой в браузере: <b>https://api.telegram.org/bot&lt;ТВОЙ_ТОКЕН&gt;/getUpdates</b> → найди <b>"chat":{"id":123456789}</b> → это твой <b>Chat ID</b>.</li>
-        <li>Пусть жена тоже напишет боту "привет" → повтори шаг 3 → получи её <b>Chat ID</b>.</li>
-      </ol>
-    </div>
-    <label class="m-lbl">Токен бота</label>
-    <input id="tg-token" class="fld" type="text" placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz">
-    <label class="m-lbl">Chat ID (ты)</label>
-    <input id="tg-chat1" class="fld" type="text" placeholder="123456789">
-    <label class="m-lbl">Chat ID (жена)</label>
-    <input id="tg-chat2" class="fld" type="text" placeholder="987654321">
-    <div class="m-act">
-      <button class="btn ghost" data-act="tg-test"> Тест</button>
-      <button class="btn primary" data-act="tg-save"> Сохранить</button>
-    </div>
-  </div>
-</div>
-
 <div id="toast"></div>
 <input type="file" id="imp" accept="application/json" hidden>
 
@@ -539,7 +522,6 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 <script>
 const LS='dkbz_timesheet_v2';
 const CFG_LS='dkbz_fb_cfg';
-const TG_LS='dkbz_tg_cfg';
 const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 const MG=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 const WD=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
@@ -737,7 +719,7 @@ function pvzHTML(n,dm){
   emps.forEach(e=>{tot+=sumRange(e.id,1,dm);rows+=empHTML(e,dm);});
   return '<div class="pvz-block" data-pvz="'+n+'">'
    +'<div class="pvz-head"><h2>'+esc(state.pvz[n])+'</h2>'
-   +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'">✎ имя</button>'
+   +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'"> имя</button>'
    +'<button class="mini" data-act="add-emp" data-pvz="'+n+'">＋ сотрудник</button>'
    +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'">🗑 ПВЗ</button></div>'
    +'<div class="pvz-total">Итого за месяц по ПВЗ: <b>'+fmt(tot)+' ₽</b></div></div>'
@@ -795,10 +777,10 @@ function updatePayChip(){
   const salDate=new Date(ty,tm+1,1);
   const salDays=Math.ceil((salDate-t)/(1000*60*60*24));
   let chipText='';
-  if(td===16){chipText=' Сегодня аванс!';}
-  else if(td===1){chipText=' Сегодня зарплата!';}
+  if(td===16){chipText='🔥 Сегодня аванс!';}
+  else if(td===1){chipText='🔥 Сегодня зарплата!';}
   else if(advDays<=salDays){chipText='💸 Аванс 16.'+pad(tm+1)+' · через '+advDays+' дн.';}
-  else{chipText=' Зарплата 1.'+pad((tm+1)%12+1)+' · через '+salDays+' дн.';}
+  else{chipText='💸 Зарплата 1.'+pad((tm+1)%12+1)+' · через '+salDays+' дн.';}
   $('#paychip').textContent=chipText;
 }
 
@@ -1014,7 +996,7 @@ document.addEventListener('click',e=>{
     if(s.b<=0) delete state.shifts[pen.k];
     else {s.p=0;s.n='';s.sub=0;}
     const positions=saveStripScrolls();
-    persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);toast('Очистлено ✔');
+    persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);toast('Очищено ✔');
   }
   else if(a==='ei-close')closeEmpInfo();
   else if(a==='ei-edit'){const id=curEmp;closeEmpInfo();openEmpEdit(id);}
@@ -1048,10 +1030,6 @@ document.addEventListener('click',e=>{
     if(!confirm('Отключить облако? Табель останется только на этом телефоне.'))return;
     localStorage.removeItem(CFG_LS);toast('Отключаю…');setTimeout(()=>location.reload(),500);
   }
-  else if(a==='tg-setup')openTgSetup();
-  else if(a==='tg-close')closeTgSetup();
-  else if(a==='tg-save')saveTgConfig();
-  else if(a==='tg-test')testTg();
   else if(a==='del-emp'){const e=empById(el.dataset.emp);if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
     state.emp=state.emp.filter(x=>x.id!==e.id);
@@ -1108,10 +1086,10 @@ document.addEventListener('click',e=>{
 });
 $('#rate').addEventListener('input',e=>{const v=parseNum(e.target.value);if(v!==null&&v>0){state.rate=v;persist();}});
 $('#p-amount').addEventListener('input',updatePenPrev);
-['overlay','penalty','emp-info','emp-edit','cloud-setup','tg-setup'].forEach(id=>{
+['overlay','penalty','emp-info','emp-edit','cloud-setup'].forEach(id=>{
   $('#'+id).addEventListener('click',e=>{if(e.target.id===id){$('#'+id).classList.remove('open');syncLock();}});
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closePen();closeEmpInfo();closeEmpEdit();closeCloudSetup();closeTgSetup();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closePen();closeEmpInfo();closeEmpEdit();closeCloudSetup();}});
 $('#imp').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.emp||!s.pvz||!s.shifts)throw 0;
@@ -1135,190 +1113,9 @@ function initTheme(){
   applyTheme(saved);
 }
 
-// ═══ TELEGRAM УВЕДОМЛЕНИЯ ══
-function getTgConfig(){
-  try{const s=localStorage.getItem(TG_LS);if(s) return JSON.parse(s);}catch(e){}
-  return null;
-}
-
-function setTgStatus(cls,txt){
-  const el=$('#tg-status');
-  el.className='tg-status '+cls;
-  $('#tg-status-txt').textContent=txt;
-}
-
-function openTgSetup(){
-  const cfg=getTgConfig();
-  if(cfg){
-    $('#tg-token').value=cfg.token||'';
-    $('#tg-chat1').value=cfg.chat1||'';
-    $('#tg-chat2').value=cfg.chat2||'';
-    setTgStatus('on','настроено');
-  }else{
-    $('#tg-token').value='';
-    $('#tg-chat1').value='';
-    $('#tg-chat2').value='';
-    setTgStatus('off','не настроено');
-  }
-  $('#tg-setup').classList.add('open');document.body.classList.add('lock');
-}
-function closeTgSetup(){$('#tg-setup').classList.remove('open');syncLock();}
-
-function saveTgConfig(){
-  const cfg={
-    token:$('#tg-token').value.trim(),
-    chat1:$('#tg-chat1').value.trim(),
-    chat2:$('#tg-chat2').value.trim()
-  };
-  if(!cfg.token||!cfg.chat1){
-    toast('Токен и хотя бы один Chat ID обязательны!');return;
-  }
-  localStorage.setItem(TG_LS,JSON.stringify(cfg));
-  setTgStatus('on','настроено');
-  toast('Настройки Telegram сохранены ✔');
-  closeTgSetup();
-}
-
-function sendTgMessage(chatId,text){
-  const cfg=getTgConfig();
-  if(!cfg||!cfg.token) return Promise.reject('Не настроено');
-  const url='https://api.telegram.org/bot'+cfg.token+'/sendMessage';
-  return fetch(url,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({chat_id:chatId,text:text,parse_mode:'HTML'})
-  }).then(r=>r.json());
-}
-
-function sendTgToAll(text){
-  const cfg=getTgConfig();
-  if(!cfg) return Promise.reject('Не настроено');
-  const promises=[];
-  if(cfg.chat1) promises.push(sendTgMessage(cfg.chat1,text));
-  if(cfg.chat2 && cfg.chat2!==cfg.chat1) promises.push(sendTgMessage(cfg.chat2,text));
-  return Promise.all(promises);
-}
-
-function testTg(){
-  const cfg={
-    token:$('#tg-token').value.trim(),
-    chat1:$('#tg-chat1').value.trim(),
-    chat2:$('#tg-chat2').value.trim()
-  };
-  if(!cfg.token||!cfg.chat1){
-    toast('Токен и хотя бы один Chat ID обязательны!');return;
-  }
-  toast('Отправляю тест…');
-  const text='<b>📱 Тестовое уведомление</b>\n\nТабель ПВЗ работает!\n\nАвтор: DKBZ';
-  sendTgToAll(text)
-    .then(()=>{toast('Тестовое сообщение отправлено! 📱');})
-    .catch((err)=>{toast('Ошибка: '+JSON.stringify(err));});
-}
-
-function buildPaymentMessage(type,dateStr,d1,d2){
-  let text='';
-  
-  if(type==='adv'){
-    text='<b>💰 Напоминание об авансе</b>\n\n';
-    text+='Сегодня '+dateStr+' — день выплаты аванса!\n\n';
-    text+='Смены с 1 по 15 число:\n━━━━━━━━━━━━━━\n';
-  }else{
-    text='<b>💵 Напоминание о зарплате</b>\n\n';
-    text+='Сегодня '+dateStr+' — день выплаты зарплаты!\n\n';
-    const dm=dim(view.y,view.m);
-    text+='Смены с 16 по '+dm+' число:\n━━━━━━━━━━━━━━\n';
-  }
-  
-  let grandTotal=0;
-  
-  // Группируем по ПВЗ
-  pvzKeys().forEach(pvzId=>{
-    const pvzName=state.pvz[pvzId];
-    const emps=state.emp.filter(e=>e.pvz===pvzId);
-    let pvzTotal=0;
-    
-    text+='\n<b>📍 '+esc(pvzName)+'</b>\n';
-    
-    emps.forEach(emp=>{
-      const amount=sumRange(emp.id,d1,d2);
-      if(amount>0){
-        pvzTotal+=amount;
-        const phone=emp.phone||'не указан';
-        const bank=emp.bank||'не указан';
-        
-        text+='\n <b>'+esc(emp.name)+'</b>\n';
-        text+='📱 '+esc(phone)+'\n';
-        text+='🏦 '+esc(bank)+'\n';
-        text+='💵 <b>'+fmt(amount)+' ₽</b>\n';
-      }
-    });
-    
-    if(pvzTotal>0){
-      text+='\n<b>Итого по ПВЗ: '+fmt(pvzTotal)+' ₽</b>';
-      grandTotal+=pvzTotal;
-    }
-  });
-  
-  text+='\n\n━━━━━━━━━━━━━━\n';
-  text+='<b>💰 ВСЕГО: '+fmt(grandTotal)+' ₽</b>\n\n';
-  text+='<i>Не забудь проверить табель!</i>';
-  
-  return text;
-}
-
-function checkAndSendReminders(){
-  const cfg=getTgConfig();
-  if(!cfg) return;
-  
-  const t=new Date();
-  const td=t.getDate();
-  const tm=t.getMonth();
-  const ty=t.getFullYear();
-  const hours=t.getHours();
-  const minutes=t.getMinutes();
-  const currentTime=hours*60+minutes; // время в минутах
-  const targetTime=16*60; // 16:00 МСК = 13:00 UTC
-  
-  // Проверяем аванс (16-го) — только после 16:00 МСК
-  if(td===16 && currentTime>=targetTime){
-    const lastSent=localStorage.getItem('dkbz_tg_adv_'+ty+'_'+tm);
-    if(!lastSent){
-      const dateStr='16.'+pad(tm+1)+'.'+ty;
-      const text=buildPaymentMessage('adv',dateStr,1,15);
-      sendTgToAll(text)
-        .then(()=>{
-          localStorage.setItem('dkbz_tg_adv_'+ty+'_'+tm,'1');
-          toast('Напоминание об авансе отправлено! ');
-        })
-        .catch(()=>{});
-    }
-  }
-  
-  // Проверяем зарплату (1-го) — только после 16:00 МСК
-  if(td===1 && currentTime>=targetTime){
-    const lastMonth=tm===0?11:tm-1;
-    const lastYear=tm===0?ty-1:ty;
-    const lastSent=localStorage.getItem('dkbz_tg_sal_'+lastYear+'_'+lastMonth);
-    if(!lastSent){
-      const dateStr='1.'+pad(tm+1)+'.'+ty;
-      const text=buildPaymentMessage('sal',dateStr,16,dim(lastYear,lastMonth));
-      sendTgToAll(text)
-        .then(()=>{
-          localStorage.setItem('dkbz_tg_sal_'+lastYear+'_'+lastMonth,'1');
-          toast('Напоминание о зарплате отправлено! ');
-        })
-        .catch(()=>{});
-    }
-  }
-}
-
-// Проверяем напоминания каждый час пока табель открыт
-setInterval(checkAndSendReminders, 60*60*1000);
-
 initTheme();
 renderAll();
 initCloud();
-checkAndSendReminders();
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:.06});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 </script>
