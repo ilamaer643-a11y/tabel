@@ -319,6 +319,13 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   font-size:20px;display:grid;place-items:center;transition:.15s;cursor:pointer}
 .t-btn:hover{border-color:var(--teal);transform:translateY(-2px)}
 .t-btn.active{background:rgba(45,212,191,.2);border-color:var(--teal)}
+
+.tg-status{display:flex;align-items:center;gap:8px;font:700 12px 'Golos Text';
+  background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin:12px 0 4px}
+.tg-status .d{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
+.tg-status.off{color:var(--mut)}
+.tg-status.on{color:var(--green)}
+.tg-status.err{color:var(--red)}
 </style>
 </head>
 <body>
@@ -330,7 +337,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </div>
   <div class="nav">
     <button class="cstat off" id="cstat" data-act="cloud-setup"><span class="d"></span><span id="cstat-txt">локально</span></button>
-    <div class="paychip" id="paychip" data-act="email-setup"></div>
+    <div class="paychip" id="paychip" data-act="tg-setup"></div>
     <div class="mnav">
       <button data-act="prev">‹</button>
       <b id="mtitle"></b>
@@ -359,7 +366,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <section class="rv" id="pvz-list"></section>
   <button class="addpvz rv" data-act="addpvz">＋ добавить ПВЗ</button>
 
-  <section class="rv"><h2 class="h2"> Выплаты</h2><div class="pay-grid" id="paygrid"></div></section>
+  <section class="rv"><h2 class="h2">💰 Выплаты</h2><div class="pay-grid" id="paygrid"></div></section>
 
   <footer class="foot rv">
     <div class="theme-switch">
@@ -368,9 +375,9 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="t-btn" data-act="theme" data-val="system" title="Как в системе">📲</button>
     </div>
     <div class="fbtns">
-      <button class="mini" data-act="cloud-setup"> Облако</button>
-      <button class="mini" data-act="email-setup">📧 Напоминания</button>
-      <button class="mini" data-act="export">⬇ Экспорт</button>
+      <button class="mini" data-act="cloud-setup">⚙ Облако</button>
+      <button class="mini" data-act="tg-setup">📱 Telegram</button>
+      <button class="mini" data-act="export"> Экспорт</button>
       <button class="mini" data-act="importbtn">⬆ Импорт</button>
       <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
     </div>
@@ -432,7 +439,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id"><div class="av" id="ei-av">?</div><div class="m-id-txt"><b id="ei-name"></b><span>контакты сотрудника</span></div></div>
-      <button class="mini" data-act="ei-close"></button>
+      <button class="mini" data-act="ei-close">✕</button>
     </div>
     <div class="info-rows">
       <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
@@ -441,8 +448,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
       <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
-      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone"> Телефон</button>
-      <a class="btn primary" id="ei-call" href="#"> Позвонить</a>
+      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
+      <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
   </div>
 </div>
@@ -494,40 +501,31 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   </div>
 </div>
 
-<div id="email-setup" class="ov">
+<div id="tg-setup" class="ov">
   <div class="modal">
     <div class="m-top">
-      <div class="m-id-txt"><b>📧 Напоминания</b><span>email уведомления о выплатах</span></div>
-      <button class="mini" data-act="es-close">✕</button>
+      <div class="m-id-txt"><b>📱 Telegram</b><span>уведомления о выплатах</span></div>
+      <button class="mini" data-act="tg-close">✕</button>
     </div>
+    <div class="tg-status off" id="tg-status"><span class="d"></span><span id="tg-status-txt">не настроено</span></div>
     <div class="cs-steps">
-      <b>Настройка EmailJS (один раз):</b>
+      <b>Настройка (один раз):</b>
       <ol>
-        <li>Зайди на <b>emailjs.com</b> → зарегистрируйся через Google.</li>
-        <li><b>Email Services</b> → Add New Service → выбери <b>Gmail</b> → подключи свой Gmail → скопируй <b>Service ID</b>.</li>
-        <li><b>Email Templates</b> → Create New Template → вставь в тело:
-<pre style="background:var(--panel2);padding:8px;border-radius:6px;font-size:9px;overflow-x:auto;margin:6px 0">Привет!
-
-Напоминаю о выплате {{type}}.
-Сумма: {{amount}} ₽
-Дата: {{date}}
-
-Не забудь проверить табель!</pre>
-        → скопируй <b>Template ID</b>.</li>
-        <li><b>Account</b> → скопируй <b>Public Key</b>.</li>
+        <li>В Telegram найди <b>@BotFather</b> → напиши <b>/newbot</b> → придумай имя и username (должен заканчиваться на <b>bot</b>) → скопируй <b>токен</b>.</li>
+        <li>Найди своего бота в Telegram → напиши ему любое сообщение (например "привет").</li>
+        <li>Открой в браузере: <b>https://api.telegram.org/bot&lt;ТВОЙ_ТОКЕН&gt;/getUpdates</b> → найди <b>"chat":{"id":123456789}</b> → это твой <b>Chat ID</b>.</li>
+        <li>Пусть жена тоже напишет боту "привет" → повтори шаг 3 → получи её <b>Chat ID</b>.</li>
       </ol>
     </div>
-    <label class="m-lbl">Public Key</label>
-    <input id="es-public" class="fld" type="text" placeholder="user_abc123">
-    <label class="m-lbl">Service ID</label>
-    <input id="es-service" class="fld" type="text" placeholder="service_abc123">
-    <label class="m-lbl">Template ID</label>
-    <input id="es-template" class="fld" type="text" placeholder="template_xyz789">
-    <label class="m-lbl">Email получателя</label>
-    <input id="es-email" class="fld" type="email" placeholder="your@email.com">
+    <label class="m-lbl">Токен бота</label>
+    <input id="tg-token" class="fld" type="text" placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz">
+    <label class="m-lbl">Chat ID (ты)</label>
+    <input id="tg-chat1" class="fld" type="text" placeholder="123456789">
+    <label class="m-lbl">Chat ID (жена)</label>
+    <input id="tg-chat2" class="fld" type="text" placeholder="987654321">
     <div class="m-act">
-      <button class="btn ghost" data-act="es-test"> Тест</button>
-      <button class="btn primary" data-act="es-save"> Сохранить</button>
+      <button class="btn ghost" data-act="tg-test">📤 Тест</button>
+      <button class="btn primary" data-act="tg-save">💾 Сохранить</button>
     </div>
   </div>
 </div>
@@ -537,12 +535,11 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
 <script>
 const LS='dkbz_timesheet_v2';
 const CFG_LS='dkbz_fb_cfg';
-const EMAIL_LS='dkbz_email_cfg';
+const TG_LS='dkbz_tg_cfg';
 const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 const MG=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 const WD=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
@@ -643,7 +640,7 @@ function initCloud(){
     dbRef=firebase.database().ref('dkbz_timesheet_v2');
   }catch(e){setCloud('err','плохой конфиг');return;}
   dbRef.once('value').then(snap=>{
-    if(snap.exists()){applyRemote(snap.val());toast('Табель синхронизирован ☁️');}
+    if(snap.exists()){applyRemote(snap.val());toast('Табель синхронизирован ️');}
     else dbRef.set(state).catch(()=>{});
     cloudOn=true;cloudReady=true;setCloud('on','облако');
     dbRef.on('value',s=>{
@@ -727,7 +724,7 @@ function empHTML(e,dm){
    +'<button class="ename" data-emp="'+e.id+'">'+esc(e.name)+'</button>'
    +'<button class="del-emp" data-act="del-emp" data-emp="'+e.id+'" title="удалить">✕</button></div>'
    +'<div class="tools"><button class="mini" data-act="fill" data-emp="'+e.id+'">график 2/2</button>'
-   +'<button class="mini danger" data-act="clearemp" data-emp="'+e.id+'"> месяц</button></div></div>'
+   +'<button class="mini danger" data-act="clearemp" data-emp="'+e.id+'">✕ месяц</button></div></div>'
    +'<div class="sums"><span class="chip">смен: <b>'+cnt+'</b></span>'
    +'<span class="chip">итого: <b class="c-b">'+fmt(tot)+' ₽</b></span>'
    +'<span class="chip">16-го: <b class="c-a">'+fmt(mid)+' ₽</b></span>'
@@ -1051,10 +1048,10 @@ document.addEventListener('click',e=>{
     if(!confirm('Отключить облако? Табель останется только на этом телефоне.'))return;
     localStorage.removeItem(CFG_LS);toast('Отключаю…');setTimeout(()=>location.reload(),500);
   }
-  else if(a==='email-setup')openEmailSetup();
-  else if(a==='es-close')closeEmailSetup();
-  else if(a==='es-save')saveEmailConfig();
-  else if(a==='es-test')testEmail();
+  else if(a==='tg-setup')openTgSetup();
+  else if(a==='tg-close')closeTgSetup();
+  else if(a==='tg-save')saveTgConfig();
+  else if(a==='tg-test')testTg();
   else if(a==='del-emp'){const e=empById(el.dataset.emp);if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
     state.emp=state.emp.filter(x=>x.id!==e.id);
@@ -1111,10 +1108,10 @@ document.addEventListener('click',e=>{
 });
 $('#rate').addEventListener('input',e=>{const v=parseNum(e.target.value);if(v!==null&&v>0){state.rate=v;persist();}});
 $('#p-amount').addEventListener('input',updatePenPrev);
-['overlay','penalty','emp-info','emp-edit','cloud-setup','email-setup'].forEach(id=>{
+['overlay','penalty','emp-info','emp-edit','cloud-setup','tg-setup'].forEach(id=>{
   $('#'+id).addEventListener('click',e=>{if(e.target.id===id){$('#'+id).classList.remove('open');syncLock();}});
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closePen();closeEmpInfo();closeEmpEdit();closeCloudSetup();closeEmailSetup();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closePen();closeEmpInfo();closeEmpEdit();closeCloudSetup();closeTgSetup();}});
 $('#imp').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.emp||!s.pvz||!s.shifts)throw 0;
@@ -1138,55 +1135,125 @@ function initTheme(){
   applyTheme(saved);
 }
 
-function getEmailConfig(){
-  try{const s=localStorage.getItem(EMAIL_LS);if(s) return JSON.parse(s);}catch(e){}
+// ═══ TELEGRAM УВЕДОМЛЕНИЯ ═══
+function getTgConfig(){
+  try{const s=localStorage.getItem(TG_LS);if(s) return JSON.parse(s);}catch(e){}
   return null;
 }
-function openEmailSetup(){
-  const cfg=getEmailConfig();
-  if(cfg){$('#es-public').value=cfg.publicKey||'';$('#es-service').value=cfg.serviceId||'';$('#es-template').value=cfg.templateId||'';$('#es-email').value=cfg.email||'';}
-  else{$('#es-public').value='';$('#es-service').value='';$('#es-template').value='';$('#es-email').value='';}
-  $('#email-setup').classList.add('open');document.body.classList.add('lock');
+
+function setTgStatus(cls,txt){
+  const el=$('#tg-status');
+  el.className='tg-status '+cls;
+  $('#tg-status-txt').textContent=txt;
 }
-function closeEmailSetup(){$('#email-setup').classList.remove('open');syncLock();}
-function saveEmailConfig(){
-  const cfg={publicKey:$('#es-public').value.trim(),serviceId:$('#es-service').value.trim(),templateId:$('#es-template').value.trim(),email:$('#es-email').value.trim()};
-  if(!cfg.publicKey||!cfg.serviceId||!cfg.templateId||!cfg.email){toast('Заполни все поля!');return;}
-  localStorage.setItem(EMAIL_LS,JSON.stringify(cfg));
-  if(typeof emailjs!=='undefined') emailjs.init(cfg.publicKey);
-  toast('Настройки сохранены ✔');
-  closeEmailSetup();
+
+function openTgSetup(){
+  const cfg=getTgConfig();
+  if(cfg){
+    $('#tg-token').value=cfg.token||'';
+    $('#tg-chat1').value=cfg.chat1||'';
+    $('#tg-chat2').value=cfg.chat2||'';
+    setTgStatus('on','настроено');
+  }else{
+    $('#tg-token').value='';
+    $('#tg-chat1').value='';
+    $('#tg-chat2').value='';
+    setTgStatus('off','не настроено');
+  }
+  $('#tg-setup').classList.add('open');document.body.classList.add('lock');
 }
-function sendEmail(type,amount,date){
-  const cfg=getEmailConfig();
-  if(!cfg){toast('Email не настроен!');return Promise.reject();}
-  if(typeof emailjs==='undefined') return Promise.reject();
-  emailjs.init(cfg.publicKey);
-  return emailjs.send(cfg.serviceId,cfg.templateId,{type:type,amount:fmt(amount),date:date,to_email:cfg.email});
+function closeTgSetup(){$('#tg-setup').classList.remove('open');syncLock();}
+
+function saveTgConfig(){
+  const cfg={
+    token:$('#tg-token').value.trim(),
+    chat1:$('#tg-chat1').value.trim(),
+    chat2:$('#tg-chat2').value.trim()
+  };
+  if(!cfg.token||!cfg.chat1){
+    toast('Токен и хотя бы один Chat ID обязательны!');return;
+  }
+  localStorage.setItem(TG_LS,JSON.stringify(cfg));
+  setTgStatus('on','настроено');
+  toast('Настройки Telegram сохранены ✔');
+  closeTgSetup();
 }
-function testEmail(){
-  const cfg={publicKey:$('#es-public').value.trim(),serviceId:$('#es-service').value.trim(),templateId:$('#es-template').value.trim(),email:$('#es-email').value.trim()};
-  if(!cfg.publicKey||!cfg.serviceId||!cfg.templateId||!cfg.email){toast('Заполни все поля!');return;}
+
+function sendTgMessage(chatId,text){
+  const cfg=getTgConfig();
+  if(!cfg||!cfg.token) return Promise.reject('Не настроено');
+  const url='https://api.telegram.org/bot'+cfg.token+'/sendMessage';
+  return fetch(url,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({chat_id:chatId,text:text,parse_mode:'HTML'})
+  }).then(r=>r.json());
+}
+
+function sendTgToAll(text){
+  const cfg=getTgConfig();
+  if(!cfg) return Promise.reject('Не настроено');
+  const promises=[];
+  if(cfg.chat1) promises.push(sendTgMessage(cfg.chat1,text));
+  if(cfg.chat2 && cfg.chat2!==cfg.chat1) promises.push(sendTgMessage(cfg.chat2,text));
+  return Promise.all(promises);
+}
+
+function testTg(){
+  const cfg={
+    token:$('#tg-token').value.trim(),
+    chat1:$('#tg-chat1').value.trim(),
+    chat2:$('#tg-chat2').value.trim()
+  };
+  if(!cfg.token||!cfg.chat1){
+    toast('Токен и хотя бы один Chat ID обязательны!');return;
+  }
   toast('Отправляю тест…');
-  sendEmail('ТЕСТОВОЕ НАПОМИНАНИЕ',0,'сегодня').then(()=>{toast('Тестовое письмо отправлено! ');}).catch((err)=>{toast('Ошибка: '+JSON.stringify(err));});
+  const text=' <b>Тестовое уведомление</b>\n\nТабель ПВЗ работает!\n\nАвтор: DKBZ';
+  sendTgToAll(text)
+    .then(()=>{toast('Тестовое сообщение отправлено! 📱');})
+    .catch((err)=>{toast('Ошибка: '+JSON.stringify(err));});
 }
+
 function checkAndSendReminders(){
-  const cfg=getEmailConfig();if(!cfg) return;
-  const t=new Date();const td=t.getDate();const tm=t.getMonth();const ty=t.getFullYear();
+  const cfg=getTgConfig();
+  if(!cfg) return;
+  
+  const t=new Date();
+  const td=t.getDate();
+  const tm=t.getMonth();
+  const ty=t.getFullYear();
+  
+  // Проверяем аванс (16-го)
   if(td===16){
-    const lastSent=localStorage.getItem('dkbz_adv_sent_'+ty+'_'+tm);
+    const lastSent=localStorage.getItem('dkbz_tg_adv_'+ty+'_'+tm);
     if(!lastSent){
       const amount=state.emp.reduce((sum,e)=>sum+sumRange(e.id,1,15),0);
-      sendEmail('АВАНС',amount,'16.'+pad(tm+1)+'.'+ty).then(()=>{localStorage.setItem('dkbz_adv_sent_'+ty+'_'+tm,'1');toast('Напоминание об авансе отправлено! 📧');}).catch(()=>{});
+      const text='💰 <b>Напоминание об авансе</b>\n\nСегодня 16.'+pad(tm+1)+'.'+ty+' — день выплаты аванса!\n\nСумма за смены 1-15 число:\n<b>'+fmt(amount)+' ₽</b>\n\nНе забудь проверить табель!';
+      sendTgToAll(text)
+        .then(()=>{
+          localStorage.setItem('dkbz_tg_adv_'+ty+'_'+tm,'1');
+          toast('Напоминание об авансе отправлено! 📱');
+        })
+        .catch(()=>{});
     }
   }
+  
+  // Проверяем зарплату (1-го)
   if(td===1){
-    const lastMonth=tm===0?11:tm-1;const lastYear=tm===0?ty-1:ty;
-    const lastSent=localStorage.getItem('dkbz_sal_sent_'+lastYear+'_'+lastMonth);
+    const lastMonth=tm===0?11:tm-1;
+    const lastYear=tm===0?ty-1:ty;
+    const lastSent=localStorage.getItem('dkbz_tg_sal_'+lastYear+'_'+lastMonth);
     if(!lastSent){
       const dm=dim(lastYear,lastMonth);
       const amount=state.emp.reduce((sum,e)=>sum+sumRange(e.id,16,dm),0);
-      sendEmail('ЗАРПЛАТА',amount,'1.'+pad(tm+1)+'.'+ty).then(()=>{localStorage.setItem('dkbz_sal_sent_'+lastYear+'_'+lastMonth,'1');toast('Напоминание о зарплате отправлено! 📧');}).catch(()=>{});
+      const text=' <b>Напоминание о зарплате</b>\n\nСегодня 1.'+pad(tm+1)+'.'+ty+' — день выплаты зарплаты!\n\nСумма за смены 16-'+dm+' число:\n<b>'+fmt(amount)+' ₽</b>\n\nНе забудь проверить табель!';
+      sendTgToAll(text)
+        .then(()=>{
+          localStorage.setItem('dkbz_tg_sal_'+lastYear+'_'+lastMonth,'1');
+          toast('Напоминание о зарплате отправлено! ');
+        })
+        .catch(()=>{});
     }
   }
 }
