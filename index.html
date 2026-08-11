@@ -372,12 +372,12 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     <div class="theme-switch">
       <button class="t-btn" data-act="theme" data-val="light" title="Светлая">☀️</button>
       <button class="t-btn" data-act="theme" data-val="dark" title="Тёмная">🌙</button>
-      <button class="t-btn" data-act="theme" data-val="system" title="Как в системе">📲</button>
+      <button class="t-btn" data-act="theme" data-val="system" title="Как в системе">📱</button>
     </div>
     <div class="fbtns">
       <button class="mini" data-act="cloud-setup">⚙ Облако</button>
       <button class="mini" data-act="tg-setup">📱 Telegram</button>
-      <button class="mini" data-act="export"> Экспорт</button>
+      <button class="mini" data-act="export">⬇ Экспорт</button>
       <button class="mini" data-act="importbtn">⬆ Импорт</button>
       <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
     </div>
@@ -448,7 +448,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
       <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
-      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
+      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone"> Телефон</button>
       <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
   </div>
@@ -524,8 +524,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     <label class="m-lbl">Chat ID (жена)</label>
     <input id="tg-chat2" class="fld" type="text" placeholder="987654321">
     <div class="m-act">
-      <button class="btn ghost" data-act="tg-test">📤 Тест</button>
-      <button class="btn primary" data-act="tg-save">💾 Сохранить</button>
+      <button class="btn ghost" data-act="tg-test"> Тест</button>
+      <button class="btn primary" data-act="tg-save"> Сохранить</button>
     </div>
   </div>
 </div>
@@ -640,7 +640,7 @@ function initCloud(){
     dbRef=firebase.database().ref('dkbz_timesheet_v2');
   }catch(e){setCloud('err','плохой конфиг');return;}
   dbRef.once('value').then(snap=>{
-    if(snap.exists()){applyRemote(snap.val());toast('Табель синхронизирован ️');}
+    if(snap.exists()){applyRemote(snap.val());toast('Табель синхронизирован ☁️');}
     else dbRef.set(state).catch(()=>{});
     cloudOn=true;cloudReady=true;setCloud('on','облако');
     dbRef.on('value',s=>{
@@ -795,10 +795,10 @@ function updatePayChip(){
   const salDate=new Date(ty,tm+1,1);
   const salDays=Math.ceil((salDate-t)/(1000*60*60*24));
   let chipText='';
-  if(td===16){chipText='🔥 Сегодня аванс!';}
-  else if(td===1){chipText='🔥 Сегодня зарплата!';}
+  if(td===16){chipText=' Сегодня аванс!';}
+  else if(td===1){chipText=' Сегодня зарплата!';}
   else if(advDays<=salDays){chipText='💸 Аванс 16.'+pad(tm+1)+' · через '+advDays+' дн.';}
-  else{chipText='💸 Зарплата 1.'+pad((tm+1)%12+1)+' · через '+salDays+' дн.';}
+  else{chipText=' Зарплата 1.'+pad((tm+1)%12+1)+' · через '+salDays+' дн.';}
   $('#paychip').textContent=chipText;
 }
 
@@ -1135,7 +1135,7 @@ function initTheme(){
   applyTheme(saved);
 }
 
-// ═══ TELEGRAM УВЕДОМЛЕНИЯ ═══
+// ═══ TELEGRAM УВЕДОМЛЕНИЯ ══
 function getTgConfig(){
   try{const s=localStorage.getItem(TG_LS);if(s) return JSON.parse(s);}catch(e){}
   return null;
@@ -1209,10 +1209,61 @@ function testTg(){
     toast('Токен и хотя бы один Chat ID обязательны!');return;
   }
   toast('Отправляю тест…');
-  const text=' <b>Тестовое уведомление</b>\n\nТабель ПВЗ работает!\n\nАвтор: DKBZ';
+  const text='<b>📱 Тестовое уведомление</b>\n\nТабель ПВЗ работает!\n\nАвтор: DKBZ';
   sendTgToAll(text)
     .then(()=>{toast('Тестовое сообщение отправлено! 📱');})
     .catch((err)=>{toast('Ошибка: '+JSON.stringify(err));});
+}
+
+function buildPaymentMessage(type,dateStr,d1,d2){
+  let text='';
+  
+  if(type==='adv'){
+    text='<b>💰 Напоминание об авансе</b>\n\n';
+    text+='Сегодня '+dateStr+' — день выплаты аванса!\n\n';
+    text+='Смены с 1 по 15 число:\n━━━━━━━━━━━━━━\n';
+  }else{
+    text='<b>💵 Напоминание о зарплате</b>\n\n';
+    text+='Сегодня '+dateStr+' — день выплаты зарплаты!\n\n';
+    const dm=dim(view.y,view.m);
+    text+='Смены с 16 по '+dm+' число:\n━━━━━━━━━━━━━━\n';
+  }
+  
+  let grandTotal=0;
+  
+  // Группируем по ПВЗ
+  pvzKeys().forEach(pvzId=>{
+    const pvzName=state.pvz[pvzId];
+    const emps=state.emp.filter(e=>e.pvz===pvzId);
+    let pvzTotal=0;
+    
+    text+='\n<b>📍 '+esc(pvzName)+'</b>\n';
+    
+    emps.forEach(emp=>{
+      const amount=sumRange(emp.id,d1,d2);
+      if(amount>0){
+        pvzTotal+=amount;
+        const phone=emp.phone||'не указан';
+        const bank=emp.bank||'не указан';
+        
+        text+='\n <b>'+esc(emp.name)+'</b>\n';
+        text+='📱 '+esc(phone)+'\n';
+        text+='🏦 '+esc(bank)+'\n';
+        text+='💵 <b>'+fmt(amount)+' ₽</b>\n';
+      }
+    });
+    
+    if(pvzTotal>0){
+      text+='\n<b>Итого по ПВЗ: '+fmt(pvzTotal)+' ₽</b>';
+      grandTotal+=pvzTotal;
+    }
+  });
+  
+  text+='\n\n━━━━━━━━━━━━━━\n';
+  text+='<b>💰 ВСЕГО: '+fmt(grandTotal)+' ₽</b>\n\n';
+  text+='<i>Не забудь проверить табель!</i>';
+  
+  return text;
 }
 
 function checkAndSendReminders(){
@@ -1223,31 +1274,34 @@ function checkAndSendReminders(){
   const td=t.getDate();
   const tm=t.getMonth();
   const ty=t.getFullYear();
+  const hours=t.getHours();
+  const minutes=t.getMinutes();
+  const currentTime=hours*60+minutes; // время в минутах
+  const targetTime=16*60; // 16:00 МСК = 13:00 UTC
   
-  // Проверяем аванс (16-го)
-  if(td===16){
+  // Проверяем аванс (16-го) — только после 16:00 МСК
+  if(td===16 && currentTime>=targetTime){
     const lastSent=localStorage.getItem('dkbz_tg_adv_'+ty+'_'+tm);
     if(!lastSent){
-      const amount=state.emp.reduce((sum,e)=>sum+sumRange(e.id,1,15),0);
-      const text='💰 <b>Напоминание об авансе</b>\n\nСегодня 16.'+pad(tm+1)+'.'+ty+' — день выплаты аванса!\n\nСумма за смены 1-15 число:\n<b>'+fmt(amount)+' ₽</b>\n\nНе забудь проверить табель!';
+      const dateStr='16.'+pad(tm+1)+'.'+ty;
+      const text=buildPaymentMessage('adv',dateStr,1,15);
       sendTgToAll(text)
         .then(()=>{
           localStorage.setItem('dkbz_tg_adv_'+ty+'_'+tm,'1');
-          toast('Напоминание об авансе отправлено! 📱');
+          toast('Напоминание об авансе отправлено! ');
         })
         .catch(()=>{});
     }
   }
   
-  // Проверяем зарплату (1-го)
-  if(td===1){
+  // Проверяем зарплату (1-го) — только после 16:00 МСК
+  if(td===1 && currentTime>=targetTime){
     const lastMonth=tm===0?11:tm-1;
     const lastYear=tm===0?ty-1:ty;
     const lastSent=localStorage.getItem('dkbz_tg_sal_'+lastYear+'_'+lastMonth);
     if(!lastSent){
-      const dm=dim(lastYear,lastMonth);
-      const amount=state.emp.reduce((sum,e)=>sum+sumRange(e.id,16,dm),0);
-      const text=' <b>Напоминание о зарплате</b>\n\nСегодня 1.'+pad(tm+1)+'.'+ty+' — день выплаты зарплаты!\n\nСумма за смены 16-'+dm+' число:\n<b>'+fmt(amount)+' ₽</b>\n\nНе забудь проверить табель!';
+      const dateStr='1.'+pad(tm+1)+'.'+ty;
+      const text=buildPaymentMessage('sal',dateStr,16,dim(lastYear,lastMonth));
       sendTgToAll(text)
         .then(()=>{
           localStorage.setItem('dkbz_tg_sal_'+lastYear+'_'+lastMonth,'1');
@@ -1257,6 +1311,9 @@ function checkAndSendReminders(){
     }
   }
 }
+
+// Проверяем напоминания каждый час пока табель открыт
+setInterval(checkAndSendReminders, 60*60*1000);
 
 initTheme();
 renderAll();
