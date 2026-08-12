@@ -361,8 +361,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <div class="fbtns">
       <button class="mini" data-act="cloud-setup">⚙ Облако</button>
-      <button class="mini" data-act="export">⬇ Экспорт</button>
-      <button class="mini" data-act="importbtn">⬆ Импорт</button>
+      <button class="mini" data-act="export"> Экспорт</button>
+      <button class="mini" data-act="importbtn"> Импорт</button>
       <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
     </div>
     <p>Автор: <b>DKBZ</b> · облако = GitHub Gist (работает в РФ)</p>
@@ -391,26 +391,22 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="mini" data-act="pclose">✕</button>
     </div>
     <div class="pen-base"><span>Смена (основа)</span><b id="p-base">0 ₽</b></div>
-    
     <label class="m-lbl">Тип действия</label>
     <div class="pen-type">
       <button class="pen-type-btn pen active" data-type="pen" onclick="setPenType('pen')">⚠️ Штраф</button>
       <button class="pen-type-btn sub" data-type="sub" onclick="setPenType('sub')">🔄 Подмена</button>
     </div>
-    
     <div class="pen-fields" id="pen-fields-pen">
       <label class="m-lbl">Сумма штрафа, ₽ — пиши БЕЗ минуса</label>
       <input id="p-amount" type="text" inputmode="decimal" placeholder="0">
       <label class="m-lbl">За что (комментарий)</label>
       <input id="p-note" class="fld" type="text" placeholder="опоздание, недостача, косяк…">
     </div>
-    
     <div class="pen-fields hidden" id="pen-fields-sub">
       <div class="m-hint" style="margin:10px 0;padding:10px;background:rgba(255,217,61,.1);border:1px solid rgba(255,217,61,.3);border-radius:8px;color:var(--yellow)">
         🔄 Подмена — день будет отмечен жёлтым, сумма за смену остаётся полной.
       </div>
     </div>
-    
     <div class="pen-prev ok" id="p-prev"><span id="p-prev-label">Итог за день</span><b id="p-prev-val">0 ₽</b></div>
     <div class="m-act">
       <button class="btn danger" data-act="pclear">Убрать</button>
@@ -426,12 +422,12 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="mini" data-act="ei-close">✕</button>
     </div>
     <div class="info-rows">
-      <div class="info-row" id="ei-row-phone"><span> Телефон</span><b id="ei-phone">—</b></div>
-      <div class="info-row" id="ei-row-bank"><span> Банк</span><b id="ei-bank">—</b></div>
+      <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
+      <div class="info-row" id="ei-row-bank"><span>🏦 Банк</span><b id="ei-bank">—</b></div>
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
-      <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
+      <button class="btn ghost" data-act="ei-edit"> Изменить</button>
       <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
       <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
@@ -442,7 +438,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id-txt"><b>Сотрудник</b><span>имя · телефон · банк</span></div>
-      <button class="mini" data-act="ee-close"></button>
+      <button class="mini" data-act="ee-close">✕</button>
     </div>
     <label class="m-lbl">Имя / ФИО</label>
     <input id="ee-name" class="fld" type="text">
@@ -461,7 +457,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id-txt"><b>⚙ Синхронизация (Gist)</b><span>работает в РФ без VPN</span></div>
-      <button class="mini" data-act="cs-close"></button>
+      <button class="mini" data-act="cs-close">✕</button>
     </div>
     <div class="cs-status off" id="cs-status"><span class="d"></span><span id="cs-status-txt">не подключено</span></div>
     <div class="cs-steps">
@@ -629,27 +625,6 @@ function initGist(){
   }).catch(()=>{setCloudStatus('err','ошибка чтения');});
 }
 
-// ═══ ИСПРАВЛЕННАЯ ПРОКРУТКА ══
-function saveStripScrolls(){
-  const positions=[];
-  document.querySelectorAll('.strip').forEach(strip=>{
-    positions.push(strip.scrollLeft);
-  });
-  return positions;
-}
-
-function restoreStripScrolls(positions){
-  requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>{
-      document.querySelectorAll('.strip').forEach((strip,i)=>{
-        if(positions[i]!==undefined){
-          strip.scrollLeft=positions[i];
-        }
-      });
-    });
-  });
-}
-
 function setupSyncScroll(){
   document.querySelectorAll('.strip').forEach(strip=>{
     if(strip.dataset.syncBound) return;
@@ -671,6 +646,79 @@ function setupSyncScroll(){
   });
 }
 
+// ═══ ТОЧЕЧНОЕ ОБНОВЛЕНИЕ ЯЧЕЙКИ (БЕЗ ПЕРЕСОЗДАНИЯ ЛЕНТЫ) ═══
+function updateCell(empId, day){
+  const cell=document.querySelector(`.cell[data-emp="${empId}"][data-d="${day}"]`);
+  if(!cell) return;
+  const k=key(empId,view.y,view.m,day);
+  const s=state.shifts[k];
+  const dw=new Date(view.y,view.m,day).getDay();
+  const cls=['cell'];
+  if(s){
+    if(s.sub) cls.push('has-sub');
+    else if(s.p>0) cls.push('has-pen');
+    else cls.push('has-pos');
+  }
+  if(dw===0||dw===6) cls.push('we');
+  const t=new Date();
+  if(t.getFullYear()===view.y&&t.getMonth()===view.m&&day===t.getDate()) cls.push('today');
+  cell.className=cls.join(' ');
+  cell.innerHTML=(s&&s.sub?'<span class="sub-label">Подмена</span>':'')
+    +'<i>'+WD[dw]+'</i><b>'+day+'</b>'
+    +(s?'<u>'+fmt(daySum(s))+'</u>':'<span class="dot">·</span>');
+}
+
+// ═══ ТОЧЕЧНОЕ ОБНОВЛЕНИЕ ЧИПОВ СОТРУДНИКА ═══
+function updateEmpChips(empId){
+  const empEl=document.querySelector(`.emp:has(.ename[data-emp="${empId}"])`);
+  if(!empEl) return;
+  const e=empById(empId);
+  const dm=dim(view.y,view.m);
+  const cnt=cntRange(empId,1,dm);
+  const tot=sumRange(empId,1,dm);
+  const mid=sumRange(empId,1,15);
+  const end=sumRange(empId,16,dm);
+  const chips=empEl.querySelectorAll('.chip b');
+  if(chips[0]) chips[0].textContent=cnt;
+  if(chips[1]) chips[1].textContent=fmt(tot);
+  if(chips[2]) chips[2].textContent=fmt(mid);
+  if(chips[3]) chips[3].textContent=fmt(end);
+}
+
+// ═══ ТОЧЕЧНОЕ ОБНОВЛЕНИЕ ИТОГА ПО ПВЗ ══
+function updatePvzTotal(pvzId){
+  const pvzEl=document.querySelector(`.pvz-block[data-pvz="${pvzId}"]`);
+  if(!pvzEl) return;
+  const dm=dim(view.y,view.m);
+  let tot=0;
+  state.emp.filter(e=>e.pvz===pvzId).forEach(e=>{tot+=sumRange(e.id,1,dm);});
+  const b=pvzEl.querySelector('.pvz-total b');
+  if(b) b.textContent=fmt(tot);
+}
+
+// ═══ ТОЧЕЧНОЕ ОБНОВЛЕНИЕ БЛОКА ВЫПЛАТ ═══
+function updatePayments(){
+  const dm=dim(view.y,view.m);
+  $('#paygrid').innerHTML=
+    panel('АВАНС','выплата 16-го','смены с 1 по 15 число',1,15,'mid')
+   +panel('ЗАРПЛАТА','выплата 1-го','смены с 16 по '+dm+' число',16,dm,'end');
+}
+
+// ═══ ТОЧЕЧНОЕ ОБНОВЛЕНИЕ СТАТИСТИКИ СВЕРХУ ═══
+function updateHeaderStats(){
+  const dm=dim(view.y,view.m);
+  let M=0,E=0,T=0;
+  state.emp.forEach(e=>{
+    M+=sumRange(e.id,1,15);
+    E+=sumRange(e.id,16,dm);
+    T+=sumRange(e.id,1,dm);
+  });
+  animNum($('#st-mid'),M,'');
+  animNum($('#st-end'),E,'');
+  animNum($('#st-total'),T,'');
+}
+
+// ═══ ПОЛНАЯ ПЕРЕРИСОВКА (только при смене месяца/структуры) ═══
 function daysHTML(e,dm){
   let h='';const t=new Date();
   const isCur=t.getFullYear()===view.y&&t.getMonth()===view.m;
@@ -742,20 +790,10 @@ function animNum(el,target,suf){
 function renderAll(){
   const dm=dim(view.y,view.m);
   $('#mtitle').textContent=MONTHS[view.m]+' '+view.y;
-  let M=0,E=0,T=0;
-  state.emp.forEach(e=>{
-    M+=sumRange(e.id,1,15);
-    E+=sumRange(e.id,16,dm);
-    T+=sumRange(e.id,1,dm);
-  });
-  animNum($('#st-mid'),M,'');
-  animNum($('#st-end'),E,'');
-  animNum($('#st-total'),T,'');
+  updateHeaderStats();
   $('#rate').value=state.rate;
   $('#pvz-list').innerHTML=pvzKeys().map(n=>pvzHTML(n,dm)).join('');
-  $('#paygrid').innerHTML=
-    panel('АВАНС','выплата 16-го','смены с 1 по 15 число',1,15,'mid')
-   +panel('ЗАРПЛАТА','выплата 1-го','смены с 16 по '+dm+' число',16,dm,'end');
+  updatePayments();
   updatePayChip();
   setupSyncScroll();
 }
@@ -774,7 +812,7 @@ function updatePayChip(){
   if(td===16){chipText='🔥 Сегодня аванс!';}
   else if(td===1){chipText='🔥 Сегодня зарплата!';}
   else if(advDays<=salDays){chipText='💸 Аванс 16.'+pad(tm+1)+' · через '+advDays+' дн.';}
-  else{chipText=' Зарплата 1.'+pad((tm+1)%12+1)+' · через '+salDays+' дн.';}
+  else{chipText='💸 Зарплата 1.'+pad((tm+1)%12+1)+' · через '+salDays+' дн.';}
   $('#paychip').textContent=chipText;
 }
 
@@ -909,19 +947,37 @@ function fallbackCopy(txt,cb){
 
 let press=null, namePress=null, cellPending=null;
 function isScrollGesture(dx,dy){return (Math.abs(dx)>6 && Math.abs(dx)>=Math.abs(dy)) || Math.abs(dy)>8;}
+
+// ═══ ГЛАВНОЕ ИЗМЕНЕНИЕ: ТОЧЕЧНОЕ ОБНОВЛЕНИЕ ВМЕСТО renderAll() ═══
 function setRateAt(emp,d){
   const k=key(emp,view.y,view.m,d);
   state.shifts[k]={b:state.rate,p:0,n:'',sub:0};state.lastAmount=state.rate;
-  const positions=saveStripScrolls();
-  persist();renderAll();restoreStripScrolls(positions);popCell(k);toast('Смена '+fmt(state.rate)+' ✔');
+  persist();
+  // ТОЧЕЧНОЕ обновление — лента НЕ пересоздаётся!
+  updateCell(emp,d);
+  updateEmpChips(emp);
+  const e=empById(emp);
+  updatePvzTotal(e.pvz);
+  updatePayments();
+  updateHeaderStats();
+  popCell(k);toast('Смена '+fmt(state.rate)+' ✔');
 }
+
 function removeShift(emp,d){
   const k=key(emp,view.y,view.m,d);
   if(!state.shifts[k])return;
   delete state.shifts[k];
-  const positions=saveStripScrolls();
-  persist();renderAll();restoreStripScrolls(positions);popCell(k);toast('Смена убрана');
+  persist();
+  // ТОЧЕЧНОЕ обновление
+  updateCell(emp,d);
+  updateEmpChips(emp);
+  const e=empById(emp);
+  updatePvzTotal(e.pvz);
+  updatePayments();
+  updateHeaderStats();
+  popCell(k);toast('Смена убрана');
 }
+
 function runTap(emp,d){
   const k=key(emp,view.y,view.m,d);
   if(state.shifts[k]) removeShift(emp,d);
@@ -974,22 +1030,41 @@ document.addEventListener('click',e=>{
     const s=state.shifts[cur.k];
     if(s){s.b=v;}
     state.lastAmount=v;
-    const positions=saveStripScrolls();
-    persist();closeM();renderAll();restoreStripScrolls(positions);popCell(cur.k);toast('Сумма смены сохранена ✔');
+    persist();closeM();
+    // ТОЧЕЧНОЕ обновление
+    updateCell(cur.emp,cur.d);
+    updateEmpChips(cur.emp);
+    const e=empById(cur.emp);
+    updatePvzTotal(e.pvz);
+    updatePayments();
+    updateHeaderStats();
+    popCell(cur.k);toast('Сумма смены сохранена ✔');
   }
   else if(a==='pclose')closePen();
   else if(a==='psave'){
     const s=state.shifts[pen.k];if(!s)return;
     if(currentPenType==='sub'){
       s.sub=1;s.p=0;s.n='Подмена';
-      const positions=saveStripScrolls();
-      persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);
+      persist();closePen();
+      updateCell(pen.emp,pen.d);
+      updateEmpChips(pen.emp);
+      const e=empById(pen.emp);
+      updatePvzTotal(e.pvz);
+      updatePayments();
+      updateHeaderStats();
+      popCell(pen.k);
       toast('Подмена оформлена ✔');
     }else{
       const p=parseNumDec($('#p-amount').value)||0;
       s.sub=0;s.p=p;s.n=$('#p-note').value.trim();
-      const positions=saveStripScrolls();
-      persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);
+      persist();closePen();
+      updateCell(pen.emp,pen.d);
+      updateEmpChips(pen.emp);
+      const e=empById(pen.emp);
+      updatePvzTotal(e.pvz);
+      updatePayments();
+      updateHeaderStats();
+      popCell(pen.k);
       toast(p>0?'Штраф '+fmt(p)+' сохранён ✔':'Штраф убран ✔');
     }
   }
@@ -997,8 +1072,14 @@ document.addEventListener('click',e=>{
     const s=state.shifts[pen.k];if(!s)return;
     if(s.b<=0) delete state.shifts[pen.k];
     else {s.p=0;s.n='';s.sub=0;}
-    const positions=saveStripScrolls();
-    persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);toast('Очищено ✔');
+    persist();closePen();
+    updateCell(pen.emp,pen.d);
+    updateEmpChips(pen.emp);
+    const e=empById(pen.emp);
+    updatePvzTotal(e.pvz);
+    updatePayments();
+    updateHeaderStats();
+    popCell(pen.k);toast('Очищено ✔');
   }
   else if(a==='ei-close')closeEmpInfo();
   else if(a==='ei-edit'){const id=curEmp;closeEmpInfo();openEmpEdit(id);}
@@ -1009,15 +1090,13 @@ document.addEventListener('click',e=>{
     const nm=$('#ee-name').value.trim();
     if(!nm){toast('Имя не может быть пустым!');return;}
     e.name=nm;e.phone=$('#ee-phone').value.trim();e.bank=$('#ee-bank').value.trim();
-    const positions=saveStripScrolls();
-    persist();closeEmpEdit();renderAll();restoreStripScrolls(positions);toast('Сотрудник сохранён ✔');
+    persist();closeEmpEdit();renderAll();toast('Сотрудник сохранён ✔');
   }
   else if(a==='ee-del'){const e=empById(curEmp);if(!e)return;
     if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
     state.emp=state.emp.filter(x=>x.id!==e.id);
-    const positions=saveStripScrolls();
-    persist();closeEmpEdit();renderAll();restoreStripScrolls(positions);toast('Сотрудник удалён');}
+    persist();renderAll();toast('Сотрудник удалён');}
   else if(a==='cloud-setup')openCloudSetup();
   else if(a==='cs-close')closeCloudSetup();
   else if(a==='cs-save'){
@@ -1034,26 +1113,21 @@ document.addEventListener('click',e=>{
   else if(a==='del-emp'){const e=empById(el.dataset.emp);if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
     state.emp=state.emp.filter(x=>x.id!==e.id);
-    const positions=saveStripScrolls();
-    persist();renderAll();restoreStripScrolls(positions);toast('Сотрудник удалён');}
+    persist();renderAll();toast('Сотрудник удалён');}
   else if(a==='add-emp'){const n=prompt('Имя нового сотрудника:','Сотрудник');if(n&&n.trim()){
     state.emp.push({id:'e'+Date.now(),pvz:el.dataset.pvz,name:n.trim(),phone:'',bank:''});
-    const positions=saveStripScrolls();
-    persist();renderAll();restoreStripScrolls(positions);toast('Сотрудник добавлен ✔');}}
+    persist();renderAll();toast('Сотрудник добавлен ✔');}}
   else if(a==='ren-pvz'){const n=prompt('Название ПВЗ:',state.pvz[el.dataset.pvz]);if(n&&n.trim()){state.pvz[el.dataset.pvz]=n.trim();
-    const positions=saveStripScrolls();
-    persist();renderAll();restoreStripScrolls(positions);}}
+    persist();renderAll();}}
   else if(a==='del-pvz'){const emps=state.emp.filter(x=>x.pvz===el.dataset.pvz);
     if(!confirm('Удалить ПВЗ «'+state.pvz[el.dataset.pvz]+'» и всех его сотрудников ('+emps.length+' чел.)?'))return;
     emps.forEach(e=>Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];}));
     state.emp=state.emp.filter(x=>x.pvz!==el.dataset.pvz);delete state.pvz[el.dataset.pvz];
     if(pvzKeys().length===0)state.pvz['p'+Date.now()]='ПВЗ №1';
-    const positions=saveStripScrolls();
-    persist();renderAll();restoreStripScrolls(positions);toast('ПВЗ удалён');}
+    persist();renderAll();toast('ПВЗ удалён');}
   else if(a==='addpvz'){const n=prompt('Название нового ПВЗ:','ПВЗ №'+(pvzKeys().length+1));if(n&&n.trim()){
     state.pvz['p'+Date.now()]=n.trim();
-    const positions=saveStripScrolls();
-    persist();renderAll();restoreStripScrolls(positions);toast('ПВЗ добавлен ✔');}}
+    persist();renderAll();toast('ПВЗ добавлен ✔');}}
   else if(a==='fill'){
     const e=empById(el.dataset.emp);
     const dm=dim(view.y,view.m);
@@ -1073,13 +1147,11 @@ document.addEventListener('click',e=>{
         state.shifts[k]={b:state.rate,p:0,n:'',sub:0};
       }
     }
-    const positions=saveStripScrolls();
-    persist();renderAll();restoreStripScrolls(positions);toast('График 2/2 с '+start+' числа готов ✔');
+    persist();renderAll();toast('График 2/2 с '+start+' числа готов ✔');
   }
   else if(a==='clearemp'){const e=empById(el.dataset.emp);if(!confirm('Стереть ВСЕ смены «'+e.name+'» за '+MONTHS[view.m]+'?'))return;
     const dm=dim(view.y,view.m);for(let d=1;d<=dm;d++)delete state.shifts[key(e.id,view.y,view.m,d)];
-    const positions=saveStripScrolls();
-    persist();renderAll();restoreStripScrolls(positions);toast('Месяц очищен');}
+    persist();renderAll();toast('Месяц очищен');}
   else if(a==='export'){const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
     const a2=document.createElement('a');a2.href=URL.createObjectURL(b);a2.download='tabel-dkbz.json';a2.click();toast('Файл сохранён ⬇');}
   else if(a==='importbtn')$('#imp').click();
