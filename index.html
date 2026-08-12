@@ -597,13 +597,13 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     <div class="theme-switch">
       <button class="t-btn" data-act="theme" data-val="light" title="Светлая">☀️</button>
       <button class="t-btn" data-act="theme" data-val="dark" title="Тёмная">🌙</button>
-      <button class="t-btn" data-act="theme" data-val="system" title="Как в системе">📱</button>
+      <button class="t-btn" data-act="theme" data-val="system" title="Как в системе"></button>
     </div>
     <div class="fbtns">
       <button class="mini" data-act="cloud-setup">⚙ Облако</button>
-      <button class="mini" data-act="export">⬇ Экспорт</button>
-      <button class="mini" data-act="importbtn">⬆ Импорт</button>
-      <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
+      <button class="mini" data-act="export"> Экспорт</button>
+      <button class="mini" data-act="importbtn"> Импорт</button>
+      <button class="mini danger" data-act="reset"> Сбросить всё</button>
     </div>
     <p>Автор: <b>DKBZ</b> · облако = общий табель для двух телефонов</p>
   </footer>
@@ -635,7 +635,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     <label class="m-lbl">Тип действия</label>
     <div class="pen-type">
       <button class="pen-type-btn pen active" data-type="pen" onclick="setPenType('pen')">️ Штраф</button>
-      <button class="pen-type-btn sub" data-type="sub" onclick="setPenType('sub')">🔄 Подмена</button>
+      <button class="pen-type-btn sub" data-type="sub" onclick="setPenType('sub')"> Подмена</button>
     </div>
     
     <div class="pen-fields" id="pen-fields-pen">
@@ -673,7 +673,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     <div class="m-act">
       <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
       <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
-      <a class="btn primary" id="ei-call" href="#"> Позвонить</a>
+      <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
   </div>
 </div>
@@ -739,12 +739,11 @@ const MG=['января','февраля','марта','апреля','мая','
 const WD=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
 const $=s=>document.querySelector(s);
 const pad=n=>String(n).padStart(2,'0');
-const fmt=n=>Math.round(n).toLocaleString('ru-RU');
+const fmt=n=>{const r=Math.round(n*100)/100;const p=r.toFixed(2).split('.');return parseInt(p[0]).toLocaleString('ru-RU')+','+p[1];};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dim=(y,m)=>new Date(y,m+1,0).getDate();
 const parseNum=v=>{const n=parseFloat(String(v).replace(/\s/g,'').replace(',','.'));return isNaN(n)?null:Math.round(n);};
 const parseNumDec=v=>{const n=parseFloat(String(v).replace(/\s/g,'').replace(',','.'));return isNaN(n)?null:Math.round(n*100)/100;};
-const fmtDec=n=>{const r=Math.round(n*100)/100;const p=r.toFixed(2).split('.');return parseInt(p[0]).toLocaleString('ru-RU')+','+p[1]+' ₽';};
 const initial=s=>{const c=(s||'').trim().charAt(0);return c?c.toUpperCase():'?';};
 
 let now=new Date();
@@ -922,9 +921,9 @@ function empHTML(e,dm){
    +'<div class="tools"><button class="mini" data-act="fill" data-emp="'+e.id+'">график 2/2</button>'
    +'<button class="mini danger" data-act="clearemp" data-emp="'+e.id+'">✕ месяц</button></div></div>'
    +'<div class="sums"><span class="chip">смен: <b>'+cnt+'</b></span>'
-   +'<span class="chip">итого: <b class="c-b">'+fmt(tot)+' ₽</b></span>'
-   +'<span class="chip">16-го: <b class="c-a">'+fmt(mid)+' ₽</b></span>'
-   +'<span class="chip">1-го: <b class="c-g">'+fmt(end)+' ₽</b></span></div>'
+   +'<span class="chip">итого: <b class="c-b">'+fmt(tot)+'</b></span>'
+   +'<span class="chip">16-го: <b class="c-a">'+fmt(mid)+'</b></span>'
+   +'<span class="chip">1-го: <b class="c-g">'+fmt(end)+'</b></span></div>'
    +'<div class="strip">'+daysHTML(e,dm)+'</div></div>';
 }
 function pvzHTML(n,dm){
@@ -936,7 +935,7 @@ function pvzHTML(n,dm){
    +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'">✎ имя</button>'
    +'<button class="mini" data-act="add-emp" data-pvz="'+n+'">＋ сотрудник</button>'
    +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'">🗑 ПВЗ</button></div>'
-   +'<div class="pvz-total">Итого за месяц по ПВЗ: <b>'+fmt(tot)+' ₽</b></div></div>'
+   +'<div class="pvz-total">Итого за месяц по ПВЗ: <b>'+fmt(tot)+'</b></div></div>'
    +rows+'</div>';
 }
 function panel(title,dateLbl,sub,d1,d2,cls){
@@ -945,13 +944,13 @@ function panel(title,dateLbl,sub,d1,d2,cls){
     let st=0;
     state.emp.filter(e=>e.pvz===n).forEach(e=>{
       const s=sumRange(e.id,d1,d2);st+=s;
-      rows+='<div class="prow"><span>'+esc(e.name)+'</span><b>'+fmt(s)+' ₽</b></div>';
+      rows+='<div class="prow"><span>'+esc(e.name)+'</span><b>'+fmt(s)+'</b></div>';
     });
     grand+=st;
-    rows+='<div class="psub"><span>'+esc(state.pvz[n])+'</span><b>'+fmt(st)+' ₽</b></div>';
+    rows+='<div class="psub"><span>'+esc(state.pvz[n])+'</span><b>'+fmt(st)+'</b></div>';
   });
   return '<div class="pay '+cls+'"><small>'+dateLbl+'</small><h3>'+title+'</h3><span>'+sub+'</span>'
-   +rows+'<div class="ptotal"><span>Всего к выплате:</span><b>'+fmt(grand)+' ₽</b></div></div>';
+   +rows+'<div class="ptotal"><span>Всего к выплате:</span><b>'+fmt(grand)+'</b></div></div>';
 }
 function animNum(el,target,suf){
   const t0=performance.now(),dur=520;
@@ -968,9 +967,9 @@ function renderAll(){
     E+=sumRange(e.id,16,dm);
     T+=sumRange(e.id,1,dm);
   });
-  animNum($('#st-mid'),M,' ₽');
-  animNum($('#st-end'),E,' ₽');
-  animNum($('#st-total'),T,' ₽');
+  animNum($('#st-mid'),M,'');
+  animNum($('#st-end'),E,'');
+  animNum($('#st-total'),T,'');
   $('#rate').value=state.rate;
   $('#pvz-list').innerHTML=pvzKeys().map(n=>pvzHTML(n,dm)).join('');
   $('#paygrid').innerHTML=
@@ -1041,13 +1040,13 @@ function updatePenPrev(){
   el.classList.remove('ok','cut','neg','sub');
   
   if(currentPenType==='sub'){
-    valEl.textContent=fmtDec(b);
+    valEl.textContent=fmt(b);
     el.classList.add('sub');
     labelEl.textContent='Итог за день (подмена)';
   }else{
     const p=parseNumDec($('#p-amount').value)||0;
     const tot=b-p;
-    valEl.textContent=fmtDec(tot);
+    valEl.textContent=fmt(tot);
     el.classList.add(tot<0?'neg':(p>0?'cut':'ok'));
     labelEl.textContent='Итог за день';
   }
@@ -1062,7 +1061,7 @@ function openPenalty(emp,d){
   $('#p-emp').textContent=empName(emp);
   const dw=new Date(view.y,view.m,d).getDay();
   $('#p-date').textContent=d+' '+MG[view.m]+' '+view.y+', '+WD[dw];
-  $('#p-base').textContent=fmtDec(s.b);
+  $('#p-base').textContent=fmt(s.b);
   $('#p-amount').value=s.p?s.p.toString().replace('.',','):'';
   $('#p-note').value=s.n||'';
   currentPenType=s.sub?'sub':'pen';
@@ -1125,7 +1124,7 @@ function setRateAt(emp,d){
   const k=key(emp,view.y,view.m,d);
   state.shifts[k]={b:state.rate,p:0,n:'',sub:0};state.lastAmount=state.rate;
   const positions=saveStripScrolls();
-  persist();renderAll();restoreStripScrolls(positions);popCell(k);toast('Смена '+fmt(state.rate)+' ₽ ✔');
+  persist();renderAll();restoreStripScrolls(positions);popCell(k);toast('Смена '+fmt(state.rate)+' ✔');
 }
 function removeShift(emp,d){
   const k=key(emp,view.y,view.m,d);
@@ -1202,7 +1201,7 @@ document.addEventListener('click',e=>{
       s.sub=0;s.p=p;s.n=$('#p-note').value.trim();
       const positions=saveStripScrolls();
       persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);
-      toast(p>0?'Штраф '+fmtDec(p)+' сохранён ✔':'Штраф убран ✔');
+      toast(p>0?'Штраф '+fmt(p)+' сохранён ✔':'Штраф убран ✔');
     }
   }
   else if(a==='pclear'){
@@ -1274,7 +1273,7 @@ document.addEventListener('click',e=>{
     if(!startDay)return;
     const start=parseInt(startDay);
     if(isNaN(start)||start<1||start>dm){toast('Неверный день!');return;}
-    if(!confirm('Раскидать для «'+e.name+'» график 2/2 с '+start+' числа? (2 рабочих / 2 выходных, ставка '+fmt(state.rate)+' ₽). Смены до '+start+' числа не тронутся, после — затрутся!'))return;
+    if(!confirm('Раскидать для «'+e.name+'» график 2/2 с '+start+' числа? (2 рабочих / 2 выходных, ставка '+fmt(state.rate)+'). Смены до '+start+' числа не тронутся, после — затрутся!'))return;
     for(let d=start;d<=dm;d++){
       const k=key(e.id,view.y,view.m,d);
       delete state.shifts[k];
@@ -1294,7 +1293,7 @@ document.addEventListener('click',e=>{
     const positions=saveStripScrolls();
     persist();renderAll();restoreStripScrolls(positions);toast('Месяц очищен');}
   else if(a==='export'){const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
-    const a2=document.createElement('a');a2.href=URL.createObjectURL(b);a2.download='tabel-dkbz.json';a2.click();toast('Файл сохранён ⬇');}
+    const a2=document.createElement('a');a2.href=URL.createObjectURL(b);a2.download='tabel-dkbz.json';a2.click();toast('Файл сохранён ');}
   else if(a==='importbtn')$('#imp').click();
   else if(a==='reset'){if(!confirm('Точно сбросить ВЕСЬ табель нахрен?'))return;localStorage.removeItem(LS);state=load();persist(false);renderAll();toast('Всё сброшено');}
 });
