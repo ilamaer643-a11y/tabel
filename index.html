@@ -17,69 +17,281 @@
   --teal:#2DD4BF; --amber:#F4B740; --green:#46D18A; --red:#FF5C5C; --pen:#FF5C5C; --yellow:#FFD93D;
 }
 [data-theme="light"]{
-  --bg:#F5F7F6; --panel:#FFFFFF; --panel2:#E8ECEF;
-  --ink:#1A2B25; --mut:#4A6B61; --line:rgba(0,40,30,.25);
+  --bg:#FFFFFF; --panel:#F8FAF9; --panel2:#E8EDEB;
+  --ink:#0A1F1A; --mut:#2D4A40; --line:rgba(0,30,25,.35);
 }
-[data-theme="light"] body::before{
-  background-image:linear-gradient(rgba(0,40,30,.08) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(0,40,30,.08) 1px,transparent 1px);
+[data-theme="light"] body::before{display:none}
+[data-theme="light"] .top{
+  background:#FFFFFF;
+  border-bottom:3px solid #2DD4BF;
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
 }
-[data-theme="light"] .top{background:rgba(255,255,255,.95); border-bottom:2px solid #B0C4BE}
-[data-theme="light"] .emp{box-shadow:0 4px 16px rgba(0,0,0,.08); border:2px solid #D0E0DB}
-[data-theme="light"] .cell{border:2px solid #B0C4BE}
-[data-theme="light"] .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.35),rgba(70,209,138,.15));border:2px solid #2DD4BF}
-[data-theme="light"] .cell.has-pos i,[data-theme="light"] .cell.has-pos u{color:#1A7A5A}
-[data-theme="light"] .cell.has-pen{background:linear-gradient(180deg,rgba(255,92,92,.35),rgba(214,40,40,.15));border:2px solid #FF5C5C;box-shadow:0 0 12px rgba(255,92,92,.25)}
-[data-theme="light"] .cell.has-pen i,[data-theme="light"] .cell.has-pen b,[data-theme="light"] .cell.has-pen u{color:#8A2020}
-[data-theme="light"] .cell.has-pen::after{color:rgba(138,32,32,.8)}
-[data-theme="light"] .cell.has-sub{background:linear-gradient(180deg,rgba(255,217,61,.4),rgba(255,217,61,.2));border:2px solid #FFD93D;box-shadow:0 0 10px rgba(255,217,61,.3)}
-[data-theme="light"] .cell.has-sub i,[data-theme="light"] .cell.has-sub b,[data-theme="light"] .cell.has-sub u{color:#8A6A00}
-[data-theme="light"] .cell.has-sub .sub-label{color:#8A6A00}
-[data-theme="light"] .modal{background:#FFFFFF;border:2px solid #2DD4BF}
-[data-theme="light"] .ov{background:rgba(0,30,20,.7)}
-[data-theme="light"] #toast{background:#FFFFFF;border:2px solid var(--teal);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.15)}
-[data-theme="light"] .c-b{color:#1A7A5A!important}
-[data-theme="light"] .stat{border-left:4px solid var(--mut)}
-[data-theme="light"] .ratebox{border:2px solid rgba(244,183,64,.6)}
-[data-theme="light"] .pay{border:2px solid var(--line)}
-[data-theme="light"] .pvz-head{border-top:3px double #B0C4BE}
-[data-theme="light"] .chip{border:2px solid var(--line)}
-[data-theme="light"] .ename{border-bottom:2px dashed var(--mut)}
-[data-theme="light"] .mini{border:2px solid var(--line)}
-[data-theme="light"] .btn{border:2px solid var(--line)}
+[data-theme="light"] .emp{
+  background:#FFFFFF;
+  border:3px solid #B8D4CE;
+  box-shadow:0 6px 20px rgba(0,0,0,.1);
+  border-radius:16px;
+}
+[data-theme="light"] .cell{
+  border:3px solid #9DB4AD;
+  background:#F0F4F3;
+}
+[data-theme="light"] .cell.has-pos{
+  background:linear-gradient(180deg,#2DD4BF,#14B8A6);
+  border:3px solid #0D9488;
+  box-shadow:0 4px 12px rgba(45,212,191,.4);
+}
+[data-theme="light"] .cell.has-pos i,
+[data-theme="light"] .cell.has-pos b,
+[data-theme="light"] .cell.has-pos u{
+  color:#FFFFFF;
+  text-shadow:0 1px 2px rgba(0,0,0,.2);
+}
+[data-theme="light"] .cell.has-pen{
+  background:linear-gradient(180deg,#FF5C5C,#DC2626);
+  border:3px solid #B91C1C;
+  box-shadow:0 4px 12px rgba(255,92,92,.4);
+}
+[data-theme="light"] .cell.has-pen i,
+[data-theme="light"] .cell.has-pen b,
+[data-theme="light"] .cell.has-pen u{
+  color:#FFFFFF;
+  text-shadow:0 1px 2px rgba(0,0,0,.2);
+}
+[data-theme="light"] .cell.has-pen::after{color:rgba(255,255,255,.95)}
+[data-theme="light"] .cell.has-sub{
+  background:linear-gradient(180deg,#FFD93D,#F59E0B);
+  border:3px solid #D97706;
+  box-shadow:0 4px 12px rgba(255,217,61,.4);
+}
+[data-theme="light"] .cell.has-sub i,
+[data-theme="light"] .cell.has-sub b,
+[data-theme="light"] .cell.has-sub u,
+[data-theme="light"] .cell.has-sub .sub-label{
+  color:#1A1A00;
+  font-weight:800;
+}
+[data-theme="light"] .modal{
+  background:#FFFFFF;
+  border:3px solid #2DD4BF;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+[data-theme="light"] .ov{background:rgba(0,20,15,.8)}
+[data-theme="light"] #toast{
+  background:#FFFFFF;
+  border:3px solid #2DD4BF;
+  color:#0A1F1A;
+  box-shadow:0 10px 40px rgba(0,0,0,.2);
+  font-weight:700;
+}
+[data-theme="light"] .stat{
+  border-left:5px solid var(--mut);
+  background:linear-gradient(90deg,rgba(45,212,191,.1),transparent);
+  padding:10px 14px;
+  border-radius:10px;
+}
+[data-theme="light"] .ratebox{
+  border:3px solid #F4B740;
+  background:linear-gradient(150deg,rgba(244,183,64,.15),rgba(244,183,64,.05));
+  box-shadow:0 4px 16px rgba(244,183,64,.2);
+}
+[data-theme="light"] .pay{
+  border:3px solid var(--line);
+  box-shadow:0 4px 16px rgba(0,0,0,.08);
+}
+[data-theme="light"] .pvz-head{border-top:4px double #2DD4BF}
+[data-theme="light"] .chip{
+  border:2px solid var(--line);
+  background:#FFFFFF;
+  font-weight:600;
+}
+[data-theme="light"] .ename{
+  border-bottom:3px dashed #2DD4BF;
+  font-weight:800;
+}
+[data-theme="light"] .mini{
+  border:2px solid var(--line);
+  background:#FFFFFF;
+  font-weight:600;
+}
+[data-theme="light"] .btn{
+  border:2px solid var(--line);
+  font-weight:700;
+}
+[data-theme="light"] .info-row{
+  border:2px solid var(--line);
+  background:#FFFFFF;
+}
+[data-theme="light"] .cs-status,
+[data-theme="light"] .tg-status{
+  border:2px solid var(--line);
+  background:#FFFFFF;
+}
+[data-theme="light"] .pen-base,
+[data-theme="light"] .pen-prev{
+  border:2px solid var(--line);
+  background:#FFFFFF;
+}
+[data-theme="light"] #m-amount,
+[data-theme="light"] #p-amount,
+[data-theme="light"] .fld,
+[data-theme="light"] .ta{
+  border:2px solid #2DD4BF;
+  background:#FFFFFF;
+  font-weight:700;
+}
+[data-theme="light"] .pvz-block{
+  background:#F8FAF9;
+  border:2px solid #D0E0DB;
+  border-radius:16px;
+  padding:10px;
+  margin-bottom:20px;
+}
+[data-theme="light"] .pvz-total{
+  background:#FFFFFF;
+  padding:8px 12px;
+  border-radius:8px;
+  border:2px solid #B8D4CE;
+}
 
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]){
-    --bg:#F5F7F6; --panel:#FFFFFF; --panel2:#E8ECEF;
-    --ink:#1A2B25; --mut:#4A6B61; --line:rgba(0,40,30,.25);
+    --bg:#FFFFFF; --panel:#F8FAF9; --panel2:#E8EDEB;
+    --ink:#0A1F1A; --mut:#2D4A40; --line:rgba(0,30,25,.35);
   }
-  :root:not([data-theme="dark"]) body::before{
-    background-image:linear-gradient(rgba(0,40,30,.08) 1px,transparent 1px),
-                     linear-gradient(90deg,rgba(0,40,30,.08) 1px,transparent 1px);
+  :root:not([data-theme="dark"]) body::before{display:none}
+  :root:not([data-theme="dark"]) .top{
+    background:#FFFFFF;
+    border-bottom:3px solid #2DD4BF;
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
   }
-  :root:not([data-theme="dark"]) .top{background:rgba(255,255,255,.95); border-bottom:2px solid #B0C4BE}
-  :root:not([data-theme="dark"]) .emp{box-shadow:0 4px 16px rgba(0,0,0,.08); border:2px solid #D0E0DB}
-  :root:not([data-theme="dark"]) .cell{border:2px solid #B0C4BE}
-  :root:not([data-theme="dark"]) .cell.has-pos{background:linear-gradient(180deg,rgba(70,209,138,.35),rgba(70,209,138,.15));border:2px solid #2DD4BF}
-  :root:not([data-theme="dark"]) .cell.has-pos i,:root:not([data-theme="dark"]) .cell.has-pos u{color:#1A7A5A}
-  :root:not([data-theme="dark"]) .cell.has-pen{background:linear-gradient(180deg,rgba(255,92,92,.35),rgba(214,40,40,.15));border:2px solid #FF5C5C;box-shadow:0 0 12px rgba(255,92,92,.25)}
-  :root:not([data-theme="dark"]) .cell.has-pen i,:root:not([data-theme="dark"]) .cell.has-pen b,:root:not([data-theme="dark"]) .cell.has-pen u{color:#8A2020}
-  :root:not([data-theme="dark"]) .cell.has-pen::after{color:rgba(138,32,32,.8)}
-  :root:not([data-theme="dark"]) .cell.has-sub{background:linear-gradient(180deg,rgba(255,217,61,.4),rgba(255,217,61,.2));border:2px solid #FFD93D;box-shadow:0 0 10px rgba(255,217,61,.3)}
-  :root:not([data-theme="dark"]) .cell.has-sub i,:root:not([data-theme="dark"]) .cell.has-sub b,:root:not([data-theme="dark"]) .cell.has-sub u{color:#8A6A00}
-  :root:not([data-theme="dark"]) .cell.has-sub .sub-label{color:#8A6A00}
-  :root:not([data-theme="dark"]) .modal{background:#FFFFFF;border:2px solid #2DD4BF}
-  :root:not([data-theme="dark"]) .ov{background:rgba(0,30,20,.7)}
-  :root:not([data-theme="dark"]) #toast{background:#FFFFFF;border:2px solid var(--teal);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.15)}
-  :root:not([data-theme="dark"]) .c-b{color:#1A7A5A!important}
-  :root:not([data-theme="dark"]) .stat{border-left:4px solid var(--mut)}
-  :root:not([data-theme="dark"]) .ratebox{border:2px solid rgba(244,183,64,.6)}
-  :root:not([data-theme="dark"]) .pay{border:2px solid var(--line)}
-  :root:not([data-theme="dark"]) .pvz-head{border-top:3px double #B0C4BE}
-  :root:not([data-theme="dark"]) .chip{border:2px solid var(--line)}
-  :root:not([data-theme="dark"]) .ename{border-bottom:2px dashed var(--mut)}
-  :root:not([data-theme="dark"]) .mini{border:2px solid var(--line)}
-  :root:not([data-theme="dark"]) .btn{border:2px solid var(--line)}
+  :root:not([data-theme="dark"]) .emp{
+    background:#FFFFFF;
+    border:3px solid #B8D4CE;
+    box-shadow:0 6px 20px rgba(0,0,0,.1);
+    border-radius:16px;
+  }
+  :root:not([data-theme="dark"]) .cell{
+    border:3px solid #9DB4AD;
+    background:#F0F4F3;
+  }
+  :root:not([data-theme="dark"]) .cell.has-pos{
+    background:linear-gradient(180deg,#2DD4BF,#14B8A6);
+    border:3px solid #0D9488;
+    box-shadow:0 4px 12px rgba(45,212,191,.4);
+  }
+  :root:not([data-theme="dark"]) .cell.has-pos i,
+  :root:not([data-theme="dark"]) .cell.has-pos b,
+  :root:not([data-theme="dark"]) .cell.has-pos u{
+    color:#FFFFFF;
+    text-shadow:0 1px 2px rgba(0,0,0,.2);
+  }
+  :root:not([data-theme="dark"]) .cell.has-pen{
+    background:linear-gradient(180deg,#FF5C5C,#DC2626);
+    border:3px solid #B91C1C;
+    box-shadow:0 4px 12px rgba(255,92,92,.4);
+  }
+  :root:not([data-theme="dark"]) .cell.has-pen i,
+  :root:not([data-theme="dark"]) .cell.has-pen b,
+  :root:not([data-theme="dark"]) .cell.has-pen u{
+    color:#FFFFFF;
+    text-shadow:0 1px 2px rgba(0,0,0,.2);
+  }
+  :root:not([data-theme="dark"]) .cell.has-pen::after{color:rgba(255,255,255,.95)}
+  :root:not([data-theme="dark"]) .cell.has-sub{
+    background:linear-gradient(180deg,#FFD93D,#F59E0B);
+    border:3px solid #D97706;
+    box-shadow:0 4px 12px rgba(255,217,61,.4);
+  }
+  :root:not([data-theme="dark"]) .cell.has-sub i,
+  :root:not([data-theme="dark"]) .cell.has-sub b,
+  :root:not([data-theme="dark"]) .cell.has-sub u,
+  :root:not([data-theme="dark"]) .cell.has-sub .sub-label{
+    color:#1A1A00;
+    font-weight:800;
+  }
+  :root:not([data-theme="dark"]) .modal{
+    background:#FFFFFF;
+    border:3px solid #2DD4BF;
+    box-shadow:0 20px 60px rgba(0,0,0,.2);
+  }
+  :root:not([data-theme="dark"]) .ov{background:rgba(0,20,15,.8)}
+  :root:not([data-theme="dark"]) #toast{
+    background:#FFFFFF;
+    border:3px solid #2DD4BF;
+    color:#0A1F1A;
+    box-shadow:0 10px 40px rgba(0,0,0,.2);
+    font-weight:700;
+  }
+  :root:not([data-theme="dark"]) .stat{
+    border-left:5px solid var(--mut);
+    background:linear-gradient(90deg,rgba(45,212,191,.1),transparent);
+    padding:10px 14px;
+    border-radius:10px;
+  }
+  :root:not([data-theme="dark"]) .ratebox{
+    border:3px solid #F4B740;
+    background:linear-gradient(150deg,rgba(244,183,64,.15),rgba(244,183,64,.05));
+    box-shadow:0 4px 16px rgba(244,183,64,.2);
+  }
+  :root:not([data-theme="dark"]) .pay{
+    border:3px solid var(--line);
+    box-shadow:0 4px 16px rgba(0,0,0,.08);
+  }
+  :root:not([data-theme="dark"]) .pvz-head{border-top:4px double #2DD4BF}
+  :root:not([data-theme="dark"]) .chip{
+    border:2px solid var(--line);
+    background:#FFFFFF;
+    font-weight:600;
+  }
+  :root:not([data-theme="dark"]) .ename{
+    border-bottom:3px dashed #2DD4BF;
+    font-weight:800;
+  }
+  :root:not([data-theme="dark"]) .mini{
+    border:2px solid var(--line);
+    background:#FFFFFF;
+    font-weight:600;
+  }
+  :root:not([data-theme="dark"]) .btn{
+    border:2px solid var(--line);
+    font-weight:700;
+  }
+  :root:not([data-theme="dark"]) .info-row{
+    border:2px solid var(--line);
+    background:#FFFFFF;
+  }
+  :root:not([data-theme="dark"]) .cs-status,
+  :root:not([data-theme="dark"]) .tg-status{
+    border:2px solid var(--line);
+    background:#FFFFFF;
+  }
+  :root:not([data-theme="dark"]) .pen-base,
+  :root:not([data-theme="dark"]) .pen-prev{
+    border:2px solid var(--line);
+    background:#FFFFFF;
+  }
+  :root:not([data-theme="dark"]) #m-amount,
+  :root:not([data-theme="dark"]) #p-amount,
+  :root:not([data-theme="dark"]) .fld,
+  :root:not([data-theme="dark"]) .ta{
+    border:2px solid #2DD4BF;
+    background:#FFFFFF;
+    font-weight:700;
+  }
+  :root:not([data-theme="dark"]) .pvz-block{
+    background:#F8FAF9;
+    border:2px solid #D0E0DB;
+    border-radius:16px;
+    padding:10px;
+    margin-bottom:20px;
+  }
+  :root:not([data-theme="dark"]) .pvz-total{
+    background:#FFFFFF;
+    padding:8px 12px;
+    border-radius:8px;
+    border:2px solid #B8D4CE;
+  }
 }
 
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -422,13 +634,13 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     
     <label class="m-lbl">Тип действия</label>
     <div class="pen-type">
-      <button class="pen-type-btn pen active" data-type="pen" onclick="setPenType('pen')">⚠️ Штраф</button>
+      <button class="pen-type-btn pen active" data-type="pen" onclick="setPenType('pen')">️ Штраф</button>
       <button class="pen-type-btn sub" data-type="sub" onclick="setPenType('sub')">🔄 Подмена</button>
     </div>
     
     <div class="pen-fields" id="pen-fields-pen">
       <label class="m-lbl">Сумма штрафа, ₽ — пиши БЕЗ минуса</label>
-      <input id="p-amount" type="text" inputmode="numeric" placeholder="0">
+      <input id="p-amount" type="text" inputmode="decimal" placeholder="0">
       <label class="m-lbl">За что (комментарий)</label>
       <input id="p-note" class="fld" type="text" placeholder="опоздание, недостача, косяк…">
     </div>
@@ -455,13 +667,13 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <div class="info-rows">
       <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
-      <div class="info-row" id="ei-row-bank"><span> Банк</span><b id="ei-bank">—</b></div>
+      <div class="info-row" id="ei-row-bank"><span>🏦 Банк</span><b id="ei-bank">—</b></div>
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
       <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
       <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
-      <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
+      <a class="btn primary" id="ei-call" href="#"> Позвонить</a>
     </div>
   </div>
 </div>
@@ -531,6 +743,8 @@ const fmt=n=>Math.round(n).toLocaleString('ru-RU');
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dim=(y,m)=>new Date(y,m+1,0).getDate();
 const parseNum=v=>{const n=parseFloat(String(v).replace(/\s/g,'').replace(',','.'));return isNaN(n)?null:Math.round(n);};
+const parseNumDec=v=>{const n=parseFloat(String(v).replace(/\s/g,'').replace(',','.'));return isNaN(n)?null:Math.round(n*100)/100;};
+const fmtDec=n=>{const r=Math.round(n*100)/100;const p=r.toFixed(2).split('.');return parseInt(p[0]).toLocaleString('ru-RU')+','+p[1]+' ₽';};
 const initial=s=>{const c=(s||'').trim().charAt(0);return c?c.toUpperCase():'?';};
 
 let now=new Date();
@@ -719,7 +933,7 @@ function pvzHTML(n,dm){
   emps.forEach(e=>{tot+=sumRange(e.id,1,dm);rows+=empHTML(e,dm);});
   return '<div class="pvz-block" data-pvz="'+n+'">'
    +'<div class="pvz-head"><h2>'+esc(state.pvz[n])+'</h2>'
-   +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'"> имя</button>'
+   +'<div class="pvz-tools"><button class="mini" data-act="ren-pvz" data-pvz="'+n+'">✎ имя</button>'
    +'<button class="mini" data-act="add-emp" data-pvz="'+n+'">＋ сотрудник</button>'
    +'<button class="mini danger" data-act="del-pvz" data-pvz="'+n+'">🗑 ПВЗ</button></div>'
    +'<div class="pvz-total">Итого за месяц по ПВЗ: <b>'+fmt(tot)+' ₽</b></div></div>'
@@ -777,7 +991,7 @@ function updatePayChip(){
   const salDate=new Date(ty,tm+1,1);
   const salDays=Math.ceil((salDate-t)/(1000*60*60*24));
   let chipText='';
-  if(td===16){chipText='🔥 Сегодня аванс!';}
+  if(td===16){chipText=' Сегодня аванс!';}
   else if(td===1){chipText='🔥 Сегодня зарплата!';}
   else if(advDays<=salDays){chipText='💸 Аванс 16.'+pad(tm+1)+' · через '+advDays+' дн.';}
   else{chipText='💸 Зарплата 1.'+pad((tm+1)%12+1)+' · через '+salDays+' дн.';}
@@ -827,13 +1041,13 @@ function updatePenPrev(){
   el.classList.remove('ok','cut','neg','sub');
   
   if(currentPenType==='sub'){
-    valEl.textContent=fmt(b)+' ₽';
+    valEl.textContent=fmtDec(b);
     el.classList.add('sub');
     labelEl.textContent='Итог за день (подмена)';
   }else{
-    const p=parseNum($('#p-amount').value)||0;
+    const p=parseNumDec($('#p-amount').value)||0;
     const tot=b-p;
-    valEl.textContent=fmt(tot)+' ₽';
+    valEl.textContent=fmtDec(tot);
     el.classList.add(tot<0?'neg':(p>0?'cut':'ok'));
     labelEl.textContent='Итог за день';
   }
@@ -848,8 +1062,8 @@ function openPenalty(emp,d){
   $('#p-emp').textContent=empName(emp);
   const dw=new Date(view.y,view.m,d).getDay();
   $('#p-date').textContent=d+' '+MG[view.m]+' '+view.y+', '+WD[dw];
-  $('#p-base').textContent=fmt(s.b)+' ₽';
-  $('#p-amount').value=s.p||'';
+  $('#p-base').textContent=fmtDec(s.b);
+  $('#p-amount').value=s.p?s.p.toString().replace('.',','):'';
   $('#p-note').value=s.n||'';
   currentPenType=s.sub?'sub':'pen';
   setPenType(currentPenType);
@@ -984,11 +1198,11 @@ document.addEventListener('click',e=>{
       persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);
       toast('Подмена оформлена ✔');
     }else{
-      const p=parseNum($('#p-amount').value)||0;
+      const p=parseNumDec($('#p-amount').value)||0;
       s.sub=0;s.p=p;s.n=$('#p-note').value.trim();
       const positions=saveStripScrolls();
       persist();closePen();renderAll();restoreStripScrolls(positions);popCell(pen.k);
-      toast(p>0?'Штраф '+fmt(p)+' ₽ сохранён ✔':'Штраф убран ✔');
+      toast(p>0?'Штраф '+fmtDec(p)+' сохранён ✔':'Штраф убран ✔');
     }
   }
   else if(a==='pclear'){
