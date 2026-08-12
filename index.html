@@ -363,9 +363,9 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="mini" data-act="cloud-setup">⚙ Облако</button>
       <button class="mini" data-act="export"> Экспорт</button>
       <button class="mini" data-act="importbtn">⬆ Импорт</button>
-      <button class="mini danger" data-act="reset"> Сбросить всё</button>
+      <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
     </div>
-    <p>Автор: <b>DKBZ</b> · облако = общий табель для двух телефонов</p>
+    <p>Автор: <b>DKBZ</b> · облако = GitHub Gist (работает в РФ)</p>
   </footer>
 </main>
 
@@ -394,8 +394,8 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     
     <label class="m-lbl">Тип действия</label>
     <div class="pen-type">
-      <button class="pen-type-btn pen active" data-type="pen" onclick="setPenType('pen')">️ Штраф</button>
-      <button class="pen-type-btn sub" data-type="sub" onclick="setPenType('sub')"> Подмена</button>
+      <button class="pen-type-btn pen active" data-type="pen" onclick="setPenType('pen')">⚠️ Штраф</button>
+      <button class="pen-type-btn sub" data-type="sub" onclick="setPenType('sub')">🔄 Подмена</button>
     </div>
     
     <div class="pen-fields" id="pen-fields-pen">
@@ -426,14 +426,14 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="mini" data-act="ei-close">✕</button>
     </div>
     <div class="info-rows">
-      <div class="info-row" id="ei-row-phone"><span>📞 Телефон</span><b id="ei-phone">—</b></div>
-      <div class="info-row" id="ei-row-bank"><span>🏦 Банк</span><b id="ei-bank">—</b></div>
+      <div class="info-row" id="ei-row-phone"><span> Телефон</span><b id="ei-phone">—</b></div>
+      <div class="info-row" id="ei-row-bank"><span> Банк</span><b id="ei-bank">—</b></div>
     </div>
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
       <button class="btn ghost" data-act="ei-edit">✎ Изменить</button>
-      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone"> Телефон</button>
-      <a class="btn primary" id="ei-call" href="#"> Позвонить</a>
+      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
+      <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
   </div>
 </div>
@@ -442,7 +442,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
   <div class="modal">
     <div class="m-top">
       <div class="m-id-txt"><b>Сотрудник</b><span>имя · телефон · банк</span></div>
-      <button class="mini" data-act="ee-close">✕</button>
+      <button class="mini" data-act="ee-close"></button>
     </div>
     <label class="m-lbl">Имя / ФИО</label>
     <input id="ee-name" class="fld" type="text">
@@ -460,24 +460,23 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 <div id="cloud-setup" class="ov">
   <div class="modal">
     <div class="m-top">
-      <div class="m-id-txt"><b>☁️ Облако</b><span>общий табель для двух телефонов</span></div>
+      <div class="m-id-txt"><b>⚙ Синхронизация (Gist)</b><span>работает в РФ без VPN</span></div>
       <button class="mini" data-act="cs-close">✕</button>
     </div>
     <div class="cs-status off" id="cs-status"><span class="d"></span><span id="cs-status-txt">не подключено</span></div>
     <div class="cs-steps">
-      <b>Как получить конфиг (один раз):</b>
+      <b>Как настроить (один раз):</b>
       <ol>
-        <li>Зайди на <b>firebase.google.com</b>, войди своим Google.</li>
-        <li>«Добавить проект» → имя любое → аналитику <b>выключи</b> → создать.</li>
-        <li>Слева <b>Build → Realtime Database → Создать базу</b> → регион <b>Europe</b>.</li>
-        <li>Вкладка <b>Rules</b> → вставь <b>{"rules":{".read":true,".write":true}}</b> → Опубликовать.</li>
-        <li>⚙ шестерёнка → <b>Настройки проекта</b> → вниз «Ваши приложения» → значок <b>&lt;/&gt;</b> (веб) → зарегистрировать → хостинг НЕ надо.</li>
-        <li>Скопируй блок <b>firebaseConfig = { … }</b> целиком (все фигурные скобки).</li>
+        <li>Зайди на <b>github.com/settings/tokens</b> → Generate new token → поставь галочку на <b>gist</b> → скопируй токен.</li>
+        <li>Зайди на <b>gist.github.com</b> → Create secret gist → имя файла: <b>data.json</b>, содержимое: <b>{}</b> → создай.</li>
+        <li>Скопируй ID гиста из адресной строки (длинный хвост URL).</li>
+        <li>Вставь Токен и ID Гиста ниже. Готово!</li>
       </ol>
     </div>
-    <label class="m-lbl">Вставь сюда конфиг { … }</label>
-    <textarea id="cfg-in" class="ta" placeholder='{ "apiKey": "...", "authDomain": "...", "databaseURL": "...", "projectId": "...", ... }'></textarea>
-    <div class="m-hint">Конфиг хранится только на этом телефоне. На втором телефоне вставь тот же конфиг — табель подтянется сам.</div>
+    <label class="m-lbl">GitHub Token (ghp_...)</label>
+    <input id="gist-token" class="fld" type="text" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+    <label class="m-lbl">Gist ID</label>
+    <input id="gist-id" class="fld" type="text" placeholder="abc123def456...">
     <div class="m-act">
       <button class="btn danger" data-act="cs-off">Отключить</button>
       <button class="btn primary" data-act="cs-save">Подключить</button>
@@ -488,12 +487,9 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
 <div id="toast"></div>
 <input type="file" id="imp" accept="application/json" hidden>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
 <script>
 const LS='dkbz_timesheet_v2';
-const CFG_LS='dkbz_fb_cfg';
+const GIST_LS='dkbz_gist_cfg';
 const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 const MG=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 const WD=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
@@ -509,9 +505,7 @@ const initial=s=>{const c=(s||'').trim().charAt(0);return c?c.toUpperCase():'?';
 let now=new Date();
 let view={y:now.getFullYear(),m:now.getMonth()};
 let state=load();
-let cloudOn=false, cloudReady=false, dbRef=null, pushT=null;
-let justPushed=false;
-let justPushedTimer=null;
+let gistOn=false, gistReady=false, syncInterval=null, isRemoteUpdate=false;
 
 function defaults(){
   return{
@@ -552,7 +546,7 @@ function load(){
   let s;try{s=JSON.parse(localStorage.getItem(LS));}catch(e){s=null;}
   return (s&&s.emp&&s.pvz)?mergeDefaults(s):defaults();
 }
-function persist(push){localStorage.setItem(LS,JSON.stringify(state));schedulePush();}
+function persist(){localStorage.setItem(LS,JSON.stringify(state));schedulePush();}
 const key=(e,y,m,d)=>e+'@'+y+'-'+pad(m+1)+'-'+pad(d);
 const empById=id=>state.emp.find(e=>e.id===id);
 const empName=id=>{const e=empById(id);return e?e.name:'?';};
@@ -562,51 +556,77 @@ function sumRange(e,d1,d2){let s=0;for(let d=d1;d<=d2;d++){const sh=state.shifts
 function cntRange(e,d1,d2){let c=0;for(let d=d1;d<=d2;d++){if(isWorked(state.shifts[key(e,view.y,view.m,d)]))c++;}return c;}
 const pvzKeys=()=>Object.keys(state.pvz);
 
-function getCfg(){
-  try{const s=localStorage.getItem(CFG_LS);if(s){const c=JSON.parse(s);if(c&&c.apiKey&&c.databaseURL)return c;}}catch(e){}
+function getGistCfg(){
+  try{const s=localStorage.getItem(GIST_LS);if(s){const c=JSON.parse(s);if(c&&c.token&&c.id)return c;}}catch(e){}
   return null;
 }
-function setCloud(cls,txt){
+function setCloudStatus(cls,txt){
   const el=$('#cstat');el.className='cstat '+cls;$('#cstat-txt').textContent=txt;
   const s=$('#cs-status');if(s){s.className='cs-status '+cls;$('#cs-status-txt').textContent=txt;}
 }
-function schedulePush(){
-  if(!cloudOn||!cloudReady||!dbRef)return;
-  clearTimeout(pushT);
-  pushT=setTimeout(()=>{
-    justPushed=true;
-    clearTimeout(justPushedTimer);
-    justPushedTimer=setTimeout(()=>{justPushed=false;}, 2000);
-    dbRef.set(state).catch(()=>setCloud('err','ошибка записи'));
-  },350);
+
+async function fetchGistData(){
+  const cfg=getGistCfg();
+  if(!cfg) return null;
+  try{
+    const res=await fetch(`https://api.github.com/gists/${cfg.id}`,{
+      headers:{'Authorization':`token ${cfg.token}`, 'Accept':'application/vnd.github.v3+json'}
+    });
+    if(!res.ok) throw new Error('Failed');
+    const data=await res.json();
+    const content=data.files['data.json']?.content;
+    return content ? JSON.parse(content) : null;
+  }catch(e){return null;}
 }
+
+async function pushGistData(){
+  const cfg=getGistCfg();
+  if(!cfg) return;
+  try{
+    await fetch(`https://api.github.com/gists/${cfg.id}`,{
+      method:'PATCH',
+      headers:{'Authorization':`token ${cfg.token}`, 'Content-Type':'application/json', 'Accept':'application/vnd.github.v3+json'},
+      body:JSON.stringify({files:{'data.json':{content:JSON.stringify(state)}}})
+    });
+  }catch(e){setCloudStatus('err','ошибка записи');}
+}
+
+function schedulePush(){
+  if(!gistOn||!gistReady) return;
+  clearTimeout(window.gistPushT);
+  window.gistPushT=setTimeout(()=>{pushGistData();}, 500);
+}
+
 function applyRemote(v){
+  isRemoteUpdate=true;
   state=mergeDefaults(v);
   localStorage.setItem(LS,JSON.stringify(state));
   renderAll();
+  setTimeout(()=>{isRemoteUpdate=false;}, 100);
 }
-function initCloud(){
-  const cfg=getCfg();
-  if(!cfg){setCloud('off','локально');return;}
-  if(typeof firebase==='undefined'){setCloud('err','нет связи с Firebase');return;}
-  setCloud('boot','синхр…');
-  try{
-    if(!firebase.apps.length)firebase.initializeApp(cfg);
-    dbRef=firebase.database().ref('dkbz_timesheet_v2');
-  }catch(e){setCloud('err','плохой конфиг');return;}
-  dbRef.once('value').then(snap=>{
-    if(snap.exists()){applyRemote(snap.val());toast('Табель синхронизирован ☁️');}
-    else dbRef.set(state).catch(()=>{});
-    cloudOn=true;cloudReady=true;setCloud('on','облако');
-    dbRef.on('value',s=>{
-      if(!s.exists()) return;
-      if(justPushed) return;
-      const remote=JSON.stringify(s.val());
-      const local=JSON.stringify(state);
-      if(remote===local) return;
-      applyRemote(s.val());
-    });
-  }).catch(()=>{cloudOn=false;setCloud('err','ошибка чтения');});
+
+function initGist(){
+  const cfg=getGistCfg();
+  if(!cfg){setCloudStatus('off','локально');return;}
+  setCloudStatus('boot','синхр…');
+  fetchGistData().then(data=>{
+    if(data){
+      applyRemote(data);
+      toast('Табель синхронизирован ☁️');
+    } else {
+      pushGistData();
+    }
+    gistOn=true; gistReady=true; setCloudStatus('on','gist');
+    syncInterval=setInterval(async ()=>{
+      if(isRemoteUpdate) return;
+      const data=await fetchGistData();
+      if(data){
+        const local=JSON.stringify(state);
+        const remote=JSON.stringify(data);
+        if(local!==remote) applyRemote(data);
+      }
+    }, 8000);
+  }).catch(()=>{setCloudStatus('err','ошибка чтения');});
 }
 
 function saveStripScrolls(){
@@ -750,7 +770,7 @@ function updatePayChip(){
   const salDate=new Date(ty,tm+1,1);
   const salDays=Math.ceil((salDate-t)/(1000*60*60*24));
   let chipText='';
-  if(td===16){chipText=' Сегодня аванс!';}
+  if(td===16){chipText='🔥 Сегодня аванс!';}
   else if(td===1){chipText='🔥 Сегодня зарплата!';}
   else if(advDays<=salDays){chipText='💸 Аванс 16.'+pad(tm+1)+' · через '+advDays+' дн.';}
   else{chipText='💸 Зарплата 1.'+pad((tm+1)%12+1)+' · через '+salDays+' дн.';}
@@ -859,8 +879,16 @@ function openEmpEdit(id){
 }
 function closeEmpEdit(){$('#emp-edit').classList.remove('open');syncLock();}
 function openCloudSetup(){
-  const cfg=getCfg();
-  $('#cfg-in').value=cfg?JSON.stringify(cfg,null,2):'';
+  const cfg=getGistCfg();
+  if(cfg){
+    $('#gist-token').value=cfg.token;
+    $('#gist-id').value=cfg.id;
+    setCloudStatus('on','подключено');
+  }else{
+    $('#gist-token').value='';
+    $('#gist-id').value='';
+    setCloudStatus('off','не подключено');
+  }
   $('#cloud-setup').classList.add('open');document.body.classList.add('lock');
 }
 function closeCloudSetup(){$('#cloud-setup').classList.remove('open');syncLock();}
@@ -992,16 +1020,15 @@ document.addEventListener('click',e=>{
   else if(a==='cloud-setup')openCloudSetup();
   else if(a==='cs-close')closeCloudSetup();
   else if(a==='cs-save'){
-    const txt=$('#cfg-in').value.trim();
-    let c;try{c=JSON.parse(txt);}catch(x){toast('Это не JSON, проверь скобки!');return;}
-    if(!c||!c.apiKey||!c.databaseURL){toast('В конфиге нет apiKey или databaseURL!');return;}
-    localStorage.setItem(CFG_LS,JSON.stringify(c));
-    toast('Подключаю, перезагружаю… ☁️');setTimeout(()=>location.reload(),650);
+    const token=$('#gist-token').value.trim(), id=$('#gist-id').value.trim();
+    if(!token||!id){toast('Заполни Токен и Gist ID!');return;}
+    localStorage.setItem(GIST_LS,JSON.stringify({token,id}));
+    toast('Подключаю, перезагружаю…');setTimeout(()=>location.reload(),650);
   }
   else if(a==='cs-off'){
-    if(!getCfg()){toast('И так не подключено');return;}
-    if(!confirm('Отключить облако? Табель останется только на этом телефоне.'))return;
-    localStorage.removeItem(CFG_LS);toast('Отключаю…');setTimeout(()=>location.reload(),500);
+    if(!getGistCfg()){toast('И так не подключено');return;}
+    if(!confirm('Отключить синхронизацию?'))return;
+    localStorage.removeItem(GIST_LS);toast('Отключаю…');setTimeout(()=>location.reload(),500);
   }
   else if(a==='del-emp'){const e=empById(el.dataset.emp);if(!confirm('Удалить «'+e.name+'» и все его смены нахрен?'))return;
     Object.keys(state.shifts).forEach(k=>{if(k.startsWith(e.id+'@'))delete state.shifts[k];});
@@ -1088,7 +1115,7 @@ function initTheme(){
 
 initTheme();
 renderAll();
-initCloud();
+initGist();
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:.06});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 </script>
