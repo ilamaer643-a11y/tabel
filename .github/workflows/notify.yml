@@ -47,7 +47,7 @@ jobs:
           fi
           
           MESSAGE="${TITLE}
-
+          
 Сегодня ${DATE_STR} — день выплаты!
 
 Смены с ${START} по ${END} число:
