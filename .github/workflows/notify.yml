@@ -2,6 +2,7 @@ name: Telegram Payment Reminder
 
 on:
   schedule:
+    # 13:00 UTC = 16:00 по Москве. Каждый день.
     - cron: '0 13 * * *'
   workflow_dispatch:
 
@@ -16,11 +17,14 @@ jobs:
           TG_CHAT2: ${{ secrets.TG_CHAT2 }}
           FIREBASE_URL: ${{ secrets.FIREBASE_URL }}
         run: |
-          # Получаем текущую дату по UTC (который +3 к Москве)
+          # Получаем текущую дату по UTC
           DAY=$(date -u +%d)
           MONTH=$(date -u +%m)
           YEAR=$(date -u +%Y)
           
+          echo "Сегодня: $DAY.$MONTH.$YEAR (UTC)"
+          
+          # Определяем тип выплаты
           if [ "$DAY" = "16" ]; then
             TYPE="adv"
             TITLE="💰 Напоминание об авансе"
@@ -32,19 +36,17 @@ jobs:
             TYPE="sal"
             TITLE="💵 Напоминание о зарплате"
             PERIOD="Смены с 16 по конец месяца"
-            # Для 1 числа берем предыдущий месяц для расчета
-            PREV_MONTH=$(date -u -d "$YEAR-$MONTH-01 -1 month" +%m)
-            PREV_YEAR=$(date -u -d "$YEAR-$MONTH-01 -1 month" +%Y)
-            LAST_DAY=$(date -u -d "$PREV_YEAR-$PREV_MONTH-01 +1 month -1 day" +%d)
             DATE_STR="1.${MONTH}.${YEAR}"
             START_DAY=16
+            # Получаем последний день предыдущего месяца
+            LAST_DAY=$(date -u -d "$YEAR-$MONTH-01 -1 day" +%d)
             END_DAY=$LAST_DAY
-            YEAR=$PREV_YEAR
-            MONTH=$PREV_MONTH
           else
             echo "Сегодня не день выплаты (не 1-е и не 16-е). Выход."
             exit 0
           fi
+          
+          echo "Тип: $TYPE, период: $START_DAY-$END_DAY"
           
           # Скачиваем данные из Firebase
           DATA=$(curl -s "${FIREBASE_URL}/dkbz_timesheet_v2.json")
@@ -54,65 +56,90 @@ jobs:
             exit 0
           fi
           
-          # Формируем сообщение через jq (максимально надежно)
-          MESSAGE=$(echo "$DATA" | jq -r --arg type "$TYPE" --arg start "$START_DAY" --arg end "$END_DAY" --arg title "$TITLE" --arg period "$PERIOD" --arg date "$DATE_STR" '
-            def fmt: tostring | gsub("(?<=[0-9])(?=(?:[0-9]{3})+(?![0-9]))"; " ");
-            
-            "\($title)\n\nСегодня \($date) — день выплаты!\n\n\($period):\n━━━━━━━━━━━━━━" +
-            (
-              .pvz | to_entries | map(
-                .key as $pvz_id |
-                .value as $pvz_name |
-                (.value | "\n📍 \(.))") +
-                (
-                  [.emp[] | select(.pvz == $pvz_id)] | map(
-                    .id as $emp_id |
-                    .name as $emp_name |
-                    (.phone // "не указан") as $emp_phone |
-                    (.bank // "не указан") as $emp_bank |
-                    (
-                      [range($start | tonumber; ($end | tonumber) + 1)] | map(
-                        if . < 10 then "0\(.)" else "\(.)" end
-                      ) | map(
-                        . as $d |
-                        .shifts["\($emp_id)@\($year)-\($month | tonumber | if . < 10 then "0\(.)" else "\(.)" end)-\($d)"] | 
-                        if . then ((.b // 0) - (.p // 0)) else 0 end
-                      ) | add // 0
-                    ) as $amount |
-                    if $amount > 0 then
-                      "\n👤 \($emp_name)\n📱 \($emp_phone)\n🏦 \($emp_bank)\n💵 \($amount | fmt) ₽"
-                    else
-                      ""
-                    end
-                  ) | join("")
-                ) as $emp_list |
-                if $emp_list != "" then
-                  $emp_list + "\n\n<b>Итого по ПВЗ: \($emp_list | split("💵 ") | map(split(" ₽")[0] | tonumber) | add | fmt) ₽</b>"
-                else
-                  ""
-                end
-              ) | join("")
-            ) +
-            "\n\n━━━━━━━━━━━━━━\n💰 <b>ВСЕГО: \(.emp | map(.id as $id | [.shifts | to_entries[] | select(.key | startswith($id + \"@\" + $year + \"-\" + (if ($month|tonumber)<10 then \"0\($month|tonumber)\" else \"\($month|tonumber)\" end) + \"-\")) | select(.key | split(\"-\")[1] | tonumber >= ($start|tonumber) and <= ($end|tonumber)) | (.value.b // 0) - (.value.p // 0)] | flatten | add // 0) | fmt) ₽</b>\n\n<i>Не забудь проверить табель!</i>"
-          ' 2>/dev/null)
+          # Формируем сообщение
+          MESSAGE="$TITLE
 
-          # Если jq сложная логика сбойнула, используем запасной простой вариант (на всякий случай)
-          if [ -z "$MESSAGE" ] || [ "$MESSAGE" = "null" ]; then
-            MESSAGE="$TITLE\n\nСегодня $DATE_STR — день выплаты!\n\n$PERIOD\n\nПроверь табель для деталей!"
-          fi
+Сегодня $DATE_STR — день выплаты!
+
+$PERIOD:
+━━━━━━━━━━━━━━"
           
-          # Отправляем в Telegram (первому)
+          GRAND_TOTAL=0
+          
+          # Получаем список ПВЗ
+          PVZ_IDS=$(echo "$DATA" | jq -r '.pvz | keys[]' 2>/dev/null)
+          
+          for PVZ_ID in $PVZ_IDS; do
+            PVZ_NAME=$(echo "$DATA" | jq -r ".pvz[\"$PVZ_ID\"]" 2>/dev/null)
+            MESSAGE="$MESSAGE
+
+📍 $PVZ_NAME"
+            
+            PVZ_TOTAL=0
+            
+            # Получаем сотрудников этого ПВЗ
+            EMP_IDS=$(echo "$DATA" | jq -r ".emp[] | select(.pvz==\"$PVZ_ID\") | .id" 2>/dev/null)
+            
+            for EMP_ID in $EMP_IDS; do
+              EMP_NAME=$(echo "$DATA" | jq -r ".emp[] | select(.id==\"$EMP_ID\") | .name" 2>/dev/null)
+              EMP_PHONE=$(echo "$DATA" | jq -r ".emp[] | select(.id==\"$EMP_ID\") | .phone // \"не указан\"" 2>/dev/null)
+              EMP_BANK=$(echo "$DATA" | jq -r ".emp[] | select(.id==\"$EMP_ID\") | .bank // \"не указан\"" 2>/dev/null)
+              
+              # Считаем сумму за период
+              AMOUNT=0
+              for D in $(seq $START_DAY $END_DAY); do
+                DAY_PAD=$(printf "%02d" $D)
+                SHIFT_KEY="${EMP_ID}@${YEAR}-${MONTH}-${DAY_PAD}"
+                SHIFT=$(echo "$DATA" | jq -r ".shifts[\"$SHIFT_KEY\"] // empty" 2>/dev/null)
+                if [ -n "$SHIFT" ]; then
+                  B=$(echo "$SHIFT" | jq -r '.b // 0' 2>/dev/null)
+                  P=$(echo "$SHIFT" | jq -r '.p // 0' 2>/dev/null)
+                  AMOUNT=$((AMOUNT + B - P))
+                fi
+              done
+              
+              if [ $AMOUNT -gt 0 ]; then
+                PVZ_TOTAL=$((PVZ_TOTAL + AMOUNT))
+                MESSAGE="$MESSAGE
+
+👤 $EMP_NAME
+📱 $EMP_PHONE
+🏦 $EMP_BANK
+💵 $AMOUNT ₽"
+              fi
+            done
+            
+            if [ $PVZ_TOTAL -gt 0 ]; then
+              MESSAGE="$MESSAGE
+
+<b>Итого по ПВЗ: $PVZ_TOTAL ₽</b>"
+              GRAND_TOTAL=$((GRAND_TOTAL + PVZ_TOTAL))
+            fi
+          done
+          
+          MESSAGE="$MESSAGE
+
+━━━━━━━━━━━━━━
+💰 <b>ВСЕГО: $GRAND_TOTAL ₽</b>
+
+<i>Не забудь проверить табель!</i>"
+          
+          echo "Отправляем сообщение..."
+          
+          # Отправляем первому
           if [ -n "$TG_CHAT1" ]; then
             curl -s -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" \
               -H "Content-Type: application/json" \
-              -d "{\"chat_id\": \"$TG_CHAT1\", \"text\": $(echo "$MESSAGE" | jq -Rs .), \"parse_mode\": \"HTML\"}" > /dev/null
+              -d "{\"chat_id\": \"$TG_CHAT1\", \"text\": $(echo "$MESSAGE" | jq -Rs .), \"parse_mode\": \"HTML\"}"
+            echo "Отправлено чату 1"
           fi
           
-          # Отправляем в Telegram (второму, если отличается)
+          # Отправляем второму (если отличается)
           if [ -n "$TG_CHAT2" ] && [ "$TG_CHAT2" != "$TG_CHAT1" ]; then
             curl -s -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" \
               -H "Content-Type: application/json" \
-              -d "{\"chat_id\": \"$TG_CHAT2\", \"text\": $(echo "$MESSAGE" | jq -Rs .), \"parse_mode\": \"HTML\"}" > /dev/null
+              -d "{\"chat_id\": \"$TG_CHAT2\", \"text\": $(echo "$MESSAGE" | jq -Rs .), \"parse_mode\": \"HTML\"}"
+            echo "Отправлено чату 2"
           fi
           
-          echo "✅ Уведомление на 16:00 МСК успешно отправлено!"
+          echo "Готово!"
