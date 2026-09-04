@@ -360,9 +360,9 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
       <button class="t-btn" data-act="theme" data-val="system" title="Как в системе">📱</button>
     </div>
     <div class="fbtns">
-      <button class="mini" data-act="cloud-setup">⚙ Облако</button>
+      <button class="mini" data-act="cloud-setup"> Облако</button>
       <button class="mini" data-act="export"> Экспорт</button>
-      <button class="mini" data-act="importbtn"> Импорт</button>
+      <button class="mini" data-act="importbtn">⬆ Импорт</button>
       <button class="mini danger" data-act="reset">⟲ Сбросить всё</button>
     </div>
     <p>Автор: <b>DKBZ</b> · облако = GitHub Gist (работает в РФ)</p>
@@ -404,7 +404,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     </div>
     <div class="pen-fields hidden" id="pen-fields-sub">
       <div class="m-hint" style="margin:10px 0;padding:10px;background:rgba(255,217,61,.1);border:1px solid rgba(255,217,61,.3);border-radius:8px;color:var(--yellow)">
-        🔄 Подмена — день будет отмечен жёлтым, сумма за смену остаётся полной.
+         Подмена — день будет отмечен жёлтым, сумма за смену остаётся полной.
       </div>
     </div>
     <div class="pen-prev ok" id="p-prev"><span id="p-prev-label">Итог за день</span><b id="p-prev-val">0 ₽</b></div>
@@ -428,7 +428,7 @@ button{font-family:inherit;color:inherit;background:none;border:none;cursor:poin
     <div class="ei-hint" id="ei-hint">Поля пустые. Зажми имя сотрудника пальцем, чтобы вписать телефон и банк.</div>
     <div class="m-act">
       <button class="btn ghost" data-act="ei-edit"> Изменить</button>
-      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone">📋 Телефон</button>
+      <button class="btn ghost" id="ei-copy" data-act="ei-copyphone"> Телефон</button>
       <a class="btn primary" id="ei-call" href="#">📞 Позвонить</a>
     </div>
   </div>
@@ -646,7 +646,6 @@ function setupSyncScroll(){
   });
 }
 
-// ═══ ТОЧЕЧНОЕ ОБНОВЛЕНИЕ ЯЧЕЙКИ (БЕЗ ПЕРЕСОЗДАНИЯ ЛЕНТЫ) ═══
 function updateCell(empId, day){
   const cell=document.querySelector(`.cell[data-emp="${empId}"][data-d="${day}"]`);
   if(!cell) return;
@@ -668,7 +667,6 @@ function updateCell(empId, day){
     +(s?'<u>'+fmt(daySum(s))+'</u>':'<span class="dot">·</span>');
 }
 
-// ═══ ТОЧЕЧНОЕ ОБНОВЛЕНИЕ ЧИПОВ СОТРУДНИКА ═══
 function updateEmpChips(empId){
   const empEl=document.querySelector(`.emp:has(.ename[data-emp="${empId}"])`);
   if(!empEl) return;
@@ -685,7 +683,6 @@ function updateEmpChips(empId){
   if(chips[3]) chips[3].textContent=fmt(end);
 }
 
-// ═══ ТОЧЕЧНОЕ ОБНОВЛЕНИЕ ИТОГА ПО ПВЗ ══
 function updatePvzTotal(pvzId){
   const pvzEl=document.querySelector(`.pvz-block[data-pvz="${pvzId}"]`);
   if(!pvzEl) return;
@@ -696,7 +693,6 @@ function updatePvzTotal(pvzId){
   if(b) b.textContent=fmt(tot);
 }
 
-// ═══ ТОЧЕЧНОЕ ОБНОВЛЕНИЕ БЛОКА ВЫПЛАТ ═══
 function updatePayments(){
   const dm=dim(view.y,view.m);
   $('#paygrid').innerHTML=
@@ -704,7 +700,6 @@ function updatePayments(){
    +panel('ЗАРПЛАТА','выплата 1-го','смены с 16 по '+dm+' число',16,dm,'end');
 }
 
-// ═══ ТОЧЕЧНОЕ ОБНОВЛЕНИЕ СТАТИСТИКИ СВЕРХУ ═══
 function updateHeaderStats(){
   const dm=dim(view.y,view.m);
   let M=0,E=0,T=0;
@@ -718,7 +713,6 @@ function updateHeaderStats(){
   animNum($('#st-total'),T,'');
 }
 
-// ═══ ПОЛНАЯ ПЕРЕРИСОВКА (только при смене месяца/структуры) ═══
 function daysHTML(e,dm){
   let h='';const t=new Date();
   const isCur=t.getFullYear()===view.y&&t.getMonth()===view.m;
@@ -747,7 +741,7 @@ function empHTML(e,dm){
    +'<div class="emp-top"><div class="ename-wrap">'
    +'<button class="ename" data-emp="'+e.id+'">'+esc(e.name)+'</button>'
    +'<button class="del-emp" data-act="del-emp" data-emp="'+e.id+'" title="удалить">✕</button></div>'
-   +'<div class="tools"><button class="mini" data-act="fill" data-emp="'+e.id+'">график 2/2</button>'
+   +'<div class="tools"><button class="mini" data-act="fill" data-emp="'+e.id+'">график</button>'
    +'<button class="mini danger" data-act="clearemp" data-emp="'+e.id+'">✕ месяц</button></div></div>'
    +'<div class="sums"><span class="chip">смен: <b>'+cnt+'</b></span>'
    +'<span class="chip">итого: <b class="c-b">'+fmt(tot)+'</b></span>'
@@ -948,12 +942,10 @@ function fallbackCopy(txt,cb){
 let press=null, namePress=null, cellPending=null;
 function isScrollGesture(dx,dy){return (Math.abs(dx)>6 && Math.abs(dx)>=Math.abs(dy)) || Math.abs(dy)>8;}
 
-// ═══ ГЛАВНОЕ ИЗМЕНЕНИЕ: ТОЧЕЧНОЕ ОБНОВЛЕНИЕ ВМЕСТО renderAll() ═══
 function setRateAt(emp,d){
   const k=key(emp,view.y,view.m,d);
   state.shifts[k]={b:state.rate,p:0,n:'',sub:0};state.lastAmount=state.rate;
   persist();
-  // ТОЧЕЧНОЕ обновление — лента НЕ пересоздаётся!
   updateCell(emp,d);
   updateEmpChips(emp);
   const e=empById(emp);
@@ -968,7 +960,6 @@ function removeShift(emp,d){
   if(!state.shifts[k])return;
   delete state.shifts[k];
   persist();
-  // ТОЧЕЧНОЕ обновление
   updateCell(emp,d);
   updateEmpChips(emp);
   const e=empById(emp);
@@ -1031,7 +1022,6 @@ document.addEventListener('click',e=>{
     if(s){s.b=v;}
     state.lastAmount=v;
     persist();closeM();
-    // ТОЧЕЧНОЕ обновление
     updateCell(cur.emp,cur.d);
     updateEmpChips(cur.emp);
     const e=empById(cur.emp);
@@ -1131,23 +1121,57 @@ document.addEventListener('click',e=>{
   else if(a==='fill'){
     const e=empById(el.dataset.emp);
     const dm=dim(view.y,view.m);
-    const startDay=prompt('С какого дня начать график 2/2? (1-'+dm+')','1');
+    
+    // Выбор типа графика
+    const type=prompt('Выбери график:\n2 - 2/2 (2 рабочих, 2 выходных)\n3 - 3/3 (3 рабочих, 3 выходных)','2');
+    if(!type) return;
+    const cycleType=parseInt(type);
+    if(cycleType!==2 && cycleType!==3){toast('Неверный тип!');return;}
+    
+    const startDay=prompt('С какого дня начать график? (1-'+dm+')','1');
     if(!startDay)return;
     const start=parseInt(startDay);
     if(isNaN(start)||start<1||start>dm){toast('Неверный день!');return;}
-    if(!confirm('Раскидать для «'+e.name+'» график 2/2 с '+start+' числа? (2 рабочих / 2 выходных, ставка '+fmt(state.rate)+'). Смены до '+start+' числа не тронутся, после — затрутся!'))return;
-    for(let d=start;d<=dm;d++){
-      const k=key(e.id,view.y,view.m,d);
-      delete state.shifts[k];
-    }
-    for(let d=start;d<=dm;d++){
-      const k=key(e.id,view.y,view.m,d);
-      const cycleDay=(d-start)%4;
-      if(cycleDay<2){
-        state.shifts[k]={b:state.rate,p:0,n:'',sub:0};
+    
+    const currentYear=view.y;
+    const endYear=currentYear; // До конца текущего года
+    
+    if(!confirm(`Раскидать для «${e.name}» график ${cycleType}/${cycleType} с ${start} числа до конца ${currentYear} года?\n\nСмены до ${start} числа не тронутся, после — затрутся!`))return;
+    
+    // Очищаем все смены с start до конца года
+    for(let y=currentYear;y<=endYear;y++){
+      const startM=(y===currentYear)?view.m:0;
+      const endM=(y===endYear)?11:11;
+      for(let m=startM;m<=endM;m++){
+        const daysInMonth=dim(y,m);
+        const startD=(y===currentYear && m===view.m)?start:1;
+        for(let d=startD;d<=daysInMonth;d++){
+          const k=key(e.id,y,m,d);
+          delete state.shifts[k];
+        }
       }
     }
-    persist();renderAll();toast('График 2/2 с '+start+' числа готов ✔');
+    
+    // Раскидываем график
+    let dayCounter=0;
+    for(let y=currentYear;y<=endYear;y++){
+      const startM=(y===currentYear)?view.m:0;
+      const endM=(y===endYear)?11:11;
+      for(let m=startM;m<=endM;m++){
+        const daysInMonth=dim(y,m);
+        const startD=(y===currentYear && m===view.m)?start:1;
+        for(let d=startD;d<=daysInMonth;d++){
+          const k=key(e.id,y,m,d);
+          if(dayCounter<cycleType){
+            state.shifts[k]={b:state.rate,p:0,n:'',sub:0};
+          }
+          dayCounter++;
+          if(dayCounter>=cycleType*2) dayCounter=0;
+        }
+      }
+    }
+    
+    persist();renderAll();toast(`График ${cycleType}/${cycleType} с ${start} числа до конца ${currentYear} года готов ✔`);
   }
   else if(a==='clearemp'){const e=empById(el.dataset.emp);if(!confirm('Стереть ВСЕ смены «'+e.name+'» за '+MONTHS[view.m]+'?'))return;
     const dm=dim(view.y,view.m);for(let d=1;d<=dm;d++)delete state.shifts[key(e.id,view.y,view.m,d)];
